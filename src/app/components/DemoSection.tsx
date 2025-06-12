@@ -8,6 +8,7 @@ import {
   Button,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { Image } from "@chakra-ui/react";
 
 export default function PowerfulFeatures() {
   const bg = useColorModeValue("gray.50", "gray.900");
@@ -41,27 +42,12 @@ export default function PowerfulFeatures() {
         mx="auto"
         mb={{ base: 16, md: 24 }}
       >
-        <Box
-          flex="1"
-          maxW={{ base: "100%", md: "600px" }}
-          rounded="2xl"
-          overflow="hidden"
-          border="1px solid"
-          borderColor={borderColor}
-          boxShadow={useColorModeValue("xl", "dark-lg")}
-          _hover={{
-            boxShadow: useColorModeValue("2xl", "dark-2xl"),
-            transition: "box-shadow 0.3s ease",
-          }}
-        >
-          <video
-            src="/demo-video.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            style={{ width: "100%", height: "auto", display: "block" }}
-            controls={false}
+        <Box position="relative">
+          <Image
+            src="http://localhost:8081/photo/macbook.png"
+            alt="MacBook with website"
+            width={700}
+            height={500}
           />
         </Box>
 
@@ -76,9 +62,10 @@ export default function PowerfulFeatures() {
             Smart Fitness Analytics Dashboard
           </Heading>
           <Text fontSize="lg" mb={8} lineHeight="tall">
-            Experience a revolutionary way to track your fitness journey with our 
-            intelligent analytics dashboard. Monitor workouts, progress, and achievements 
-            in real-time, making your fitness goals more achievable than ever.
+            Experience a revolutionary way to track your fitness journey with
+            our intelligent analytics dashboard. Monitor workouts, progress, and
+            achievements in real-time, making your fitness goals more achievable
+            than ever.
           </Text>
           <Button
             size="lg"
@@ -96,68 +83,122 @@ export default function PowerfulFeatures() {
         </Box>
       </Flex>
 
-      <Flex
-        direction={{ base: "column", md: "row-reverse" }}
-        align="center"
-        justify="space-between"
-        gap={{ base: 12, md: 20 }}
-        maxW="7xl"
-        mx="auto"
-      >
-        <Box
-          flex="1"
-          maxW={{ base: "100%", md: "600px" }}
-          rounded="2xl"
-          overflow="hidden"
-          border="1px solid"
-          borderColor={borderColor}
-          boxShadow={useColorModeValue("xl", "dark-lg")}
-          _hover={{
-            boxShadow: useColorModeValue("2xl", "dark-2xl"),
-            transition: "box-shadow 0.3s ease",
-          }}
+      <Box mt={24} maxW="7xl" mx="auto" textAlign="center">
+        <Heading
+          as="h2"
+          size="xl"
+          mb={12}
+          color="gray.700"
+          fontWeight="extrabold"
         >
-          <video
-            src="/demo-video-2.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            style={{ width: "100%", height: "auto", display: "block" }}
-            controls={false}
-          />
-        </Box>
+          Unlock Your Full Potential
+        </Heading>
+        <Flex
+          direction={{ base: "column", md: "row" }}
+          justify="center"
+          align="stretch"
+          gap={8}
+        >
+          <Box
+            p={8}
+            rounded="2xl"
+            border="1px solid"
+            borderColor={borderColor}
+            boxShadow={useColorModeValue("xl", "dark-lg")}
+            flex="1"
+            maxW={{ base: "100%", md: "380px" }}
+            display="flex"
+            flexDirection="column"
+            justifyContent="space-between"
+          >
+            <Box>
+              <Heading as="h3" size="md" mb={4} color={textColor}>
+                3 months free
+              </Heading>
+              <Text fontSize="md" mb={6} color={textColor}>
+                New subscribers get 3 months of HandFit+ free with the first
+                purchase.
+              </Text>
+            </Box>
+            <Button
+              size="md"
+              colorScheme="green"
+              bg="brand.500"
+              _hover={{ bg: "brand.600" }}
+            >
+              Shop now
+            </Button>
+          </Box>
+          <Box
+            p={8}
+            rounded="2xl"
+            border="1px solid"
+            borderColor={borderColor}
+            boxShadow={useColorModeValue("xl", "dark-lg")}
+            flex="1"
+            maxW={{ base: "100%", md: "380px" }}
+            display="flex"
+            flexDirection="column"
+            justifyContent="space-between"
+          >
+            <Box>
+              <Heading as="h3" size="md" mb={4} color={textColor}>
+                1 month free
+              </Heading>
+              <Text fontSize="md" mb={6} color={textColor}>
+                New subscribers get 1 month of HandFit+ free, then pay
+                $9.99 per month or $79.99 annually.
+              </Text>
+            </Box>
+            <Button
+              size="md"
+              colorScheme="green"
+              bg="brand.500"
+              _hover={{ bg: "brand.600" }}
+            >
+              Try it free
+            </Button>
+          </Box>
 
-        <Box flex="1" maxW={{ base: "100%", md: "480px" }} color={textColor}>
-          <Heading
-            as="h2"
-            size="xl"
-            mb={5}
-            color="gray.700"
-            fontWeight="extrabold"
+          <Box
+            p={8}
+            rounded="2xl"
+            border="1px solid"
+            borderColor={borderColor}
+            boxShadow={useColorModeValue("xl", "dark-lg")}
+            flex="1"
+            maxW={{ base: "100%", md: "380px" }}
+            display="flex"
+            flexDirection="column"
+            justifyContent="space-between"
           >
-            Comprehensive Workout Insights
-          </Heading>
-          <Text fontSize="lg" mb={8} lineHeight="tall">
-            Gain deep insights into your training progress with an intuitive, 
-            Apple Fitness-inspired interface. Track exercises, sets, and personal records 
-            with ease, making your fitness journey more rewarding and effective.
-          </Text>
-          <Button
-            size="lg"
-            colorScheme="brand"
-            _hover={{
-              bg: "brand.400",
-              boxShadow: useColorModeValue(
-                "0 0 12px rgba(170, 255, 3, 0.7)",
-                "0 0 12px rgba(170, 255, 3, 0.7)"
-              ),
-            }}
-          >
-            View Progress
-          </Button>
-        </Box>
-      </Flex>
+            <Box>
+              <Heading as="h3" size="md" mb={4} color={textColor}>
+                
+              </Heading>
+              <Text fontSize="md" mb={6} color={textColor}>
+                Bundle Apple Fitness+ with five other great services for one low
+                monthly price.
+              </Text>
+            </Box>
+            <Flex direction="column" gap={2}>
+              <Button
+                size="md"
+                colorScheme="green"
+                variant="outline"
+                borderColor="brand.500"
+                color="brand.500"
+                _hover={{ bg: "brand.500", color: "white" }}
+              >
+                Try Apple One free
+              </Button>
+              <Button size="md" variant="link" color={textColor}>
+                Learn more
+              </Button>
+            </Flex>
+          </Box>
+        </Flex>
+      </Box>
     </Box>
   );
 }

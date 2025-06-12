@@ -26,10 +26,21 @@ const Hero = () => {
   return (
     <Box
       as="section"
-      minH={"100vh"}
+      minH="100vh"
       className="relative overflow-hidden py-20 sm:py-28 text-center items-center flex justify-center"
       bg="white"
     >
+      <Box
+        as="video"
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover z-0"
+      >
+        <source src="http://localhost:8081/media/run.mp4" type="video/mp4" />
+      </Box>
+
       <Box
         as="div"
         className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center"
@@ -41,7 +52,7 @@ const Hero = () => {
         as="div"
         className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
       >
-        <motion.h1 {...fadeIn(0.2)} className="text-4xl sm:text-6xl text-black">
+        <motion.h1 {...fadeIn(0.2)} className="text-4xl sm:text-6xl text-white">
           Stay fit, healthy <br className="sm:hidden" />
           <span className="text-[#AAFF03] dark:text-[#AAFF03] font-bold">
             with HandFit
@@ -50,9 +61,9 @@ const Hero = () => {
 
         <motion.p
           {...fadeIn(0.4)}
-          className="mt-6 text-lg sm:text-xl max-w-2xl mx-auto text-gray-500"
+          className="mt-6 text-lg sm:text-xl max-w-2xl mx-auto text-gray-200"
         >
-          **Personalized Workouts & Smart Progress Tracking**: Get tailored
+          <strong>Personalized Workouts & Smart Progress Tracking</strong>: Get tailored
           fitness plans and detailed progress insights—automatically. Our AI
           analyzes your activity, tracks improvements, and delivers motivating
           feedback to help you stay on top of your goals.
@@ -68,12 +79,12 @@ const Hero = () => {
           </Link>
         </motion.div>
 
-        <motion.div {...fadeIn(0.8)} className="mt-8 text-gray-500">
+        <motion.div {...fadeIn(0.8)} className="mt-8 text-white">
           Join{" "}
           <motion.span className="font-bold text-[#AAFF03] dark:text-[#AAFF03]">
             {rounded}
           </motion.span>
-          + power users.
+          + fit people.
         </motion.div>
       </Box>
     </Box>

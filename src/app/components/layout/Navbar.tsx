@@ -34,7 +34,7 @@ const Navbar = () => {
     return {
       variant: "ghost",
       fontWeight: "medium",
-      color: "gray.800",
+      color: "white",
       _hover: hoverGlow,
       sx: {
         position: "relative",
@@ -48,7 +48,7 @@ const Navbar = () => {
               width: "4px",
               height: "4px",
               borderRadius: "full",
-              bg: "black",
+              bg: "brand.300",
             }
           : {},
       },
@@ -95,7 +95,7 @@ const Navbar = () => {
       display="flex"
       justifyContent="space-between"
       alignItems="center"
-      color="gray.800"
+      color="white"
       transform="translateX(-50%)"
       _hover={hoverGlow}
       backdropFilter="blur(10px)"
@@ -106,14 +106,14 @@ const Navbar = () => {
         display={{ base: "flex", md: "none" }}
         onClick={onOpen}
         variant="ghost"
-        color="gray.800"
+        color="white"
         _hover={hoverGlow}
       />
 
       <Link
         href="/"
         aria-label="Go to homepage"
-        className="p-2 tracking-tight text-2xl font-bold transition-all  hover:text-gray-500"
+        className="p-2 tracking-tight text-2xl font-bold transition-all"
       >
         HandFit
       </Link>
@@ -125,16 +125,6 @@ const Navbar = () => {
           <Button {...getActiveStyles("/about-us")}>About</Button>
         </Link>
 
-        {/* <Link href="/#features-section" aria-label="Go to features">
-          <Button
-            variant="ghost"
-            fontWeight="medium"
-            color="gray.800"
-            _hover={hoverGlow}
-          >
-            Features
-          </Button>
-        </Link> */}
 
         <Link href="/pricing" aria-label="Go to pricing">
           <Button {...getActiveStyles("/pricing")}>Pricing</Button>
