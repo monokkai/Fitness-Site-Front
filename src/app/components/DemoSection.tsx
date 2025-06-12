@@ -207,7 +207,7 @@ export default function PowerfulFeatures() {
                     borderRadius={30}
                     _hover={{ bg: "brand.500", color: "white" }}
                   >
-                    Try Apple One free
+                    Try HandFit One free
                   </Button>
                 </Link>
                 <Link href="/pricing" passHref>
