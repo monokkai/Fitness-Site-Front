@@ -34,12 +34,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   letter-spacing: -0.011em;
-  background: linear-gradient(
-    to bottom,
-    rgb(var(--background-start-rgb)),
-    rgb(var(--background-end-rgb))
-  );
-  color: rgb(var(--foreground-rgb));
+  background-color: white;
+  color: #2D3748; /* gray.800 */
   min-height: 100vh;
   scroll-behavior: smooth;
 }

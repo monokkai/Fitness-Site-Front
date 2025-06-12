@@ -16,7 +16,6 @@ import faqItems from "../utils/faqItems";
 import { useEffect } from "react";
 
 export default function FAQSection() {
-  const bg = useColorModeValue("white", "gray.900");
   const textColor = useColorModeValue("gray.800", "gray.100");
   const headingColor = useColorModeValue("black", "white");
   const itemBorderColor = useColorModeValue("gray.200", "gray.700");
@@ -35,7 +34,7 @@ export default function FAQSection() {
   return (
     <Box
       id="faq-section"
-      bg={bg}
+      bg="transparent"
       py={{ base: 16, md: 24 }}
       px={{ base: 4, md: 12 }}
     >
@@ -74,31 +73,6 @@ export default function FAQSection() {
               </AccordionPanel>
             </AccordionItem>
           ))}
-          <AccordionItem
-            borderTopWidth="1px"
-            borderBottomWidth="1px"
-            borderColor={itemBorderColor}
-          >
-            <Heading as="h2">
-              <AccordionButton
-                py={4}
-                _hover={{ bg: accordionButtonHoverBg }}
-                _expanded={{ bg: accordionButtonExpandedBg }}
-                color={textColor}
-              >
-                <Box flex="1" textAlign="left" fontWeight="medium">
-                  Can I adjust the volume of the trainer&apos;s voice or the
-                  music in my workouts?
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-            </Heading>
-            <AccordionPanel pb={4} textAlign="left" color={textColor}>
-              Yes. With Audio Focus, you can prioritize the volume of the
-              trainer or the music so you can hear more of whatever is most
-              important to you.
-            </AccordionPanel>
-          </AccordionItem>
         </Accordion>
       </Container>
     </Box>

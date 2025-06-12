@@ -18,7 +18,7 @@ export default function Home() {
   }
 
   return (
-    <Box>
+    <Box bg="white">
       <Hero />
       <DemoSection />
       <FAQSection />

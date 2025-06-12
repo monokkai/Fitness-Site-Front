@@ -18,7 +18,7 @@ export default function LayoutWrapper({
   return (
     <>
       {!isAuthOrGeneratePage && <Navbar />}
-      <main className="bg-[#201F24] text-white">{children}</main>
+      <main className="bg-white text-white">{children}</main>
       {!isAuthOrGeneratePage && <Footer />}
     </>
   );
