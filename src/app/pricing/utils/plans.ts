@@ -1,50 +1,33 @@
 const plans = [
     {
         id: "free",
-        title: "Starter",
-        description: "Perfect for individual developers and small projects",
+        title: "Free Tier",
+        description: "Perfect for personal use and getting started with basic tracking.",
         price: "0.00",
         features: [
-            "5 AI-powered changelogs daily",
-            "Basic Git analytics dashboard",
+            "5 daily workout logs",
+            "Basic progress tracking",
             "Standard email support",
-            "7-day commit history",
-            "Basic reporting features"
+            "7-day workout history",
+            "Essential performance metrics"
         ],
         isPopular: false,
     },
     {
         id: "pro",
-        title: "Professional",
-        description: "Ideal for growing teams and medium-sized projects",
+        title: "Pro Member",
+        description: "Ideal for dedicated fitness enthusiasts and advanced tracking.",
         price: "29.99",
         features: [
-            "Unlimited AI changelogs",
-            "Advanced Git analytics",
-            "Priority support response",
-            "30-day commit history",
-            "Custom reporting tools",
-            "Team collaboration features",
-            "API access"
+            "Unlimited workout logs",
+            "Advanced analytics dashboard",
+            "Priority email support",
+            "30-day workout history",
+            "Customizable reporting",
+            "Goal setting & tracking",
+            "API access (coming soon)"
         ],
         isPopular: true,
-    },
-    {
-        id: "enterprise",
-        title: "Enterprise",
-        description: "For large organizations with complex needs",
-        price: "99.99",
-        features: [
-            "Everything in Professional",
-            "Unlimited repositories",
-            "24/7 dedicated support",
-            "Unlimited commit history",
-            "Custom integrations",
-            "Advanced security features",
-            "SLA guarantee",
-            "On-premise deployment option"
-        ],
-        isPopular: false,
     }
 ];
 

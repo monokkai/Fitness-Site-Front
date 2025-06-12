@@ -34,7 +34,7 @@ const Navbar = () => {
     return {
       variant: "ghost",
       fontWeight: "medium",
-      color: "white",
+      color: "gray.800",
       _hover: hoverGlow,
       sx: {
         position: "relative",
@@ -48,7 +48,7 @@ const Navbar = () => {
               width: "4px",
               height: "4px",
               borderRadius: "full",
-              bg: "brand.300",
+              bg: "black",
             }
           : {},
       },
@@ -113,7 +113,7 @@ const Navbar = () => {
       <Link
         href="/"
         aria-label="Go to homepage"
-        className="p-2 tracking-tight text-2xl font-bold transition-all"
+        className="p-2 tracking-tight text-2xl font-bold transition-all  hover:text-gray-500 text-gray-700"
       >
         HandFit
       </Link>

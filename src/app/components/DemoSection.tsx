@@ -8,7 +8,7 @@ import {
   Button,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { Image } from "@chakra-ui/react";
+import Link from "next/link";
 
 export default function PowerfulFeatures() {
   const bg = useColorModeValue("gray.50", "gray.900");
@@ -42,12 +42,23 @@ export default function PowerfulFeatures() {
         mx="auto"
         mb={{ base: 16, md: 24 }}
       >
-        <Box position="relative">
-          <Image
+        <Box
+          flex="1"
+          maxW={{ base: "100%", md: "600px" }}
+          rounded="2xl"
+          overflow="hidden"
+          border="1px solid"
+          borderColor={borderColor}
+          boxShadow={useColorModeValue("xl", "dark-lg")}
+          _hover={{
+            boxShadow: useColorModeValue("2xl", "dark-2xl"),
+            transition: "box-shadow 0.3s ease",
+          }}
+        >
+          <img
             src="http://localhost:8081/photo/macbook.png"
             alt="MacBook with website"
-            width={700}
-            height={500}
+            style={{ width: "100%", height: "auto", display: "block" }}
           />
         </Box>
 
@@ -70,6 +81,7 @@ export default function PowerfulFeatures() {
           <Button
             size="lg"
             colorScheme="brand"
+            borderRadius={30}
             _hover={{
               bg: "brand.400",
               boxShadow: useColorModeValue(
@@ -101,7 +113,7 @@ export default function PowerfulFeatures() {
         >
           <Box
             p={8}
-            rounded="2xl"
+            rounded="3xl"
             border="1px solid"
             borderColor={borderColor}
             boxShadow={useColorModeValue("xl", "dark-lg")}
@@ -120,18 +132,21 @@ export default function PowerfulFeatures() {
                 purchase.
               </Text>
             </Box>
-            <Button
-              size="md"
-              colorScheme="green"
-              bg="brand.500"
-              _hover={{ bg: "brand.600" }}
-            >
-              Shop now
-            </Button>
+            <Link href="/pricing" passHref>
+              <Button
+                size="md"
+                colorScheme="green"
+                bg="brand.500"
+                borderRadius={30}
+                _hover={{ bg: "brand.600" }}
+              >
+                Shop now
+              </Button>
+            </Link>
           </Box>
           <Box
             p={8}
-            rounded="2xl"
+            rounded="3xl"
             border="1px solid"
             borderColor={borderColor}
             boxShadow={useColorModeValue("xl", "dark-lg")}
@@ -146,56 +161,21 @@ export default function PowerfulFeatures() {
                 1 month free
               </Heading>
               <Text fontSize="md" mb={6} color={textColor}>
-                New subscribers get 1 month of HandFit+ free, then pay
-                $9.99 per month or $79.99 annually.
+                New subscribers get 1 month of HandFit+ free, then pay $9.99 per
+                month or $79.99 annually.
               </Text>
             </Box>
-            <Button
-              size="md"
-              colorScheme="green"
-              bg="brand.500"
-              _hover={{ bg: "brand.600" }}
-            >
-              Try it free
-            </Button>
-          </Box>
-
-          <Box
-            p={8}
-            rounded="2xl"
-            border="1px solid"
-            borderColor={borderColor}
-            boxShadow={useColorModeValue("xl", "dark-lg")}
-            flex="1"
-            maxW={{ base: "100%", md: "380px" }}
-            display="flex"
-            flexDirection="column"
-            justifyContent="space-between"
-          >
-            <Box>
-              <Heading as="h3" size="md" mb={4} color={textColor}>
-                
-              </Heading>
-              <Text fontSize="md" mb={6} color={textColor}>
-                Bundle Apple Fitness+ with five other great services for one low
-                monthly price.
-              </Text>
-            </Box>
-            <Flex direction="column" gap={2}>
+            <Link href="/pricing" passHref>
               <Button
                 size="md"
                 colorScheme="green"
-                variant="outline"
-                borderColor="brand.500"
-                color="brand.500"
-                _hover={{ bg: "brand.500", color: "white" }}
+                bg="brand.500"
+                borderRadius={30}
+                _hover={{ bg: "brand.600" }}
               >
-                Try Apple One free
+                Try it free
               </Button>
-              <Button size="md" variant="link" color={textColor}>
-                Learn more
-              </Button>
-            </Flex>
+            </Link>
           </Box>
         </Flex>
       </Box>

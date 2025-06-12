@@ -51,11 +51,11 @@ export default function Cards() {
   const cardBg = useColorModeValue("white", "gray.800");
   const textColor = useColorModeValue("gray.800", "gray.100");
   const borderColor = useColorModeValue("gray.200", "gray.700");
-  const purpleColor = useColorModeValue("purple.600", "purple.400");
-  const purpleHover = useColorModeValue("purple.700", "purple.500");
+  const accentColor = useColorModeValue("brand.500", "brand.300");
+  const accentHover = useColorModeValue("brand.600", "brand.400");
   const buttonBoxShadow = useColorModeValue(
-    "0 0 12px rgba(128, 90, 213, 0.7)",
-    "0 0 12px rgba(159, 122, 234, 0.7)"
+    "0 0 12px rgba(170, 255, 3, 0.7)",
+    "0 0 12px rgba(170, 255, 3, 0.7)"
   );
 
   return (
@@ -84,7 +84,7 @@ export default function Cards() {
       <Flex
         direction={{ base: "column", md: "row" }}
         gap={8}
-        maxW="6xl"
+        maxW="4xl"
         mx="auto"
         alignItems="stretch"
         as={motion.div}
@@ -181,7 +181,7 @@ export default function Cards() {
                     variants={itemVariants}
                     custom={index}
                   >
-                    <ListIcon as={FaCheckCircle} color={purpleColor} />
+                    <ListIcon as={FaCheckCircle} color={accentColor} />
                     {feature}
                   </ListItem>
                 ))}
@@ -190,7 +190,7 @@ export default function Cards() {
             <Button
               size="lg"
               width="full"
-              bg={"black"}
+              bg={accentColor}
               borderRadius={20}
               color="white"
               as={motion.button}
@@ -200,7 +200,7 @@ export default function Cards() {
               }}
               whileTap={{ scale: 0.98 }}
               _hover={{
-                bg: purpleHover,
+                bg: accentHover,
                 boxShadow: buttonBoxShadow,
               }}
               onClick={() => console.log(`Subscribing to ${plan.title}`)}
