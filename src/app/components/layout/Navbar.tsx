@@ -20,13 +20,26 @@ import {
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { motion, AnimatePresence, useSpring } from "framer-motion";
 import { useEffect, useState } from "react";
-import navbarItems from "../utils/navbarItems";
+import navbarItems, { NavbarItem } from "../utils/navbarItems";
 
 const Navbar = () => {
   const pathname = usePathname();
   const hoverGlow = {
     transition: "all 0.2s ease-in-out",
     boxShadow: "0 0 8px rgba(170, 255, 3, 0.2)",
+  };
+
+  const handleClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    if (href.includes("#faq-section")) {
+      e.preventDefault();
+      const element = document.getElementById("faq-section");
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
   };
 
   const getActiveStyles = (path: string) => {
@@ -95,7 +108,7 @@ const Navbar = () => {
       display="flex"
       justifyContent="space-between"
       alignItems="center"
-      color="white"
+      color="gray.800"
       transform="translateX(-50%)"
       _hover={hoverGlow}
       backdropFilter="blur(10px)"
@@ -113,7 +126,7 @@ const Navbar = () => {
       <Link
         href="/"
         aria-label="Go to homepage"
-        className="p-2 tracking-tight text-2xl font-bold transition-all  hover:text-gray-500 text-gray-700"
+        className="p-2 tracking-tight text-2xl font-bold transition-all  hover:text-gray-500"
       >
         HandFit
       </Link>
@@ -121,14 +134,19 @@ const Navbar = () => {
       <Spacer display={{ base: "none", md: "block" }} />
 
       <Flex display={{ base: "none", md: "flex" }} alignItems="center" gap={4}>
-        <Link href="/about-us" aria-label="Go to about us">
-          <Button {...getActiveStyles("/about-us")}>About</Button>
-        </Link>
-
-
-        <Link href="/pricing" aria-label="Go to pricing">
-          <Button {...getActiveStyles("/pricing")}>Pricing</Button>
-        </Link>
+        {navbarItems.map(({ href, label }: NavbarItem) => (
+          <Link
+            key={href}
+            href={href}
+            onClick={(e) => handleClick(e, href)}
+            aria-label={`Go to ${label}`}
+            scroll={
+              href.startsWith("/") && !href.includes("#") ? undefined : false
+            }
+          >
+            <Button {...getActiveStyles(href)}>{label}</Button>
+          </Link>
+        ))}
       </Flex>
 
       <AnimatePresence>
@@ -180,11 +198,14 @@ const Navbar = () => {
           <DrawerHeader borderBottomWidth="1px">Navigation</DrawerHeader>
           <DrawerBody>
             <VStack alignItems="flex-start" spacing={4}>
-              {navbarItems.map(({ href, label }) => (
+              {navbarItems.map(({ href, label }: NavbarItem) => (
                 <Link
                   key={href}
                   href={href}
-                  onClick={onClose}
+                  onClick={(e) => {
+                    handleClick(e, href);
+                    onClose();
+                  }}
                   style={{
                     position: "relative",
                     padding: "4px 0",

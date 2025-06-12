@@ -1,9 +1,12 @@
-const navbarItems = [
-    { href: "/", label: "Home" },
-    { href: "/about-us", label: "About" },
-    { href: "/#features-section", label: "Features" },
-    { href: "/pricing", label: "Pricing" },
-    { href: "/login", label: "Login with GitHub" },
-]
+export type NavbarItem = {
+    href: string;
+    label: string;
+};
 
-export default navbarItems;
+const navbarItems: NavbarItem[] = [
+    { href: "/about-us", label: "About" },
+    { href: "/pricing", label: "Pricing" },
+    { href: "/#faq-section", label: "FAQ" },
+];
+
+export default navbarItems; 

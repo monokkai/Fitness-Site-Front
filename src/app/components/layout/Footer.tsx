@@ -37,7 +37,7 @@ export default function Footer() {
       >
         <Box textAlign={{ base: "center", md: "left" }}>
           <Heading as="h4" size="md" fontWeight="bold" color={color}>
-            © {new Date().getFullYear()} Git Glade
+            © {new Date().getFullYear()} HandFit
           </Heading>
           <Text fontSize="sm" mt={1} color={color}>
             All rights reserved.
@@ -58,15 +58,7 @@ export default function Footer() {
               About
             </ChakraLink>
           </Link>
-          <Link href="/features" passHref legacyBehavior>
-            <ChakraLink
-              fontWeight="medium"
-              color={color}
-              _hover={{ color: linkHoverColor, textDecoration: "underline" }}
-            >
-              Features
-            </ChakraLink>
-          </Link>
+
           <Link href="/pricing" passHref legacyBehavior>
             <ChakraLink
               fontWeight="medium"
@@ -76,20 +68,11 @@ export default function Footer() {
               Pricing
             </ChakraLink>
           </Link>
-          <Link href="/blog" passHref legacyBehavior>
-            <ChakraLink
-              fontWeight="medium"
-              color={color}
-              _hover={{ color: linkHoverColor, textDecoration: "underline" }}
-            >
-              Blog
-            </ChakraLink>
-          </Link>
         </Stack>
 
         <Stack direction="row" spacing={6} align="center" justify="center">
           <ChakraLink
-            href="https://github.com/jenni-ai"
+            href="https://github.com/"
             isExternal
             aria-label="GitHub"
             color={color}
@@ -98,7 +81,7 @@ export default function Footer() {
             <FaGithub size="24px" />
           </ChakraLink>
           <ChakraLink
-            href="https://twitter.com/jenni_ai"
+            href="https://x.com/"
             isExternal
             aria-label="Twitter"
             color={color}
@@ -107,7 +90,7 @@ export default function Footer() {
             <FaTwitter size="24px" />
           </ChakraLink>
           <ChakraLink
-            href="https://linkedin.com/company/jenni-ai"
+            href="https://linkedin.com/"
             isExternal
             aria-label="LinkedIn"
             color={color}

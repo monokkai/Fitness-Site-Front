@@ -11,6 +11,7 @@ import {
   Image,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import FAQSection from "./FAQSection";
 
 export default function PowerfulFeatures() {
   const bg = useColorModeValue("gray.50", "gray.900");
@@ -221,6 +222,8 @@ export default function PowerfulFeatures() {
             </Box>
           </Flex>
         </Box>
+
+        <FAQSection/>
       </Box>
     </Box>
   );

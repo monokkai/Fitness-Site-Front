@@ -3,6 +3,7 @@
 import { Box } from "@chakra-ui/react";
 import Hero from "./components/layout/Hero";
 import DemoSection from "./components/DemoSection";
+import FAQSection from "./components/FAQSection";
 import { useState, useEffect } from "react";
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
     <Box>
       <Hero />
       <DemoSection />
+      <FAQSection />
     </Box>
   );
 }
