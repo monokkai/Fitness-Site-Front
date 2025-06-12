@@ -14,6 +14,23 @@ import {
 } from "@chakra-ui/react";
 import faqItems from "../components/utils/faqItems";
 import { useEffect } from "react";
+import { motion } from "framer-motion";
+
+const MotionBox = motion(Box);
+const MotionContainer = motion(Container);
+const MotionAccordionItem = motion(AccordionItem);
+
+const fadeInUp = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.5 }
+};
+
+const fadeInLeft = {
+  initial: { opacity: 0, x: -20 },
+  animate: { opacity: 1, x: 0 },
+  transition: { duration: 0.5 }
+};
 
 export default function FAQSection() {
   const textColor = useColorModeValue("gray.800", "gray.100");
@@ -32,29 +49,48 @@ export default function FAQSection() {
   }, []);
 
   return (
-    <Box
+    <MotionBox
       id="faq-section"
       bg="transparent"
       py={{ base: 16, md: 24 }}
       px={{ base: 4, md: 12 }}
+      variants={fadeInUp}
+      initial="initial"
+      whileInView="animate"
+      viewport={{ amount: 0.3 }}
+      transition={{ duration: 0.6 }}
     >
-      <Container maxW="3xl" textAlign="center" mb={16}>
+      <MotionContainer
+        maxW="3xl"
+        textAlign="center"
+        mb={16}
+        variants={fadeInUp}
+        initial="initial"
+        whileInView="animate"
+        viewport={{ amount: 0.3 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+      >
         <Heading as="h2" size="2xl" mb={4} color={headingColor}>
           Questions? Answers.
         </Heading>
         <Text fontSize="xl" color={textColor}>
           Find quick answers to the most common questions about HandFit+.
         </Text>
-      </Container>
+      </MotionContainer>
 
       <Container maxW="4xl">
         <Accordion allowToggle>
           {faqItems.map((item, index) => (
-            <AccordionItem
+            <MotionAccordionItem
               key={index}
               fontSize={25}
               borderTopWidth="1px"
               borderColor={itemBorderColor}
+              variants={fadeInLeft}
+              initial="initial"
+              whileInView="animate"
+              viewport={{ amount: 0.3 }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
             >
               <Heading as="h2">
                 <AccordionButton
@@ -73,10 +109,10 @@ export default function FAQSection() {
               <AccordionPanel pb={4} textAlign="left" color={textColor}>
                 {item.answer}
               </AccordionPanel>
-            </AccordionItem>
+            </MotionAccordionItem>
           ))}
         </Accordion>
       </Container>
-    </Box>
+    </MotionBox>
   );
 }
