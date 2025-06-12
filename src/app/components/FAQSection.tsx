@@ -12,7 +12,7 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import faqItems from "../utils/faqItems";
+import faqItems from "../components/utils/faqItems";
 import { useEffect } from "react";
 
 export default function FAQSection() {
@@ -39,10 +39,10 @@ export default function FAQSection() {
       px={{ base: 4, md: 12 }}
     >
       <Container maxW="3xl" textAlign="center" mb={16}>
-        <Heading as="h2" size="xl" mb={4} color={headingColor}>
+        <Heading as="h2" size="2xl" mb={4} color={headingColor}>
           Questions? Answers.
         </Heading>
-        <Text fontSize="lg" color={textColor}>
+        <Text fontSize="xl" color={textColor}>
           Find quick answers to the most common questions about HandFit+.
         </Text>
       </Container>
@@ -52,12 +52,14 @@ export default function FAQSection() {
           {faqItems.map((item, index) => (
             <AccordionItem
               key={index}
+              fontSize={25}
               borderTopWidth="1px"
               borderColor={itemBorderColor}
             >
               <Heading as="h2">
                 <AccordionButton
                   py={4}
+                  fontSize={30}
                   _hover={{ bg: accordionButtonHoverBg }}
                   _expanded={{ bg: accordionButtonExpandedBg }}
                   color={textColor}
