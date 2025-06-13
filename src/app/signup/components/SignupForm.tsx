@@ -50,7 +50,7 @@ const itemVariants = {
   },
 };
 
-const AuthForm = () => {
+const SignupForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const bgColor = useColorModeValue("white", "gray.800");
   const borderColor = useColorModeValue("gray.200", "gray.700");
@@ -67,10 +67,10 @@ const AuthForm = () => {
       <MotionStack spacing="6" variants={itemVariants}>
         <Stack spacing={{ base: "2", md: "3" }} textAlign="center">
           <Heading size={{ base: "xl", md: "2xl" }} color={headingColor}>
-            Welcome to HandFit+
+            Create Your Account
           </Heading>
           <Text color={textColor}>
-            Sign in to your account to continue your fitness journey
+            Join HandFit+ to start your fitness journey
           </Text>
         </Stack>
       </MotionStack>
@@ -87,6 +87,25 @@ const AuthForm = () => {
       >
         <Stack spacing="6">
           <Stack spacing="5">
+            <MotionBox variants={itemVariants}>
+              <FormControl>
+                <FormLabel htmlFor="name" color={headingColor}>
+                  Full Name
+                </FormLabel>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="Enter your full name"
+                  size="lg"
+                  borderRadius="xl"
+                  _focus={{
+                    borderColor: "brand.400",
+                    boxShadow: "0 0 0 1px var(--chakra-colors-brand-400)",
+                  }}
+                />
+              </FormControl>
+            </MotionBox>
+
             <MotionBox variants={itemVariants}>
               <FormControl>
                 <FormLabel htmlFor="email" color={headingColor}>
@@ -115,7 +134,7 @@ const AuthForm = () => {
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
+                    placeholder="Create a password"
                     borderRadius="xl"
                     _focus={{
                       borderColor: "brand.400",
@@ -148,7 +167,7 @@ const AuthForm = () => {
                 boxShadow: "0 0 12px rgba(170, 255, 3, 0.7)",
               }}
             >
-              Sign in
+              Create Account
             </Button>
           </MotionBox>
         </Stack>
@@ -215,14 +234,14 @@ const AuthForm = () => {
         variants={itemVariants}
         whileHover={{ scale: 1.02 }}
       >
-        Don&apos;t have an account?{" "}
-        <Link href="/signup" passHref>
+        Already have an account?{" "}
+        <Link href="/auth" passHref>
           <Button
             variant="link"
             color="brand.400"
             _hover={{ color: "brand.500" }}
           >
-            Sign up
+            Sign in
           </Button>
         </Link>
       </MotionText>
@@ -230,4 +249,4 @@ const AuthForm = () => {
   );
 };
 
-export default AuthForm;
+export default SignupForm;
