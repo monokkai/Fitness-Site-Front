@@ -13,6 +13,7 @@ import {
   Divider,
   Tag,
   TagLabel,
+  Container,
 } from "@chakra-ui/react";
 import { FaCheckCircle } from "react-icons/fa";
 import { motion, Variants } from "framer-motion";
@@ -23,6 +24,7 @@ const MotionVStack = motion(VStack);
 const MotionText = motion(Text);
 const MotionHeading = motion(Heading);
 const MotionTag = motion(Tag);
+const MotionFlex = motion(Flex);
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -47,169 +49,230 @@ const itemVariants: Variants = {
 };
 
 export default function Cards() {
-  const bg = useColorModeValue("gray.50", "gray.900");
-  const cardBg = useColorModeValue("white", "gray.800");
-  const textColor = useColorModeValue("gray.800", "gray.100");
-  const borderColor = useColorModeValue("gray.200", "gray.700");
-  const accentColor = useColorModeValue("brand.500", "brand.300");
-  const accentHover = useColorModeValue("brand.600", "brand.400");
-  const buttonBoxShadow = useColorModeValue(
-    "0 0 12px rgba(170, 255, 3, 0.7)",
-    "0 0 12px rgba(170, 255, 3, 0.7)"
-  );
+  const bg = useColorModeValue("gray.900", "gray.900");
+  const cardBg = useColorModeValue("rgba(255, 255, 255, 0.05)", "rgba(255, 255, 255, 0.05)");
+  const textColor = useColorModeValue("white", "white");
+  const borderColor = useColorModeValue("rgba(255, 255, 255, 0.1)", "rgba(255, 255, 255, 0.1)");
+  const accentColor = useColorModeValue("brand.300", "brand.300");
+  const accentHover = useColorModeValue("brand.400", "brand.400");
 
   return (
     <Box
       bg={bg}
+      minH="100vh"
+      position="relative"
+      overflow="hidden"
       py={{ base: 16, md: 24 }}
       px={{ base: 4, md: 12 }}
-      minH="100vh"
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
     >
-      <MotionHeading
-        as="h1"
-        size="xl"
-        mb={10}
-        textAlign="center"
-        color={textColor}
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+      {/* Animated background elements */}
+      <Box
+        position="absolute"
+        top="0"
+        left="0"
+        right="0"
+        bottom="0"
+        overflow="hidden"
+        zIndex="0"
       >
-        Choose the Right Plan for You
-      </MotionHeading>
-      <Flex
-        direction={{ base: "column", md: "row" }}
-        gap={8}
-        maxW="4xl"
-        mx="auto"
-        alignItems="stretch"
-        as={motion.div}
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        {plans.map((plan) => (
-          <MotionBox
-            key={plan.id}
-            flex="1"
-            bg={cardBg}
-            rounded="2xl"
-            shadow="lg"
-            p={8}
-            border="1px solid"
-            borderColor={borderColor}
-            position="relative"
-            variants={itemVariants}
-            whileHover={{
-              y: -5,
-              transition: { duration: 0.3, ease: "easeInOut" },
-            }}
-            style={{ boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)" }}
+        <Box
+          position="absolute"
+          top="10%"
+          left="10%"
+          w="300px"
+          h="300px"
+          borderRadius="full"
+          bg="brand.300"
+          opacity="0.1"
+          filter="blur(60px)"
+          animation="float 8s ease-in-out infinite"
+        />
+        <Box
+          position="absolute"
+          bottom="10%"
+          right="10%"
+          w="400px"
+          h="400px"
+          borderRadius="full"
+          bg="brand.400"
+          opacity="0.1"
+          filter="blur(60px)"
+          animation="float 12s ease-in-out infinite"
+        />
+      </Box>
+
+      <Container maxW="7xl" position="relative" zIndex="1">
+        <MotionVStack spacing={16}>
+          <MotionVStack
+            spacing={6}
+            textAlign="center"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
           >
-            {plan.isPopular && (
-              <MotionTag
-                size="md"
-                variant="solid"
-                colorScheme="purple"
-                position="absolute"
-                top="-4"
-                right="4"
-                rounded="full"
-                py={1}
-                px={3}
-                variants={itemVariants}
-              >
-                <TagLabel fontWeight="bold">Most Popular</TagLabel>
-              </MotionTag>
-            )}
-            <MotionVStack
-              spacing={4}
-              align="center"
-              mb={8}
-              variants={itemVariants}
+            <MotionHeading
+              as="h1"
+              size="2xl"
+              bgGradient="linear(to-r, brand.300, brand.400)"
+              bgClip="text"
+              fontWeight="extrabold"
             >
-              <MotionHeading
-                as="h2"
-                size="lg"
-                color={textColor}
-                variants={itemVariants}
-              >
-                {plan.title}
-              </MotionHeading>
-              <MotionText
-                fontSize="md"
-                color="gray.500"
-                textAlign="center"
-                variants={itemVariants}
-              >
-                {plan.description}
-              </MotionText>
-              <MotionText
-                fontSize="5xl"
-                fontWeight="extrabold"
-                color={textColor}
-                variants={itemVariants}
-              >
-                {plan.price}€
-                <Text
-                  as="span"
-                  fontSize="lg"
-                  fontWeight="normal"
-                  color="gray.500"
-                >
-                  /month
-                </Text>
-              </MotionText>
-            </MotionVStack>
-            <Divider mb={8} />
-            <MotionVStack
-              spacing={3}
-              align="flex-start"
-              mb={10}
-              variants={itemVariants}
+              Choose Your Path
+            </MotionHeading>
+            <MotionText
+              fontSize="xl"
+              color="gray.400"
+              maxW="2xl"
             >
-              <List spacing={3}>
-                {plan.features.map((feature, index) => (
-                  <ListItem
-                    key={index}
-                    color={textColor}
-                    as={motion.li}
+              Unlock your potential with our cutting-edge fitness solutions
+            </MotionText>
+          </MotionVStack>
+
+          <MotionFlex
+            direction={{ base: "column", md: "row" }}
+            gap={8}
+            maxW="6xl"
+            mx="auto"
+            alignItems="stretch"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            {plans.map((plan) => (
+              <MotionBox
+                key={plan.id}
+                flex="1"
+                bg={cardBg}
+                rounded="2xl"
+                p={8}
+                border="1px solid"
+                borderColor={borderColor}
+                position="relative"
+                variants={itemVariants}
+                whileHover={{
+                  y: -5,
+                  transition: { duration: 0.3, ease: "easeInOut" },
+                }}
+                backdropFilter="blur(10px)"
+                _before={{
+                  content: '""',
+                  position: "absolute",
+                  inset: "-1px",
+                  borderRadius: "2xl",
+                  padding: "1px",
+                  background: "linear-gradient(45deg, brand.300, brand.400)",
+                  WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                  WebkitMaskComposite: "xor",
+                  maskComposite: "exclude",
+                }}
+              >
+                {plan.isPopular && (
+                  <MotionTag
+                    size="md"
+                    variant="solid"
+                    bg="brand.300"
+                    color="black"
+                    position="absolute"
+                    top="-4"
+                    right="4"
+                    rounded="full"
+                    py={1}
+                    px={3}
                     variants={itemVariants}
-                    custom={index}
+                    boxShadow="0 0 20px rgba(170, 255, 3, 0.3)"
                   >
-                    <ListIcon as={FaCheckCircle} color={accentColor} />
-                    {feature}
-                  </ListItem>
-                ))}
-              </List>
-            </MotionVStack>
-            <Button
-              size="lg"
-              width="full"
-              bg={accentColor}
-              borderRadius={20}
-              color="white"
-              as={motion.button}
-              whileHover={{
-                scale: 1.02,
-                transition: { duration: 0.2 },
-              }}
-              whileTap={{ scale: 0.98 }}
-              _hover={{
-                bg: accentHover,
-                boxShadow: buttonBoxShadow,
-              }}
-              onClick={() => console.log(`Subscribing to ${plan.title}`)}
-            >
-              {plan.id === "free" ? "Get Started" : "Subscribe Now"}
-            </Button>
-          </MotionBox>
-        ))}
-      </Flex>
+                    <TagLabel fontWeight="bold">Most Popular</TagLabel>
+                  </MotionTag>
+                )}
+                <MotionVStack
+                  spacing={6}
+                  align="center"
+                  mb={8}
+                  variants={itemVariants}
+                >
+                  <MotionHeading
+                    as="h2"
+                    size="lg"
+                    color={textColor}
+                    variants={itemVariants}
+                  >
+                    {plan.title}
+                  </MotionHeading>
+                  <MotionText
+                    fontSize="md"
+                    color="gray.400"
+                    textAlign="center"
+                    variants={itemVariants}
+                  >
+                    {plan.description}
+                  </MotionText>
+                  <MotionText
+                    fontSize="5xl"
+                    fontWeight="extrabold"
+                    color={textColor}
+                    variants={itemVariants}
+                  >
+                    {plan.price}€
+                    <Text
+                      as="span"
+                      fontSize="lg"
+                      fontWeight="normal"
+                      color="gray.400"
+                    >
+                      /month
+                    </Text>
+                  </MotionText>
+                </MotionVStack>
+                <Divider borderColor="rgba(255, 255, 255, 0.1)" mb={8} />
+                <MotionVStack
+                  spacing={4}
+                  align="flex-start"
+                  mb={10}
+                  variants={itemVariants}
+                >
+                  <List spacing={4}>
+                    {plan.features.map((feature, index) => (
+                      <ListItem
+                        key={index}
+                        color="gray.300"
+                        as={motion.li}
+                        variants={itemVariants}
+                        custom={index}
+                        display="flex"
+                        alignItems="center"
+                        gap={2}
+                      >
+                        <ListIcon as={FaCheckCircle} color={accentColor} />
+                        {feature}
+                      </ListItem>
+                    ))}
+                  </List>
+                </MotionVStack>
+                <Button
+                  size="lg"
+                  width="full"
+                  bg={accentColor}
+                  color="black"
+                  borderRadius={20}
+                  as={motion.button}
+                  whileHover={{
+                    scale: 1.02,
+                    transition: { duration: 0.2 },
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                  _hover={{
+                    bg: accentHover,
+                    boxShadow: "0 0 20px rgba(170, 255, 3, 0.3)",
+                  }}
+                  onClick={() => console.log(`Subscribing to ${plan.title}`)}
+                >
+                  {plan.id === "free" ? "Get Started" : "Subscribe Now"}
+                </Button>
+              </MotionBox>
+            ))}
+          </MotionFlex>
+        </MotionVStack>
+      </Container>
     </Box>
   );
 }

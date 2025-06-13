@@ -24,6 +24,8 @@ import navbarItems, { NavbarItem } from "../utils/navbarItems";
 
 const Navbar = () => {
   const pathname = usePathname();
+  const isPricingPage = pathname?.startsWith("/pricing");
+
   const hoverGlow = {
     transition: "all 0.2s ease-in-out",
     boxShadow: "0 0 8px rgba(170, 255, 3, 0.2)",
@@ -42,29 +44,17 @@ const Navbar = () => {
     }
   };
 
-  const getActiveStyles = (path: string) => {
-    const isActive = pathname === path;
+  const getActiveStyles = (href: string) => {
+    const isActive = pathname === href;
     return {
       variant: "ghost",
-      fontWeight: "medium",
-      color: "gray.800",
-      _hover: hoverGlow,
-      sx: {
-        position: "relative",
-        "&::after": isActive
-          ? {
-              content: '""',
-              position: "absolute",
-              bottom: "-2px",
-              left: "50%",
-              transform: "translateX(-50%)",
-              width: "4px",
-              height: "4px",
-              borderRadius: "full",
-              bg: "black",
-            }
-          : {},
+      color: isPricingPage ? "white" : "gray.800",
+      _hover: {
+        bg: isPricingPage ? "whiteAlpha.200" : "gray.100",
       },
+      ...(isActive && {
+        bg: isPricingPage ? "whiteAlpha.200" : "gray.100",
+      }),
     };
   };
 
@@ -102,16 +92,22 @@ const Navbar = () => {
       style={{ maxWidth: navbarSpringWidth }}
       px={{ base: 3, md: 4 }}
       py={2}
-      border="1px solid rgba(0, 0, 0, 0.1)"
+      border="1px solid"
+      borderColor={isPricingPage ? "whiteAlpha.200" : "rgba(0, 0, 0, 0.1)"}
       borderRadius={30}
-      boxShadow="0 4px 12px rgba(0, 0, 0, 0.1)"
+      boxShadow={
+        isPricingPage
+          ? "0 4px 12px rgba(255, 255, 255, 0.1)"
+          : "0 4px 12px rgba(0, 0, 0, 0.1)"
+      }
       display="flex"
       justifyContent="space-between"
       alignItems="center"
-      color="gray.800"
+      color={isPricingPage ? "white" : "gray.800"}
       transform="translateX(-50%)"
       _hover={hoverGlow}
       backdropFilter="blur(10px)"
+      bg={isPricingPage ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.8)"}
     >
       <IconButton
         aria-label="Open menu"
@@ -119,14 +115,16 @@ const Navbar = () => {
         display={{ base: "flex", md: "none" }}
         onClick={onOpen}
         variant="ghost"
-        color="white"
+        color={isPricingPage ? "white" : "gray.800"}
         _hover={hoverGlow}
       />
 
       <Link
         href="/"
         aria-label="Go to homepage"
-        className="p-2 tracking-tight text-2xl font-bold transition-all  hover:text-gray-500"
+        className={`p-2 tracking-tight text-2xl font-bold transition-all hover:text-gray-500 ${
+          isPricingPage ? "text-white" : "text-gray.800"
+        }`}
       >
         HandFit
       </Link>
@@ -159,7 +157,7 @@ const Navbar = () => {
           >
             <Link href="/auth" passHref>
               <Button
-                color="black"
+                color={isPricingPage ? "white" : "black"}
                 bg={pathname === "/login" ? "brand.400" : "brand.300"}
                 _hover={{
                   bg: "brand.400",
