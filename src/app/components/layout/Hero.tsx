@@ -63,10 +63,10 @@ const Hero = () => {
           {...fadeIn(0.4)}
           className="mt-6 text-lg sm:text-xl max-w-2xl mx-auto text-gray-200"
         >
-          <strong>Personalized Workouts & Smart Progress Tracking</strong>: Get tailored
-          fitness plans and detailed progress insights—automatically. Our AI
-          analyzes your activity, tracks improvements, and delivers motivating
-          feedback to help you stay on top of your goals.
+          <strong>Personalized Workouts & Smart Progress Tracking</strong>: Get
+          tailored fitness plans and detailed progress insights—automatically.
+          Our AI analyzes your activity, tracks improvements, and delivers
+          motivating feedback to help you stay on top of your goals.
         </motion.p>
 
         <motion.div {...fadeIn(0.6)} className="mt-10">
