@@ -6,7 +6,6 @@ import {
   VStack,
   Flex,
   Button,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
@@ -57,8 +56,17 @@ export default function HeroSection() {
         muted
         playsInline
         className="absolute inset-0 w-full h-full object-cover z-0"
+        onError={(e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
+          console.error("Error loading video:", e);
+        }}
+        onEnded={(e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
+          e.currentTarget.play();
+        }}
       >
-        <source src="http://localhost:8081/media/run.mp4" type="video/mp4" />
+        <source
+          src="http://localhost:8081/media/about_run.mp4"
+          type="video/mp4"
+        />
       </Box>
 
       <Box
@@ -85,16 +93,17 @@ export default function HeroSection() {
             color="white"
             variants={fadeInUp}
           >
-            About <span className="text-[#AAFF03]">HandFit+</span>
+            About <span className="text-[#AAFF03]">HandFit</span>
           </MotionHeading>
           <MotionText
             fontSize="xl"
             maxW="2xl"
-            color="gray.200"
+            color="gray.400"
             variants={fadeInUp}
           >
-            We're revolutionizing the fitness industry with AI-powered workout plans and smart progress tracking. 
-            Our mission is to make fitness accessible, enjoyable, and effective for everyone.
+            We&apos;re revolutionizing the fitness industry with AI-powered
+            workout plans and smart progress tracking. Our mission is to make
+            fitness accessible, enjoyable, and effective for everyone.
           </MotionText>
           <MotionFlex
             gap={4}
@@ -120,8 +129,8 @@ export default function HeroSection() {
               <Button
                 size="lg"
                 variant="outline"
-                color="white"
-                borderColor="white"
+                color="gray.400"
+                borderColor="gray.300"
                 borderRadius={30}
                 _hover={{
                   bg: "white",
