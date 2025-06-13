@@ -28,7 +28,9 @@ const Navbar = () => {
 
   const hoverGlow = {
     transition: "all 0.2s ease-in-out",
-    boxShadow: "0 0 8px rgba(170, 255, 3, 0.2)",
+    boxShadow: isPricingPage
+      ? "0 0 20px rgba(255, 255, 255, 0.1)"
+      : "0 0 20px rgba(0, 0, 0, 0.1)",
   };
 
   const handleClick = (
@@ -50,11 +52,28 @@ const Navbar = () => {
       variant: "ghost",
       color: isPricingPage ? "white" : "gray.800",
       _hover: {
-        bg: isPricingPage ? "whiteAlpha.200" : "gray.100",
+        bg: "transparent",
+        transform: "translateY(-1px)",
+        textShadow: isPricingPage
+          ? "0 0 8px rgba(255, 255, 255, 0.5)"
+          : "0 0 8px rgba(0, 0, 0, 0.2)",
       },
-      ...(isActive && {
-        bg: isPricingPage ? "whiteAlpha.200" : "gray.100",
-      }),
+      _before: isActive
+        ? {
+            content: '""',
+            position: "absolute",
+            bottom: "-4px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "4px",
+            height: "4px",
+            borderRadius: "full",
+            bg: isPricingPage ? "white" : "black",
+            boxShadow: isPricingPage
+              ? "0 0 8px rgba(255, 255, 255, 0.5)"
+              : "0 0 8px rgba(0, 0, 0, 0.2)",
+          }
+        : undefined,
     };
   };
 
@@ -107,7 +126,6 @@ const Navbar = () => {
       transform="translateX(-50%)"
       _hover={hoverGlow}
       backdropFilter="blur(10px)"
-      bg={isPricingPage ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.8)"}
     >
       <IconButton
         aria-label="Open menu"
@@ -116,15 +134,21 @@ const Navbar = () => {
         onClick={onOpen}
         variant="ghost"
         color={isPricingPage ? "white" : "gray.800"}
-        _hover={hoverGlow}
+        _hover={{
+          bg: "transparent",
+          transform: "translateY(-1px)",
+          textShadow: isPricingPage
+            ? "0 0 8px rgba(255, 255, 255, 0.5)"
+            : "0 0 8px rgba(0, 0, 0, 0.2)",
+        }}
       />
 
       <Link
         href="/"
         aria-label="Go to homepage"
-        className={`p-2 tracking-tight text-2xl font-bold transition-all hover:text-gray-500 ${
+        className={`p-2 tracking-tight text-2xl font-bold transition-all ${
           isPricingPage ? "text-white" : "text-gray.800"
-        }`}
+        } hover:opacity-80`}
       >
         HandFit
       </Link>
@@ -160,26 +184,10 @@ const Navbar = () => {
                 bg={pathname === "/login" ? "brand.400" : "brand.300"}
                 _hover={{
                   bg: "brand.400",
-                  boxShadow: "0 0 8px rgba(170, 255, 3, 0.2)",
+                  transform: "translateY(-1px)",
+                  boxShadow: "0 0 20px rgba(170, 255, 3, 0.3)",
                 }}
                 borderRadius={20}
-                sx={{
-                  position: "relative",
-                  "&::after":
-                    pathname === "/login"
-                      ? {
-                          content: '""',
-                          position: "absolute",
-                          bottom: "-2px",
-                          left: "50%",
-                          transform: "translateX(-50%)",
-                          width: "4px",
-                          height: "4px",
-                          borderRadius: "full",
-                          bg: "white",
-                        }
-                      : {},
-                }}
               >
                 Sign In
               </Button>
