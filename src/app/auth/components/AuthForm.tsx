@@ -67,7 +67,7 @@ const AuthForm = () => {
       <MotionStack spacing="6" variants={itemVariants}>
         <Stack spacing={{ base: "2", md: "3" }} textAlign="center">
           <Heading size={{ base: "xl", md: "2xl" }} color={headingColor}>
-            Welcome to HandFit+
+            Welcome to HandFit
           </Heading>
           <Text color={textColor}>
             Sign in to your account to continue your fitness journey
