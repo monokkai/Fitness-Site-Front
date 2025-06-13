@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@auth/core": "^0.34.2",
     "@chakra-ui/color-mode": "^2.2.0",
     "@chakra-ui/hooks": "^2.4.5",
     "@chakra-ui/icons": "^2.2.4",
@@ -24,6 +25,7 @@
     "@xyflow/react": "^12.6.4",
     "framer-motion": "^11.18.2",
     "next": "14.2.16",
+    "next-auth": "^4.24.11",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^5.0.1",
