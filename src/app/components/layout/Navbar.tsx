@@ -157,7 +157,6 @@ const Navbar = () => {
           >
             <Link href="/auth" passHref>
               <Button
-                color={isPricingPage ? "white" : "black"}
                 bg={pathname === "/login" ? "brand.400" : "brand.300"}
                 _hover={{
                   bg: "brand.400",
