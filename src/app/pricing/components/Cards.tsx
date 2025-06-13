@@ -50,9 +50,15 @@ const itemVariants: Variants = {
 
 export default function Cards() {
   const bg = useColorModeValue("gray.900", "gray.900");
-  const cardBg = useColorModeValue("rgba(255, 255, 255, 0.05)", "rgba(255, 255, 255, 0.05)");
+  const cardBg = useColorModeValue(
+    "rgba(255, 255, 255, 0.05)",
+    "rgba(255, 255, 255, 0.05)"
+  );
   const textColor = useColorModeValue("white", "white");
-  const borderColor = useColorModeValue("rgba(255, 255, 255, 0.1)", "rgba(255, 255, 255, 0.1)");
+  const borderColor = useColorModeValue(
+    "rgba(255, 255, 255, 0.1)",
+    "rgba(255, 255, 255, 0.1)"
+  );
   const accentColor = useColorModeValue("brand.300", "brand.300");
   const accentHover = useColorModeValue("brand.400", "brand.400");
 
@@ -65,7 +71,6 @@ export default function Cards() {
       py={{ base: 16, md: 24 }}
       px={{ base: 4, md: 12 }}
     >
-      {/* Animated background elements */}
       <Box
         position="absolute"
         top="0"
@@ -112,6 +117,7 @@ export default function Cards() {
           >
             <MotionHeading
               as="h1"
+              mt={10}
               size="2xl"
               bgGradient="linear(to-r, brand.300, brand.400)"
               bgClip="text"
@@ -119,11 +125,7 @@ export default function Cards() {
             >
               Choose Your Path
             </MotionHeading>
-            <MotionText
-              fontSize="xl"
-              color="gray.400"
-              maxW="2xl"
-            >
+            <MotionText fontSize="xl" color="gray.400" maxW="2xl">
               Unlock your potential with our cutting-edge fitness solutions
             </MotionText>
           </MotionVStack>
@@ -161,7 +163,8 @@ export default function Cards() {
                   borderRadius: "2xl",
                   padding: "1px",
                   background: "linear-gradient(45deg, brand.300, brand.400)",
-                  WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                  WebkitMask:
+                    "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
                   WebkitMaskComposite: "xor",
                   maskComposite: "exclude",
                 }}
