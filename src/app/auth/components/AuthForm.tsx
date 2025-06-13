@@ -50,7 +50,7 @@ const itemVariants = {
   },
 };
 
-const AuthForm = () => {
+const AuthForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const bgColor = useColorModeValue("white", "gray.800");
   const borderColor = useColorModeValue("gray.200", "gray.700");
