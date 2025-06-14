@@ -2,14 +2,14 @@
 
 import { Box, Container, Heading, Text } from "@chakra-ui/react";
 import { Roadmap } from "./components/Roadmap";
-import LayoutWrapper from "../components/layout/LayoutWrapper";
+import LayoutWrapper from "./components/LayoutWrapper";
 
-export default function TrainingsPage() {
+export default function TrainingsPage(): React.ReactNode {
   return (
     <LayoutWrapper>
       <Box as="main" minH="100vh" bg="gray.50">
         <Container maxW="container.xl" py={10}>
-          <Box textAlign="center" mb={16}>
+          <Box textAlign="center" mb={16} mt={12}>
             <Heading
               as="h1"
               size="2xl"

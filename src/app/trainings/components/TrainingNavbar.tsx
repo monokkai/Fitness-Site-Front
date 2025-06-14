@@ -4,7 +4,7 @@ import { Box, Container, IconButton } from "@chakra-ui/react";
 import { FaUserCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
 
-export const TrainingNavbar: React.FC = () => {
+const TrainingNavbar: React.FC = () => {
   return (
     <Box
       as="nav"
@@ -44,3 +44,5 @@ export const TrainingNavbar: React.FC = () => {
     </Box>
   );
 };
+
+export default TrainingNavbar;
