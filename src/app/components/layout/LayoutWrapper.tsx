@@ -11,16 +11,16 @@ export default function LayoutWrapper({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const isAuthOrGeneratePage =
-    pathname?.startsWith("/auth") || pathname?.startsWith("/signup");
+  const hideNavbarPaths = ["/auth", "/signup", "/trainings"];
+  const shouldHideNavbar = hideNavbarPaths.some(path => pathname?.startsWith(path));
 
   return (
     <Box>
-      {!isAuthOrGeneratePage && <Navbar />}
+      {!shouldHideNavbar && <Navbar />}
       <Box as="main" className="bg-white text-white">
         {children}
       </Box>
-      {!isAuthOrGeneratePage && <Footer />}
+      {!shouldHideNavbar && <Footer />}
     </Box>
   );
 }
