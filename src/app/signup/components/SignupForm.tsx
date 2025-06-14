@@ -57,8 +57,10 @@ const SignupForm: React.FC = () => {
   const textColor = useColorModeValue("gray.600", "gray.400");
   const headingColor = useColorModeValue("gray.700", "white");
 
-  const { formData, handleChange } = useSignup();
+  const { formData, handleChange, handleSubmit } = useSignup();
   const [showPassword, setShowPassword] = useState(false);
+
+  console.log("formData", formData);
 
   return (
     <MotionStack
@@ -87,6 +89,7 @@ const SignupForm: React.FC = () => {
         borderRadius={{ base: "none", sm: "xl" }}
         borderWidth="1px"
         borderColor={borderColor}
+        color={textColor}
       >
         <Stack spacing="6">
           <Stack spacing="5">
@@ -175,6 +178,7 @@ const SignupForm: React.FC = () => {
                 bg: "brand.400",
                 boxShadow: "0 0 12px rgba(170, 255, 3, 0.7)",
               }}
+              onClick={handleSubmit}
             >
               Create Account
             </Button>
