@@ -21,6 +21,7 @@ import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useSignup } from "@/app/signup/hooks/useSignup";
 
 const MotionBox = motion(Box);
 const MotionStack = motion(Stack);
@@ -51,12 +52,13 @@ const itemVariants = {
 };
 
 const AuthForm: React.FC = () => {
-  const [showPassword, setShowPassword] = useState(false);
   const bgColor = useColorModeValue("white", "gray.800");
   const borderColor = useColorModeValue("gray.200", "gray.700");
   const textColor = useColorModeValue("gray.600", "gray.400");
   const headingColor = useColorModeValue("gray.700", "white");
 
+  const { formData, handleChange, handleSubmit } = useSignup();
+  const [showPassword, setShowPassword] = useState(false);
   return (
     <MotionStack
       spacing="8"
@@ -102,6 +104,8 @@ const AuthForm: React.FC = () => {
                     borderColor: "brand.400",
                     boxShadow: "0 0 0 1px var(--chakra-colors-brand-400)",
                   }}
+                  value={formData.email}
+                  onChange={handleChange}
                 />
               </FormControl>
             </MotionBox>
@@ -121,6 +125,8 @@ const AuthForm: React.FC = () => {
                       borderColor: "brand.400",
                       boxShadow: "0 0 0 1px var(--chakra-colors-brand-400)",
                     }}
+                    value={formData.password}
+                    onChange={handleChange}
                   />
                   <InputRightElement>
                     <IconButton
@@ -147,6 +153,7 @@ const AuthForm: React.FC = () => {
                 bg: "brand.400",
                 boxShadow: "0 0 12px rgba(170, 255, 3, 0.7)",
               }}
+              onClick={handleSubmit}
             >
               Sign in
             </Button>
