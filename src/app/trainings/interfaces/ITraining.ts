@@ -17,3 +17,13 @@ export interface FeaturedWorkout {
     difficulty: string;
     xp: number;
 }
+
+export interface PathNode {
+    type: 'level' | 'story' | 'chest';
+    level?: number;
+    isCompleted?: boolean;
+    isLocked?: boolean;
+    difficulty?: "easy" | "medium" | "hard";
+    xp?: number;
+    exerciseCount?: number;
+}

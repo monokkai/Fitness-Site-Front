@@ -5,11 +5,9 @@ import TrainingNavbar from "./TrainingNavbar";
 import Footer from "../../components/layout/Footer";
 import { Box } from "@chakra-ui/react";
 
-export default function LayoutWrapper({
+const LayoutWrapper: React.FC<{ children: React.ReactNode }> = ({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+}) => {
   const pathname = usePathname();
   const hideNavbarPaths = ["/trainings"];
   const shouldHideNavbar = hideNavbarPaths.some((path) =>
@@ -25,4 +23,6 @@ export default function LayoutWrapper({
       {!shouldHideNavbar && <Footer />}
     </Box>
   );
-}
+};
+
+export default LayoutWrapper;

@@ -18,7 +18,7 @@ import {
   Flex,
   Center,
 } from "@chakra-ui/react";
-import { Roadmap } from "./components/Roadmap";
+import Roadmap from "./components/Roadmap";
 import LayoutWrapper from "./components/LayoutWrapper";
 import { FaFire, FaStar, FaTrophy, FaPlus } from "react-icons/fa";
 import { motion } from "framer-motion";
