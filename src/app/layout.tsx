@@ -7,8 +7,8 @@ import LayoutWrapper from "./components/layout/LayoutWrapper";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Payment System",
-  description: "Payment system with Stripe integration",
+  title: "HandFit - Fitness App",
+  description: "Fitness App with powerful features",
 };
 
 export default function RootLayout({
