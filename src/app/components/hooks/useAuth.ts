@@ -1,5 +1,6 @@
 import { AuthFormData } from "@/app/components/interfaces/IAuth";
 import { create } from "zustand"
+import axios from "axios"
 
 const useAuthStore = create<AuthFormData>(set => ({
     email: "",
@@ -25,12 +26,11 @@ export const useAuth = () => {
         event.preventDefault();
         try {
             console.log("Submitting form data with Zustand:", email, password);
-            const response = await fetch("api/auth/auth", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
+            const response = await axios.post("/auth...", {
+                email,
+                password
             });
-            const data = await response.json();
+            const data = await response.data;
             console.log("Response data:", data);
         } catch (error) {
             console.error("Error was occured:", error);
