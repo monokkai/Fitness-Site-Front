@@ -21,7 +21,7 @@ import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useSignup } from "@/app/signup/hooks/useSignup";
+import { useAuth } from "../../components/hooks/useAuth";
 
 const MotionBox = motion(Box);
 const MotionStack = motion(Stack);
@@ -57,7 +57,7 @@ const AuthForm: React.FC = () => {
   const textColor = useColorModeValue("gray.600", "gray.400");
   const headingColor = useColorModeValue("gray.700", "white");
 
-  const { formData, handleChange, handleSubmit } = useSignup();
+  const { formData, handleChange, handleSubmit } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   return (
     <MotionStack
