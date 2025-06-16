@@ -76,7 +76,7 @@ Accessible only after authentication (JWT Bearer Token required):
 
 Frontend communicates with backend via RESTful API or optionally gRPC (if added later). Docker containers expose APIs, consumed via `/api` route in Next.js.
 
-## 🔐 Auth Flow Summary
+## 🔐 Auth Flow 
 
 1. User signs up via NextAuth
 2. Frontend sends auth request to ASP.NET `auth-service`
@@ -90,5 +90,12 @@ Frontend communicates with backend via RESTful API or optionally gRPC (if added 
 - Leaderboards with daily/weekly rewards
 - Notification system for missed days or milestones
 - Offline mode with synced progress
+
+
+---
+- `nginx-service` --> https://github.com/monokkai/Fitness-Site-Nginx-Service
+- `auth-service` --> https://github.com/monokkai/Fitness-Site-Auth-Service
+- `rewards-service` --> https://github.com/monokkai/Fitness-Site-Rewards-Service
+ 
 
 ---
