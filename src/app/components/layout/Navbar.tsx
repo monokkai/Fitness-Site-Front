@@ -20,7 +20,7 @@ import {
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { motion, AnimatePresence, useSpring } from "framer-motion";
 import { useEffect, useState } from "react";
-import navbarItems, { NavbarItem } from "../../utils/navbarItems";
+import navbarItems, { NavbarItem } from "../../shared/utils/navbarItems";
 
 const Navbar = () => {
   const pathname = usePathname();

@@ -12,7 +12,7 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import faqItems from "../utils/faqItems";
+import faqItems from "../shared/utils/faqItems";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 
