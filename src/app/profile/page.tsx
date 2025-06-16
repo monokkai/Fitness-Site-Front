@@ -24,10 +24,10 @@ import LayoutWrapper from "./components/LayoutWrapper";
 
 const ProfilePage: React.FC = () => {
   const stats = [
-    { label: "Current Streak", value: "7", icon: FaFire, color: "orange" },
-    { label: "Total XP", value: "1,250", icon: FaTrophy, color: "yellow" },
-    { label: "Exercises Done", value: "45", icon: FaDumbbell, color: "blue" },
-    { label: "Achievements", value: "12", icon: FaMedal, color: "purple" },
+    { label: "Current Streak", value: "0", icon: FaFire, color: "orange" },
+    { label: "Total XP", value: "0", icon: FaTrophy, color: "yellow" },
+    { label: "Exercises Done", value: "0", icon: FaDumbbell, color: "blue" },
+    { label: "Achievements", value: "0", icon: FaMedal, color: "purple" },
   ];
 
   return (
@@ -42,20 +42,16 @@ const ProfilePage: React.FC = () => {
                   spacing={8}
                   align="center"
                 >
-                  <Avatar
-                    size="2xl"
-                    name="John Doe"
-                    src="https://bit.ly/broken-link"
-                  />
+                  <Avatar size="2xl" />
                   <Box flex={1}>
                     <Heading size="lg" mb={2}>
-                      John Doe
+                      Profile
                     </Heading>
                     <Text color="gray.600" mb={4}>
-                      Joined January 2024
+                      Joined: -
                     </Text>
                     <Badge colorScheme="blue" fontSize="md" p={2}>
-                      Goal: Build Muscle
+                      Goal: Not Set
                     </Badge>
                   </Box>
                 </Stack>
@@ -96,10 +92,10 @@ const ProfilePage: React.FC = () => {
                   <Box>
                     <HStack justify="space-between" mb={2}>
                       <Text fontWeight="medium">Daily Goal</Text>
-                      <Text color="green.500">4/5 exercises</Text>
+                      <Text color="green.500">0/0 exercises</Text>
                     </HStack>
                     <Progress
-                      value={80}
+                      value={0}
                       colorScheme="green"
                       borderRadius="full"
                     />
@@ -107,10 +103,10 @@ const ProfilePage: React.FC = () => {
                   <Box>
                     <HStack justify="space-between" mb={2}>
                       <Text fontWeight="medium">Weekly Goal</Text>
-                      <Text color="blue.500">18/25 exercises</Text>
+                      <Text color="blue.500">0/0 exercises</Text>
                     </HStack>
                     <Progress
-                      value={72}
+                      value={0}
                       colorScheme="blue"
                       borderRadius="full"
                     />
@@ -118,10 +114,10 @@ const ProfilePage: React.FC = () => {
                   <Box>
                     <HStack justify="space-between" mb={2}>
                       <Text fontWeight="medium">Monthly Challenge</Text>
-                      <Text color="purple.500">Level 7</Text>
+                      <Text color="purple.500">Level 0</Text>
                     </HStack>
                     <Progress
-                      value={65}
+                      value={0}
                       colorScheme="purple"
                       borderRadius="full"
                     />
@@ -141,7 +137,7 @@ const ProfilePage: React.FC = () => {
                       Training Goal
                     </Text>
                     <Button colorScheme="blue" variant="outline">
-                      Build Muscle
+                      Not Set
                     </Button>
                   </Box>
                   <Box>
@@ -149,7 +145,7 @@ const ProfilePage: React.FC = () => {
                       Difficulty Level
                     </Text>
                     <Button colorScheme="orange" variant="outline">
-                      Intermediate
+                      Not Set
                     </Button>
                   </Box>
                   <Box>
@@ -157,7 +153,7 @@ const ProfilePage: React.FC = () => {
                       Weekly Target
                     </Text>
                     <Button colorScheme="green" variant="outline">
-                      25 exercises
+                      Not Set
                     </Button>
                   </Box>
                   <Box>
@@ -165,7 +161,7 @@ const ProfilePage: React.FC = () => {
                       Rest Days
                     </Text>
                     <Button colorScheme="purple" variant="outline">
-                      2 days/week
+                      Not Set
                     </Button>
                   </Box>
                 </SimpleGrid>

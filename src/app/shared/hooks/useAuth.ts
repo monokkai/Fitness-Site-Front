@@ -1,4 +1,4 @@
-import { AuthFormData } from "@/app/components/interfaces/IAuth";
+import { AuthFormData } from "@/app/shared/interfaces/IAuth";
 import { create } from "zustand"
 import axios from "axios"
 
@@ -9,7 +9,7 @@ const useAuthStore = create<AuthFormData>(set => ({
     setPassword: (password: string) => set({ password })
 }))
 
-export const useAuth = () => {
+export const useAuth: () => void = () => {
     const { email, password, setEmail, setPassword } = useAuthStore();
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

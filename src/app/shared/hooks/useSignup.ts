@@ -1,4 +1,4 @@
-import { SignupFormData } from "@/app/components/interfaces/IAuth";
+import { SignupFormData } from "@/app/shared/interfaces/IAuth";
 import { create } from "zustand"
 import axios from "axios"
 

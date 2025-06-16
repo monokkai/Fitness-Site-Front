@@ -21,7 +21,7 @@ import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useAuth } from "../../components/hooks/useAuth";
+import { useAuth } from "../../shared/hooks/useAuth";
 
 const MotionBox = motion(Box);
 const MotionStack = motion(Stack);
