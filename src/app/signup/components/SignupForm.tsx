@@ -60,7 +60,7 @@ const SignupForm: React.FC = () => {
   const { formData, handleChange, handleSubmit } = useSignup();
   const [showPassword, setShowPassword] = useState(false);
 
-  console.log("formData", formData);
+  // console.log("formData", formData);
 
   return (
     <MotionStack

@@ -24,7 +24,6 @@ export const useSignup = () => {
         if (id == "password") {
             setPassword(value);
         }
-        console.log("Form data:", name, email, password)
     };
 
     const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
