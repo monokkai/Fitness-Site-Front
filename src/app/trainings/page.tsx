@@ -75,7 +75,6 @@ export default function TrainingsPage(): React.ReactNode {
     <LayoutWrapper>
       <Box as="main" minH="100vh" bg="gray.50">
         <Container maxW="container.xl" py={10}>
-          {/* Hero Section */}
           <MotionBox
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -99,7 +98,6 @@ export default function TrainingsPage(): React.ReactNode {
             </Text>
           </MotionBox>
 
-          {/* Stats Section */}
           <SimpleGrid columns={{ base: 1, md: 3 }} spacing={8} mb={12}>
             <MotionCard
               initial={{ opacity: 0, x: -20 }}
@@ -156,7 +154,6 @@ export default function TrainingsPage(): React.ReactNode {
             </MotionCard>
           </SimpleGrid>
 
-          {/* Categories Section */}
           <Box mb={16}>
             <Heading size="lg" mb={6}>
               Training Categories
@@ -208,7 +205,6 @@ export default function TrainingsPage(): React.ReactNode {
             </SimpleGrid>
           </Box>
 
-          {/* Featured Workouts */}
           <Box mb={16}>
             <Heading size="lg" mb={6}>
               Featured Workouts
@@ -253,7 +249,6 @@ export default function TrainingsPage(): React.ReactNode {
             </SimpleGrid>
           </Box>
 
-          {/* Training Path */}
           <Box>
             <Heading size="lg" mb={6}>
               Learning Path
