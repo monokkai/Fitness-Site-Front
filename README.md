@@ -96,6 +96,5 @@ Frontend communicates with backend via RESTful API or optionally gRPC (if added 
 - `nginx-service` --> https://github.com/monokkai/Fitness-Site-Nginx-Service
 - `auth-service` --> https://github.com/monokkai/Fitness-Site-Auth-Service
 - `rewards-service` --> https://github.com/monokkai/Fitness-Site-Rewards-Service
- 
-
+- `frontend` --> https://github.com/monokkai/Fitness-Site-Front 📍 U're here
 ---
