@@ -30,7 +30,7 @@ export const useSignup = () => {
     const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         try {
-            console.log('Submitting form data:', name, email, password);
+            console.log('Submitting form data with Zustand:', name, email, password);
             const response = await fetch('/api/auth/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
