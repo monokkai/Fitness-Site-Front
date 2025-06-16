@@ -19,7 +19,8 @@ The frontend is built using:
 ### Public Routes
 
 - `/` — Landing page (for unauthenticated users only)
-- `/login` — Login/signup screen using NextAuth
+- `/auth` — Login screen using NextAuth
+- `/signup` - Sign Up screen using NextAuth
 
 ### Protected Routes
 
@@ -29,7 +30,7 @@ Accessible only after authentication (JWT Bearer Token required):
 - `/profile` — View/edit user profile (weight, height, goals, etc.)
 - `/rewards` — View earned rewards and achievements
 
-> Unauthenticated users trying to access protected routes will be redirected to `/`.
+> !! Unauthenticated users trying to access protected routes will be redirected to `/`.
 
 ## 🧭 Training Journey UI ("Road" like Duolingo)
 
