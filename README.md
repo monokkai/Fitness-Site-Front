@@ -91,7 +91,6 @@ Frontend communicates with backend via RESTful API or optionally gRPC (if added 
 - Notification system for missed days or milestones
 - Offline mode with synced progress
 
-
 ---
 - `nginx-service` --> https://github.com/monokkai/Fitness-Site-Nginx-Service
 - `auth-service` --> https://github.com/monokkai/Fitness-Site-Auth-Service
