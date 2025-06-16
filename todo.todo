@@ -9,4 +9,5 @@
 ---BACKEND(SERVICES)---
 ✔ Make nginx-service for giving static files to frontend @done(25-06-16 18:04)
 ☐ Auth-service (C# ASP.NET Core)
+☐ Make independent services for databases for users, achievements, rewards
 
