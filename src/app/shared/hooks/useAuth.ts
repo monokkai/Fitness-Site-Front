@@ -1,6 +1,11 @@
+'use client';
+
 import { AuthFormData } from "@/app/shared/interfaces/IAuth";
 import { create } from "zustand"
 import axios from "axios"
+import { useRouter } from 'next/navigation';
+import { useUserStore } from "../store/userStore";
+import { IAuthResponse } from "../interfaces/IUser";
 
 const useAuthStore = create<AuthFormData>(set => ({
     email: "",
@@ -9,8 +14,10 @@ const useAuthStore = create<AuthFormData>(set => ({
     setPassword: (password: string) => set({ password })
 }))
 
-export const useAuth: () => void = () => {
+export const useAuth = () => {
+    const router = useRouter();
     const { email, password, setEmail, setPassword } = useAuthStore();
+    const { setUser, setToken } = useUserStore();
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = event.target;
@@ -25,15 +32,22 @@ export const useAuth: () => void = () => {
     const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         try {
-            console.log("Submitting form data with Zustand:", email, password);
-            const response = await axios.post("/auth...", {
+            const response = await axios.post("http://localhost:8082/api/auth/auth", {
                 email,
                 password
             });
-            const data = await response.data;
-            console.log("Response data:", data);
-        } catch (error) {
-            console.error("Error was occured:", error);
+
+            const { token, user } = response.data as IAuthResponse;
+            setToken(token);
+            setUser(user);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+            setEmail("");
+            setPassword("");
+            router.push('/');
+
+        } catch (error: any) {
+            console.error("Error occurred:", error.response?.data?.error || error.message);
         }
     }
 
