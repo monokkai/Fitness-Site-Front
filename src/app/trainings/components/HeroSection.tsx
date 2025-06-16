@@ -18,16 +18,17 @@ const HeroSection: React.FC = () => (
       as="h1"
       size="2xl"
       mb={4}
+      h={100}
       bgGradient="linear(to-r, blue.400, blue.600)"
       bgClip="text"
     >
       Your Training Journey
     </Heading>
     <Text fontSize="lg" color="gray.600" maxW="2xl" mx="auto">
-      Follow your personalized training plan and reach new heights.
-      Every workout brings you closer to your goal!
+      Follow your personalized training plan and reach new heights. Every
+      workout brings you closer to your goal!
     </Text>
   </MotionBox>
 );
 
-export default HeroSection; 
+export default HeroSection;

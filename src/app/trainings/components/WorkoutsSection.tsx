@@ -60,14 +60,14 @@ const WorkoutsSection: React.FC = () => {
             </MotionCard>
           ))
         ) : (
-          <Box>
+          <>
             <EmptyWorkoutCard />
             <EmptyWorkoutCard />
-          </Box>
+          </>
         )}
       </SimpleGrid>
     </Box>
   );
 };
 
-export default WorkoutsSection;
+export default WorkoutsSection; 
