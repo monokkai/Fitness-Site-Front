@@ -1,12 +1,13 @@
 ---FRONTEND---
 ✔ Make basic frontend components like: Navbar, Header, Hero, Footer, etc. @done(25-05-28 14:57)
-☐ When it comes to dashboard it must look like app.jenni.ai/editor/5mS1WoZyn5HLDkAq9I8m
-There is the app. ... abd editor/Some key for UNIQUE USER 
 ☐ Create new /generate route for user that SIGNED IN and after that using React Flow and Monaco Editor make UI/UX better
-
+✔ Check if data from inputs gets valid in console.log @done(25-06-16 17:12)
+✔ Use axios to fetch data from the backend, not fetch @done(25-06-16 18:04)
+✔ Use Zustand for state management, not useState @done(25-06-16 17:44)
+✔ Cookies, not localStorage! @done(25-06-16 18:03)
 
 ---BACKEND(SERVICES)---
-☐ Make basic backend services like: User, Auth, etc.
+✔ Make nginx-service for giving static files to frontend @done(25-06-16 18:04)
 
 
 ---BACKEND(API GATEWAY)---

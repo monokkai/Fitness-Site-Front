@@ -1,5 +1,0 @@
---FRONTEND--
-✔ Check if data from inputs gets valid in console.log @done(25-06-16 17:12)
-☐ Use axios to fetch data from the backend, not fetch
-✔ Use Zustand for state management, not useState @done(25-06-16 17:44)
-☐ Cookies, not localStorage!
