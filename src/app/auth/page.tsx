@@ -9,6 +9,7 @@ const AuthPage: React.FC = () => {
       maxW="lg"
       py={{ base: "12", md: "24" }}
       px={{ base: "0", sm: "8" }}
+      color={"black"}
     >
       <AuthForm />
     </Container>

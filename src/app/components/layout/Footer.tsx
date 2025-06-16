@@ -49,7 +49,7 @@ export default function Footer() {
           spacing={{ base: 4, md: 8 }}
           align="center"
         >
-          <Link href="/about" passHref legacyBehavior>
+          <Link href="/about-us" passHref legacyBehavior>
             <ChakraLink
               fontWeight="medium"
               color={color}
