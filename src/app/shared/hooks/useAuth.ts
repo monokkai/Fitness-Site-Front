@@ -17,7 +17,7 @@ const useAuthStore = create<AuthFormData>(set => ({
 export const useAuth = () => {
     const router = useRouter();
     const { email, password, setEmail, setPassword } = useAuthStore();
-    const { setUser, setToken } = useUserStore();
+    const { setUser } = useUserStore();
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = event.target;
@@ -32,22 +32,23 @@ export const useAuth = () => {
     const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         try {
-            const response = await api.post("/auth/auth", {
+            const response = await api.post("/auth/login", {
                 email,
                 password
             });
 
-            const { token, user } = response.data as IAuthResponse;
-            setToken(token);
+            const { user } = response.data as IAuthResponse;
             setUser(user);
-            api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
             setEmail("");
             setPassword("");
             router.push('/');
 
         } catch (error: any) {
-            console.error("Error occurred:", error.response?.data?.error || error.message);
+            if (error instanceof Error) {
+                console.error("Error occurred:", error.message);
+            } else {
+                console.error("An unknown error occurred");
+            }
         }
     }
 

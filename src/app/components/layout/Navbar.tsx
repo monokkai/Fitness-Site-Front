@@ -30,8 +30,7 @@ const Navbar: React.FC = () => {
   const pathname = usePathname();
   const isPricingPage = pathname?.startsWith("/pricing");
 
-  const { user, token } = useUserStore();
-  const isAuthenticated = !!token && !!user;
+  const { user, isAuthenticated } = useUserStore();
 
   const hoverGlow = {
     transition: "all 0.2s ease-in-out",

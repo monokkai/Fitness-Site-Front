@@ -9,7 +9,7 @@ interface ApiError {
     response?: {
         data?: {
             error?: string;
-            modelState?: Record<string, string[]>;  
+            modelState?: Record<string, string[]>;
         };
     };
     message?: string;
@@ -38,7 +38,7 @@ const useSignupStore = create<SignupStore>(set => ({
 export const useSignup = () => {
     const router = useRouter();
     const { username, email, password, errors, setUsername, setEmail, setPassword, setErrors } = useSignupStore();
-    const { setUser, setToken } = useUserStore();
+    const { setUser } = useUserStore();
 
     const validateForm = () => {
         const errors: { username?: string; email?: string; password?: string; } = {};
@@ -94,9 +94,7 @@ export const useSignup = () => {
                 return;
             }
 
-            setToken(data.token);
             setUser(data.user);
-            api.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
 
             setUsername("");
             setEmail("");

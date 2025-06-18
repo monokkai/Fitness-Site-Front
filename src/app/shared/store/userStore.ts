@@ -1,22 +1,25 @@
 "use client"
 import { create } from "zustand";
-import { IUser, IUserStore } from "../interfaces/IUser";
+import { IUser } from "../interfaces/IUser";
+import api from "../api/axios";
 
-export const useUserStore = create<IUserStore>((set) => ({
+interface UserStore {
+    user: IUser | null;
+    isAuthenticated: boolean;
+    setUser: (user: IUser | null) => void;
+    logout: () => Promise<void>;
+}
+
+export const useUserStore = create<UserStore>((set) => ({
     user: null,
-    token: typeof window !== 'undefined' ? localStorage.getItem('token') : null,
-    isAuth: typeof window !== 'undefined' ? !!localStorage.getItem('token') : false,
-    setUser: (user: IUser) => set({ user, isAuth: true }),
-    setToken: (token: string) => {
-        if (typeof window !== 'undefined') {
-            localStorage.setItem('token', token);
+    isAuthenticated: false,
+    setUser: (user: IUser | null) => set({ user, isAuthenticated: !!user }),
+    logout: async () => {
+        try {
+            await api.post('/auth/logout');
+            set({ user: null, isAuthenticated: false });
+        } catch (error) {
+            console.error('Logout error:', error);
         }
-        set({ token });
-    },
-    logout: () => {
-        if (typeof window !== 'undefined') {
-            localStorage.removeItem('token');
-        }
-        set({ user: null, token: null, isAuth: false });
     }
 }));

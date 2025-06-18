@@ -1,8 +1,8 @@
-
 import axios from 'axios';
+import { API_CONFIG } from '../config/api.config';
 
 const api = axios.create({
-    baseURL: 'http://localhost:8082/api',
+    baseURL: API_CONFIG.baseURL,
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
@@ -10,27 +10,24 @@ const api = axios.create({
     withCredentials: true
 });
 
-api.interceptors.request.use(
-    (config) => {
-        const token = localStorage.getItem('token');
-        if (token && config.headers) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    }
-);
-
 api.interceptors.response.use(
     response => response,
     error => {
         if (error.response) {
             console.error('Server error:', error.response.data);
+            throw error.response.data;
         } else if (error.request) {
-            console.error('Network error:', error.request);
+            console.error('Network error:', {
+                status: error.request.status,
+                statusText: error.request.statusText,
+                readyState: error.request.readyState,
+                responseURL: error.request.responseURL
+            });
+            throw new Error('Network error occurred');
         } else {
             console.error('Error:', error.message);
+            throw error;
         }
-        return Promise.reject(error);
     }
 );
 
