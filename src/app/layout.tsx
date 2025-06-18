@@ -15,19 +15,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { isLoading } = useSession();
-
-  if (isLoading) {
-    return (
-      <html lang="en">
-        <body className={inter.className}>
-          <ChakraProvider theme={theme}>
-            <div>Loading...</div>
-          </ChakraProvider>
-        </body>
-      </html>
-    );
-  }
+  useSession();
 
   return (
     <html lang="en">
