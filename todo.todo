@@ -1,6 +1,5 @@
 ---FRONTEND---
 ✔ Make basic frontend components like: Navbar, Header, Hero, Footer, etc. @done(25-05-28 14:57)
-☐ Create new /generate route for user that SIGNED IN and after that using React Flow and Monaco Editor make UI/UX better
 ✔ Check if data from inputs gets valid in console.log @done(25-06-16 17:12)
 ✔ Use axios to fetch data from the backend, not fetch @done(25-06-16 18:04)
 ✔ Use Zustand for state management, not useState @done(25-06-16 17:44)
@@ -8,6 +7,6 @@
 
 ---BACKEND(SERVICES)---
 ✔ Make nginx-service for giving static files to frontend @done(25-06-16 18:04)
-☐ Auth-service (C# ASP.NET Core)
-☐ Make independent services for databases for users, achievements, rewards
+☐ Auth-service (C# ASP.NET Core) @started(25-06-18 12:02)
+☐ Make independent services for databases for users, achievements, rewards @started(25-06-18 12:02)
 
