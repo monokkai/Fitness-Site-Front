@@ -16,15 +16,22 @@ import {
   VStack,
   Spacer,
   Box,
+  HStack,
+  Text,
+  Avatar,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { motion, AnimatePresence, useSpring } from "framer-motion";
 import { useEffect, useState } from "react";
 import navbarItems, { NavbarItem } from "../../shared/utils/navbarItems";
+import { useUserStore } from "../../shared/store/userStore";
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
   const pathname = usePathname();
   const isPricingPage = pathname?.startsWith("/pricing");
+
+  const { user, token } = useUserStore();
+  const isAuthenticated = !!token && !!user;
 
   const hoverGlow = {
     transition: "all 0.2s ease-in-out",
@@ -179,19 +186,33 @@ const Navbar = () => {
             exit={{ x: 70, opacity: 0 }}
             transition={{ type: "spring", stiffness: 60, damping: 15 }}
           >
-            <Link href="/auth" passHref>
-              <Button
-                bg={pathname === "/login" ? "brand.400" : "brand.300"}
-                _hover={{
-                  bg: "brand.400",
-                  transform: "translateY(-1px)",
-                  boxShadow: "0 0 20px rgba(170, 255, 3, 0.3)",
-                }}
-                borderRadius={20}
-              >
-                Sign In
-              </Button>
-            </Link>
+            {isAuthenticated ? (
+              <HStack spacing={3}>
+                <Avatar
+                  size="sm"
+                  name={user?.username}
+                  bg="green.500"
+                  color="white"
+                />
+                <Text fontSize="18px" fontWeight="medium">
+                  {user?.username}
+                </Text>
+              </HStack>
+            ) : (
+              <Link href="/auth" passHref>
+                <Button
+                  bg={pathname === "/login" ? "brand.400" : "brand.300"}
+                  _hover={{
+                    bg: "brand.400",
+                    transform: "translateY(-1px)",
+                    boxShadow: "0 0 20px rgba(170, 255, 3, 0.3)",
+                  }}
+                  borderRadius={20}
+                >
+                  Sign In
+                </Button>
+              </Link>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

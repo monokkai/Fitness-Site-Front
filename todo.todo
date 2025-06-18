@@ -7,8 +7,9 @@
 
 ---BACKEND(SERVICES)---
 ✔ Make nginx-service for giving static files to frontend @done(25-06-16 18:04)
-☐ Auth-service (C# ASP.NET Core)
+✔ Auth-service (C# ASP.NET Core) @started(25-06-18 19:18) @done(25-06-18 19:18) @lasted(5s)
 ☐ Make independent services for databases for users, achievements, rewards
+☐ When user is logged in, show user's name in navbar
 
 
 ---FIXING BUGS---
