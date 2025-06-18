@@ -7,6 +7,11 @@
 
 ---BACKEND(SERVICES)---
 ✔ Make nginx-service for giving static files to frontend @done(25-06-16 18:04)
-☐ Auth-service (C# ASP.NET Core) @started(25-06-18 12:02)
-☐ Make independent services for databases for users, achievements, rewards @started(25-06-18 12:02)
+☐ Auth-service (C# ASP.NET Core)
+☐ Make independent services for databases for users, achievements, rewards
+
+
+---FIXING BUGS---
+☐ Problem with axios, gives error in axios.ts
+☐ useAuth, useSignup hooks do not make the request to auth-service! and give error! 
 
