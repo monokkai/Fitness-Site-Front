@@ -103,5 +103,6 @@ Frontend communicates with backend via RESTful API or optionally gRPC (if added 
 ---
 
 - `docker exec -it auth-db mysql -u root -phandfit_root` - run docker to see changes or databases in MySQL
+- `docker exec auth-db mysql -uhandfit_user -phandfit_pass -e "USE handfit_db; SELECT UserId, Username, Email, CreatedAt, LastLoginAt, IsActive FROM Users;"` - check users in database
 
 ---
