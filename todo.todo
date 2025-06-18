@@ -4,15 +4,16 @@
 ✔ Use axios to fetch data from the backend, not fetch @done(25-06-16 18:04)
 ✔ Use Zustand for state management, not useState @done(25-06-16 17:44)
 ✔ Cookies, not localStorage! @done(25-06-16 18:03)
+☐ After login, ask user in popup to enter his goals and parameters for trainings! Then, in /profile, it will be shown! But it will save in another database in PostgreSQL for params for every user! There, the id of user, and his params!
 
 ---BACKEND(SERVICES)---
 ✔ Make nginx-service for giving static files to frontend @done(25-06-16 18:04)
 ✔ Auth-service (C# ASP.NET Core) @started(25-06-18 19:18) @done(25-06-18 19:18) @lasted(5s)
 ☐ Make independent services for databases for users, achievements, rewards
 ☐ When user is logged in, show user's name in navbar
-
+☐ Use Cookies for auth + I deleted localStorage and saving user's data in saved from XSS attacks auth-service by using HttpOnly Cookies! 
 
 ---FIXING BUGS---
-☐ Problem with axios, gives error in axios.ts
-☐ useAuth, useSignup hooks do not make the request to auth-service! and give error! 
+✔ Problem with axios, gives error in axios.ts @done(25-06-18 20:53)
+✔ useAuth, useSignup hooks do not make the request to auth-service! and give error! @done(25-06-18 20:53)
 

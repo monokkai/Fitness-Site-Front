@@ -1,10 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "framer-motion";
 import { Box } from "@chakra-ui/react";
 import { useMotionValue, useTransform, animate } from "framer-motion";
 import { useEffect } from "react";
+import { useUserStore } from "../../shared/store/userStore";
+import { useRouter } from "next/navigation";
 
 const fadeIn = (delay: number = 0) => ({
   initial: { opacity: 0, y: 20 },
@@ -12,16 +13,35 @@ const fadeIn = (delay: number = 0) => ({
   transition: { delay, duration: 0.8, ease: "easeOut" },
 });
 
-const Hero = () => {
+const pulseAnimation = {
+  scale: [1, 1.05, 1],
+  transition: {
+    duration: 1.5,
+    repeat: Infinity,
+    ease: "easeInOut",
+  },
+};
+
+const Hero: React.FC = () => {
   const count = useMotionValue(0);
   const rounded = useTransform(count, (latest) =>
     Math.round(latest).toLocaleString()
   );
+  const { isAuthenticated } = useUserStore();
+  const router = useRouter();
 
   useEffect(() => {
     const animation = animate(count, 14000, { duration: 3 });
     return animation.stop;
   }, [count]);
+
+  const handleClick = () => {
+    if (isAuthenticated) {
+      router.push("/trainings");
+    } else {
+      router.push("/auth");
+    }
+  };
 
   return (
     <Box
@@ -70,13 +90,14 @@ const Hero = () => {
         </motion.p>
 
         <motion.div {...fadeIn(0.6)} className="mt-10">
-          <Link
-            href="/auth"
+          <motion.button
+            animate={pulseAnimation}
+            onClick={handleClick}
             className="inline-flex rounded-[30px] items-center px-8 py-4 text-base font-medium text-black bg-[#AAFF03] hover:bg-[#8cdb00] transition-all group shadow-lg shadow-[#AAFF03]/20"
             aria-label="Start your fitness journey"
           >
-            Try it free*
-          </Link>
+            {isAuthenticated ? "Go to Trainings! 💪" : "Try it free* 🚀"}
+          </motion.button>
         </motion.div>
 
         <motion.div {...fadeIn(0.8)} className="mt-8 text-white">

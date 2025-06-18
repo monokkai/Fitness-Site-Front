@@ -1,10 +1,12 @@
 "use client";
 
+import { useUserStore } from "@/app/shared/store/userStore";
 import {
+  Avatar,
   Badge,
   Box,
   Button,
-  IconButton,
+  Divider,
   Menu,
   MenuButton,
   MenuItem,
@@ -12,7 +14,7 @@ import {
   useBreakpointValue,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { FaFire, FaMedal, FaUserCircle } from "react-icons/fa";
+import { FaFire, FaMedal, FaUserCircle, FaSignOutAlt } from "react-icons/fa";
 import { IoMdTrophy } from "react-icons/io";
 
 const navItems = [
@@ -31,8 +33,14 @@ const navItems = [
 ];
 
 const NavContent: React.FC = () => {
+  const { user, logout } = useUserStore();
   const router = useRouter();
   const isMobile = useBreakpointValue({ base: true, md: false });
+
+  const handleLogout = async () => {
+    await logout();
+    router.push("/");
+  };
 
   return (
     <Box display="flex" alignItems="center" gap={4}>
@@ -61,21 +69,42 @@ const NavContent: React.FC = () => {
       ))}
       <Menu>
         <MenuButton
-          as={IconButton}
-          icon={<FaUserCircle size={24} />}
+          as={Button}
           variant="ghost"
-          colorScheme="blue"
-          size="lg"
-          aria-label="User menu"
-        />
-        <MenuList>
+          display="flex"
+          alignItems="center"
+          gap={2}
+          px={2}
+        >
+          <Box display="flex" flexDirection="row" alignItems="center" gap={2}>
+            <Avatar
+              size="sm"
+              name={user?.username || "User"}
+              src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.username}`}
+            />
+            <Box fontSize="20px" display={{ base: "none", md: "block" }}>
+              {user?.username}
+            </Box>
+          </Box>
+        </MenuButton>
+        <MenuList color={"black"}>
           <MenuItem
             icon={<FaUserCircle />}
             onClick={() => router.push("/profile")}
           >
             Profile Settings
           </MenuItem>
-          <MenuItem icon={<FaFire />}>Current Streak: 7 days</MenuItem>
+          <MenuItem color="green.500" icon={<FaFire />}>
+            Current Streak: 7 days
+          </MenuItem>
+          <Divider my={2} />
+          <MenuItem
+            icon={<FaSignOutAlt />}
+            onClick={handleLogout}
+            color="red.500"
+          >
+            Sign Out
+          </MenuItem>
         </MenuList>
       </Menu>
     </Box>

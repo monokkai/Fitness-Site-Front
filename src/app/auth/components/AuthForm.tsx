@@ -15,11 +15,11 @@ import {
   InputGroup,
   InputRightElement,
   IconButton,
+  Link,
 } from "@chakra-ui/react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import Link from "next/link";
 import { motion } from "framer-motion";
 import { useAuth } from "../../shared/hooks/useAuth";
 
@@ -57,7 +57,7 @@ const AuthForm: React.FC = () => {
   const textColor = useColorModeValue("gray.600", "gray.400");
   const headingColor = useColorModeValue("gray.700", "white");
 
-  const { formData, handleChange, handleSubmit } = useAuth();
+  const { formData, handleChange, handleSubmit, showCookies } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   return (
     <MotionStack
@@ -158,6 +158,18 @@ const AuthForm: React.FC = () => {
               Sign in
             </Button>
           </MotionBox>
+
+          <MotionBox variants={itemVariants}>
+            <Button
+              size="lg"
+              variant="outline"
+              borderRadius="xl"
+              width="100%"
+              onClick={showCookies}
+            >
+              Show Cookies
+            </Button>
+          </MotionBox>
         </Stack>
 
         <Stack spacing="6" mt="8">
@@ -223,14 +235,8 @@ const AuthForm: React.FC = () => {
         whileHover={{ scale: 1.02 }}
       >
         Don&apos;t have an account?{" "}
-        <Link href="/signup" passHref>
-          <Button
-            variant="link"
-            color="brand.400"
-            _hover={{ color: "brand.500" }}
-          >
-            Sign up
-          </Button>
+        <Link as={Link} href="/signup" color="brand.400" _hover={{ color: "brand.500" }}>
+          Sign up
         </Link>
       </MotionText>
     </MotionStack>

@@ -32,10 +32,12 @@ export const useAuth = () => {
     const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         try {
+            console.log('Cookies before login:', document.cookie);
             const response = await api.post("/auth/login", {
                 email,
                 password
             });
+            console.log('Cookies after login:', document.cookie);
 
             const { user } = response.data as IAuthResponse;
             setUser(user);
@@ -52,5 +54,9 @@ export const useAuth = () => {
         }
     }
 
-    return { formData: { email, password }, handleChange, handleSubmit }
+    const showCookies = () => {
+        console.log('Current cookies:', document.cookie);
+    }
+
+    return { formData: { email, password }, handleChange, handleSubmit, showCookies }
 }
