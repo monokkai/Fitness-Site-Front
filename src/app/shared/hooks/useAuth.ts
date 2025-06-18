@@ -2,7 +2,7 @@
 
 import { AuthFormData } from "@/app/shared/interfaces/IAuth";
 import { create } from "zustand"
-import axios from "axios"
+import api from "../api/axios";
 import { useRouter } from 'next/navigation';
 import { useUserStore } from "../store/userStore";
 import { IAuthResponse } from "../interfaces/IUser";
@@ -32,7 +32,7 @@ export const useAuth = () => {
     const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         try {
-            const response = await axios.post("http://localhost:8082/api/auth/auth", {
+            const response = await api.post("/auth/auth", {
                 email,
                 password
             });
@@ -40,7 +40,7 @@ export const useAuth = () => {
             const { token, user } = response.data as IAuthResponse;
             setToken(token);
             setUser(user);
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
             setEmail("");
             setPassword("");

@@ -56,8 +56,9 @@ const SignupForm: React.FC = () => {
   const borderColor = useColorModeValue("gray.200", "gray.700");
   const textColor = useColorModeValue("gray.600", "gray.400");
   const headingColor = useColorModeValue("gray.700", "white");
+  const errorColor = useColorModeValue("red.500", "red.300");
 
-  const { formData, handleChange, handleSubmit } = useSignup();
+  const { formData, errors, handleChange, handleSubmit } = useSignup();
   const [showPassword, setShowPassword] = useState(false);
 
   // console.log("formData", formData);
@@ -94,28 +95,33 @@ const SignupForm: React.FC = () => {
         <Stack spacing="6">
           <Stack spacing="5">
             <MotionBox variants={itemVariants}>
-              <FormControl>
-                <FormLabel htmlFor="name" color={headingColor}>
-                  Full Name
+              <FormControl isInvalid={!!errors.username}>
+                <FormLabel htmlFor="username" color={headingColor}>
+                  Username
                 </FormLabel>
                 <Input
-                  id="name"
+                  id="username"
                   type="text"
-                  placeholder="Enter your full name"
+                  placeholder="Enter your username"
                   size="lg"
                   borderRadius="xl"
                   _focus={{
                     borderColor: "brand.400",
                     boxShadow: "0 0 0 1px var(--chakra-colors-brand-400)",
                   }}
-                  value={formData.name}
+                  value={formData.username}
                   onChange={handleChange}
                 />
+                {errors.username && (
+                  <Text color={errorColor} fontSize="sm" mt={1}>
+                    {errors.username}
+                  </Text>
+                )}
               </FormControl>
             </MotionBox>
 
             <MotionBox variants={itemVariants}>
-              <FormControl>
+              <FormControl isInvalid={!!errors.email}>
                 <FormLabel htmlFor="email" color={headingColor}>
                   Email
                 </FormLabel>
@@ -132,11 +138,16 @@ const SignupForm: React.FC = () => {
                   value={formData.email}
                   onChange={handleChange}
                 />
+                {errors.email && (
+                  <Text color={errorColor} fontSize="sm" mt={1}>
+                    {errors.email}
+                  </Text>
+                )}
               </FormControl>
             </MotionBox>
 
             <MotionBox variants={itemVariants}>
-              <FormControl>
+              <FormControl isInvalid={!!errors.password}>
                 <FormLabel htmlFor="password" color={headingColor}>
                   Password
                 </FormLabel>
@@ -164,6 +175,11 @@ const SignupForm: React.FC = () => {
                     />
                   </InputRightElement>
                 </InputGroup>
+                {errors.password && (
+                  <Text color={errorColor} fontSize="sm" mt={1}>
+                    {errors.password}
+                  </Text>
+                )}
               </FormControl>
             </MotionBox>
           </Stack>

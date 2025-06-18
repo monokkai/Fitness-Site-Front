@@ -1,30 +1,22 @@
+"use client"
 import { create } from "zustand";
-import { IUser } from "../interfaces/IUser";
+import { IUser, IUserStore } from "../interfaces/IUser";
 
-interface UserStore {
-    user: {
-        id: number;
-        username: string;
-        email: string;
-    } | null;
-    token: string | null;
-    isAuth: boolean;
-    setUser: (user: IUser) => void;
-    setToken: (token: string) => void;
-    logout: () => void;
-}
-
-export const useUserStore = create<UserStore>((set) => ({
+export const useUserStore = create<IUserStore>((set) => ({
     user: null,
-    token: localStorage.getItem('token'),
-    isAuth: !!localStorage.getItem('token'),
+    token: typeof window !== 'undefined' ? localStorage.getItem('token') : null,
+    isAuth: typeof window !== 'undefined' ? !!localStorage.getItem('token') : false,
     setUser: (user: IUser) => set({ user, isAuth: true }),
     setToken: (token: string) => {
-        localStorage.setItem('token', token);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('token', token);
+        }
         set({ token });
     },
     logout: () => {
-        localStorage.removeItem('token');
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('token');
+        }
         set({ user: null, token: null, isAuth: false });
     }
 }));

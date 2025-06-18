@@ -1,8 +1,8 @@
 export interface SignupFormData {
-    name: string;
+    username: string;
     email: string;
     password: string;
-    setName: (name: string) => void;
+    setUsername: (username: string) => void;
     setEmail: (email: string) => void;
     setPassword: (password: string) => void;
 }
