@@ -1,5 +1,6 @@
 "use client";
 
+import { useUserStore } from "@/app/shared/store/userStore";
 import {
   Avatar,
   Box,
@@ -12,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 
 const ProfileHeader: React.FC = () => {
+  const { user } = useUserStore();
   return (
     <Card>
       <CardBody>
@@ -23,13 +25,13 @@ const ProfileHeader: React.FC = () => {
           <Avatar size="2xl" />
           <Box flex={1}>
             <Heading size="lg" mb={2}>
-              Profile
+              Profile: {user?.username || "Unknown"}
             </Heading>
             <Text color="gray.600" mb={4}>
-              Joined: -
+              Joined: {user?.createdAt || "Not Stated"}
             </Text>
-            <Badge colorScheme="blue" fontSize="md" p={2}>
-              Goal: Not Set
+            <Badge colorScheme="blue" borderRadius="full" fontSize="md" p={3}>
+              Goal: {/* Goal: {user?.goal || "Not Set"} */}
             </Badge>
           </Box>
         </Stack>
@@ -38,4 +40,4 @@ const ProfileHeader: React.FC = () => {
   );
 };
 
-export default ProfileHeader; 
+export default ProfileHeader;
