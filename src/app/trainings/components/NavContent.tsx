@@ -67,7 +67,7 @@ const NavContent: React.FC = () => {
           )}
         </Button>
       ))}
-      <Menu>
+      <Menu gutter={4}>
         <MenuButton
           as={Button}
           variant="ghost"
@@ -79,29 +79,56 @@ const NavContent: React.FC = () => {
           <Box display="flex" flexDirection="row" alignItems="center" gap={2}>
             <Avatar
               size="sm"
-              name={user?.username || "User"}
+              name={user?.username || "Unknown"}
               src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.username}`}
             />
             <Box fontSize="20px" display={{ base: "none", md: "block" }}>
-              {user?.username}
+              {user?.username ? user.username : "Guest"}
             </Box>
           </Box>
         </MenuButton>
-        <MenuList color={"black"}>
+        <MenuList
+          bg="white"
+          color={"black"}
+          border="1px solid"
+          borderColor="gray.100"
+          boxShadow="sm"
+          py={2}
+          sx={{
+            "& > button": {
+              transition: "background 0.2s ease",
+            },
+          }}
+        >
           <MenuItem
             icon={<FaUserCircle />}
             onClick={() => router.push("/profile")}
+            py={2}
+            px={4}
+            _hover={{ bg: "gray.50" }}
           >
             Profile Settings
           </MenuItem>
-          <MenuItem color="green.500" icon={<FaFire />}>
+          <MenuItem
+            color="green.500"
+            icon={<FaFire />}
+            py={2}
+            px={4}
+            _hover={{ bg: "gray.50" }}
+          >
             Current Streak: 7 days
           </MenuItem>
           <Divider my={2} />
           <MenuItem
             icon={<FaSignOutAlt />}
             onClick={handleLogout}
-            color="red.500"
+            isDisabled={!user?.username}
+            py={2}
+            px={4}
+            color={user?.username ? "red.500" : "gray.400"}
+            opacity={user?.username ? 1 : 0.6}
+            cursor={user?.username ? "pointer" : "not-allowed"}
+            _hover={user?.username ? { bg: "gray.50" } : {}}
           >
             Sign Out
           </MenuItem>

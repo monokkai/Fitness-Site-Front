@@ -13,7 +13,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { FeaturedWorkout } from "../interfaces/ITraining";
 import EmptyWorkoutCard from "./EmptyWorkoutCard";
 
@@ -21,6 +21,7 @@ const MotionCard = motion(Card);
 
 const WorkoutsSection: React.FC = () => {
   const featuredWorkouts: FeaturedWorkout[] = [];
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <Box mb={16}>
@@ -32,14 +33,14 @@ const WorkoutsSection: React.FC = () => {
           featuredWorkouts.map((workout, index) => (
             <MotionCard
               key={workout.id}
-              initial={{ opacity: 0, y: 20 }}
+              initial={shouldReduceMotion ? {} : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
               cursor="pointer"
-              _hover={{ transform: "translateY(-4px)", shadow: "lg" }}
               bg="white"
               borderRadius="lg"
               boxShadow="base"
+              whileHover={shouldReduceMotion ? {} : { y: -2, boxShadow: "md" }}
             >
               <CardBody>
                 <VStack align="start" spacing={4}>
