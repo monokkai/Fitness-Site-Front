@@ -14,7 +14,7 @@ import {
   useBreakpointValue,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { FaFire, FaMedal, FaUserCircle, FaSignOutAlt } from "react-icons/fa";
+import { FaFire, FaUserCircle, FaSignOutAlt } from "react-icons/fa";
 import { IoMdTrophy } from "react-icons/io";
 
 const navItems = [
@@ -22,13 +22,7 @@ const navItems = [
     label: "Rewards",
     icon: <IoMdTrophy size={20} />,
     path: "/rewards",
-    streak: "7 🔥",
-  },
-  {
-    label: "Achievements",
-    icon: <FaMedal size={20} />,
-    path: "/achievements",
-    count: 12,
+    streak: "0",
   },
 ];
 
@@ -56,13 +50,13 @@ const NavContent: React.FC = () => {
         >
           {item.label}
           {item.streak && (
-            <Badge ml={2} colorScheme="orange" variant="solid">
+            <Badge
+              ml={2}
+              borderRadius="full"
+              colorScheme="orange"
+              variant="solid"
+            >
               {item.streak}
-            </Badge>
-          )}
-          {item.count && (
-            <Badge ml={2} colorScheme="purple" variant="solid">
-              {item.count}
             </Badge>
           )}
         </Button>

@@ -5,6 +5,7 @@
 ✔ Use Zustand for state management, not useState @done(25-06-16 17:44)
 ✔ Cookies, not localStorage! @done(25-06-16 18:03)
 ☐ After login, ask user in popup to enter his goals and parameters for trainings! Then, in /profile, it will be shown! But it will save in another database in PostgreSQL for params for every user! There, the id of user, and his params!
+☐ Remade some design on /training page! @started(25-06-19 18:40)
 
 ---BACKEND(SERVICES)---
 ✔ Make nginx-service for giving static files to frontend @done(25-06-16 18:04)
