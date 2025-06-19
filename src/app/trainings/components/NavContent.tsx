@@ -31,13 +31,19 @@ const NavContent: React.FC = () => {
   const router = useRouter();
   const isMobile = useBreakpointValue({ base: true, md: false });
 
-  const handleLogout = async () => {
+  const handleLogout: () => Promise<void> = async () => {
     await logout();
     router.push("/");
   };
 
   return (
-    <Box display="flex" alignItems="center" gap={4}>
+    <Box
+      display="flex"
+      alignItems="center"
+      bg="transparent"
+      gap={4}
+      backdropFilter="blur(10px)"
+    >
       {navItems.map((item, index) => (
         <Button
           key={index}
