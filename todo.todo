@@ -13,9 +13,10 @@
 ✔ Make nginx-service for giving static files to frontend @done(25-06-16 18:04)
 ✔ Auth-service (C# ASP.NET Core) @started(25-06-18 19:18) @done(25-06-18 19:18) @lasted(5s)
 ☐ Make independent services for databases for users, achievements, rewards
-☐ When user is logged in, show user's name in navbar
-☐ Use Cookies for auth + I deleted localStorage and saving user's data in saved from XSS attacks auth-service by using HttpOnly Cookies! 
-
+✔ When user is logged in, show user's name in navbar @done(25-06-25 13:42)
+✔ Use Cookies for auth + I deleted localStorage and saving user's data in saved from XSS attacks auth-service by using HttpOnly Cookies! @done(25-06-25 13:42)
+ But now it doest show cookies(token) in browser!
+ 
 ---FIXING BUGS---
 ✔ Problem with axios, gives error in axios.ts @done(25-06-18 20:53)
 ✔ useAuth, useSignup hooks do not make the request to auth-service! and give error! @done(25-06-18 20:53)
