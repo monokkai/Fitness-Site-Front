@@ -21,8 +21,8 @@ export const AuthGuardPopup = () => {
   };
 
   return (
-    <Modal 
-      isOpen={isPopupOpen} 
+    <Modal
+      isOpen={isPopupOpen}
       onClose={() => {}}
       closeOnOverlayClick={false}
       closeOnEsc={false}
@@ -31,13 +31,14 @@ export const AuthGuardPopup = () => {
       blockScrollOnMount={true}
       useInert={true}
     >
-      <ModalOverlay 
-        backdropFilter="blur(4px)"
+      <ModalOverlay
+        backdropFilter="blur(7px)"
         onClick={(e) => e.stopPropagation()}
       />
-      <ModalContent 
-        bg="gray.900" 
+      <ModalContent
+        bg="gray"
         color="white"
+        borderRadius="30px"
         onMouseDown={(e) => e.stopPropagation()}
       >
         <ModalHeader textAlign="center">Access Restricted</ModalHeader>

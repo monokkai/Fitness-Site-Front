@@ -7,7 +7,7 @@
 ☐ After login, ask user in popup to enter his goals and parameters for trainings! Then, in /profile, it will be shown! But it will save in another database in PostgreSQL for params for every user! There, the id of user, and his params!
 ☐ Remade some design on /training page!
 ✔ Make custom 404 page? @started(25-06-25 12:17) @done(25-06-25 12:22) @lasted(5m42s)
-☐ Make Guard and Popup for unauthorized user if he wants to go to /trainings page! @started(25-06-25 12:30)
+✔ Make Guard and Popup for unauthorized user if he wants to go to /trainings page! @started(25-06-25 12:30) @done(25-06-25 13:31) @lasted(1h1m1s)
 
 ---BACKEND(SERVICES)---
 ✔ Make nginx-service for giving static files to frontend @done(25-06-16 18:04)

@@ -18,6 +18,7 @@ export const useAuthGuardStore = create<AuthGuardStore>((set, get) => ({
       get().openPopup()
       return false
     }
+    else get().closePopup();
     return true
   }
 }))
