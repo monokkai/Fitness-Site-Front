@@ -21,4 +21,10 @@ export const useAuthGuardStore = create<AuthGuardStore>((set, get) => ({
     else get().closePopup();
     return true
   }
-}))
+}));
+
+useUserStore.subscribe((state) => {
+  if (state.user) {
+    useAuthGuardStore.getState().closePopup();
+  }
+});

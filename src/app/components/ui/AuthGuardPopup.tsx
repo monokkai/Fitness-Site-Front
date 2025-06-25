@@ -11,14 +11,19 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useAuthGuardStore } from "@/app/shared/store/authGuardStore";
+import { useEffect } from "react";
 
 export const AuthGuardPopup = () => {
   const router = useRouter();
-  const { isPopupOpen } = useAuthGuardStore();
+  const { isPopupOpen, checkAuth } = useAuthGuardStore();
 
   const handleSignIn = () => {
     router.push("/auth");
   };
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   return (
     <Modal
