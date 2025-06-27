@@ -12,6 +12,9 @@
     There is the site what will be able to create a PP document for site! 
 ☐ Clean .tsx files of some rubbish like: 
     const progressItems = [...]
+☐ Delete guards from frontend part!
+    ☐ Make another service for guards
+    ☐ When user goes to trainings, he needs to be redirected to login page! NO BLUR! It's unsafe!
 
 ---BACKEND(SERVICES)---
 ✔ Make nginx-service for giving static files to frontend @done(25-06-16 18:04)
