@@ -9,22 +9,36 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
-import { useAuthGuardStore } from "@/app/shared/store/authGuardStore";
 
-const AuthPopup = () => {
-  const router = useRouter();
-  const { isPopupOpen, closePopup } = useAuthGuardStore();
+interface AuthPopupProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onLogin: () => void;
+  message: string;
+}
 
-  const handleSignIn = () => {
-    router.push("/auth");
-    closePopup();
-  };
-
+export default function AuthPopup({ isOpen, onClose, onLogin, message }: AuthPopupProps) {
   return (
-    <Modal isOpen={isPopupOpen} onClose={closePopup} isCentered>
-      <ModalOverlay backdropFilter="blur(4px)" />
-      <ModalContent bg="gray.900" color="white">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      closeOnOverlayClick={false}
+      closeOnEsc={false}
+      isCentered
+      trapFocus={true}
+      blockScrollOnMount={true}
+      useInert={true}
+    >
+      <ModalOverlay
+        backdropFilter="blur(7px)"
+        onClick={(e) => e.stopPropagation()}
+      />
+      <ModalContent
+        bg="gray"
+        color="white"
+        borderRadius="30px"
+        onMouseDown={(e) => e.stopPropagation()}
+      >
         <ModalHeader textAlign="center">Access Restricted</ModalHeader>
         <ModalBody>
           <VStack spacing={4}>
@@ -32,7 +46,7 @@ const AuthPopup = () => {
               Oops! You are not authorized!
             </Text>
             <Text fontSize="md" color="gray.400" textAlign="center">
-              Please sign in to access training content
+              {message}
             </Text>
           </VStack>
         </ModalBody>
@@ -42,7 +56,7 @@ const AuthPopup = () => {
             size="lg"
             borderRadius="30px"
             px={8}
-            onClick={handleSignIn}
+            onClick={onLogin}
             _hover={{ transform: "scale(1.05)" }}
             transition="all 0.2s"
           >
@@ -52,6 +66,4 @@ const AuthPopup = () => {
       </ModalContent>
     </Modal>
   );
-};
-
-export default AuthPopup;
+}

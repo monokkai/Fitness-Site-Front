@@ -22,7 +22,19 @@ import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { AUTH_ENDPOINTS } from '../../shared/config/api.config';
+import api from "../../shared/api/axios";
+import { AUTH_ENDPOINTS } from "../../shared/config/api.config";
+
+interface AuthResponse {
+  success: boolean;
+  error?: string;
+  token?: string;
+  user?: {
+    id: number;
+    username: string;
+    email: string;
+  };
+}
 
 const MotionBox = motion(Box);
 const MotionStack = motion(Stack);
@@ -79,24 +91,25 @@ const AuthForm: React.FC = () => {
     setError("");
 
     try {
-      const response = await fetch(AUTH_ENDPOINTS.LOGIN, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-        credentials: "include",
-      });
+      console.log('Sending login request to:', AUTH_ENDPOINTS.LOGIN);
+      console.log('With data:', { ...formData, password: formData.password.length + ' chars' });
 
-      const data = await response.json();
+      const response = await api.post<AuthResponse>(AUTH_ENDPOINTS.LOGIN, formData);
+      console.log('Server response:', response.data);
 
-      if (!response.ok) {
-        throw new Error(data.message || "Login failed");
+      if (response.data.success) {
+        router.push("/");
+      } else {
+        setError(response.data.error || "Login failed");
       }
-
-      router.push("/");
-    } catch (error) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+    } catch (error: any) {
+      console.error('Full error object:', error);
+      if (error.response) {
+        console.error('Error status:', error.response.status);
+        console.error('Error headers:', error.response.headers);
+        console.error('Error data:', error.response.data);
+      }
+      setError(error.response?.data?.message || error.message || "An error occurred during login");
       console.error("Login error:", error);
     }
   };

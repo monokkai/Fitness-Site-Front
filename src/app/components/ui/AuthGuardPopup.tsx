@@ -1,76 +1,41 @@
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
-import { useAuthGuardStore } from "@/app/shared/store/authGuardStore";
-import { useEffect } from "react";
+import { useEffect, useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import { useGuards } from '../../shared/hooks/useGuards';
+import AuthPopup from './AuthPopup';
 
-export const AuthGuardPopup = () => {
+export default function AuthGuardPopup() {
+  const [showPopup, setShowPopup] = useState(false);
   const router = useRouter();
-  const { isPopupOpen, checkAuth } = useAuthGuardStore();
-
-  const handleSignIn = () => {
-    router.push("/auth");
-  };
+  const pathname = usePathname();
+  const { checkAccess } = useGuards();
 
   useEffect(() => {
+    const checkAuth = async () => {
+      const hasAccess = await checkAccess(pathname);
+      if (!hasAccess) {
+        setShowPopup(true);
+      }
+    };
+
     checkAuth();
-  }, [checkAuth]);
+  }, [pathname, checkAccess]);
+
+  const handleClose = () => {
+    setShowPopup(false);
+  };
+
+  const handleLogin = () => {
+    router.push('/auth');
+  };
+
+  if (!showPopup) return null;
 
   return (
-    <Modal
-      isOpen={isPopupOpen}
-      onClose={() => {}}
-      closeOnOverlayClick={false}
-      closeOnEsc={false}
-      isCentered
-      trapFocus={true}
-      blockScrollOnMount={true}
-      useInert={true}
-    >
-      <ModalOverlay
-        backdropFilter="blur(7px)"
-        onClick={(e) => e.stopPropagation()}
-      />
-      <ModalContent
-        bg="gray"
-        color="white"
-        borderRadius="30px"
-        onMouseDown={(e) => e.stopPropagation()}
-      >
-        <ModalHeader textAlign="center">Access Restricted</ModalHeader>
-        <ModalBody>
-          <VStack spacing={4}>
-            <Text fontSize="xl" textAlign="center">
-              Oops! You are not authorized!
-            </Text>
-            <Text fontSize="md" color="gray.400" textAlign="center">
-              Please sign in to access training content
-            </Text>
-          </VStack>
-        </ModalBody>
-        <ModalFooter justifyContent="center" pb={6}>
-          <Button
-            colorScheme="blue"
-            size="lg"
-            borderRadius="30px"
-            px={8}
-            onClick={handleSignIn}
-            _hover={{ transform: "scale(1.05)" }}
-            transition="all 0.2s"
-          >
-            Sign In
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+    <AuthPopup
+      isOpen={showPopup}
+      onClose={handleClose}
+      onLogin={handleLogin}
+      message="Please log in to access this page"
+    />
   );
-};
+}

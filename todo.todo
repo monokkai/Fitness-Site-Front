@@ -26,4 +26,4 @@
 ---FIXING BUGS---
 ✔ Problem with axios, gives error in axios.ts @done(25-06-18 20:53)
 ✔ useAuth, useSignup hooks do not make the request to auth-service! and give error! @done(25-06-18 20:53)
-
+☐ Fix bug with colors on the page "/"!
