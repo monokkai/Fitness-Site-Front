@@ -12,8 +12,7 @@
     There is the site what will be able to create a PP document for site! 
 ☐ Clean .tsx files of some rubbish like: 
     const progressItems = [...]
-☐ Delete guards from frontend part!
-    ☐ Make another service for guards
+✔ Delete guards from frontend part! @started(25-07-04 14:01) @done(25-07-04 14:02) @lasted(1m)
     ☐ When user goes to trainings, he needs to be redirected to login page! NO BLUR! It's unsafe!
 
 ---BACKEND(SERVICES)---

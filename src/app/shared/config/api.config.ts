@@ -1,8 +1,8 @@
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = 'http://localhost:5001/api';
 
 export const AUTH_ENDPOINTS = {
-  LOGIN: `${API_URL}/auth/login`,
-  SIGNUP: `${API_URL}/auth/signup`,
-  LOGOUT: `${API_URL}/auth/logout`,
-  ME: `${API_URL}/auth/me`,
+  LOGIN: `${API_BASE_URL}/auth/login`,
+  SIGNUP: `${API_BASE_URL}/auth/register`,
+  LOGOUT: `${API_BASE_URL}/auth/logout`,
+  ME: `${API_BASE_URL}/auth/me`,
 } as const; 
