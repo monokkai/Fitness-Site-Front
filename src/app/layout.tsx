@@ -6,7 +6,6 @@ import { Inter } from "next/font/google";
 import LayoutWrapper from "./components/layout/LayoutWrapper";
 import { ChakraProvider } from "@chakra-ui/react";
 import theme from "./theme";
-import { useSession } from "./shared/hooks/useSession";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,15 +14,13 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  useSession();
-
   return (
     <html lang="en">
       <body className={inter.className}>
         <ChakraProvider theme={theme}>
-        <Providers>
-          <LayoutWrapper>{children}</LayoutWrapper>
-        </Providers>
+          <Providers>
+            <LayoutWrapper>{children}</LayoutWrapper>
+          </Providers>
         </ChakraProvider>
       </body>
     </html>

@@ -21,7 +21,8 @@ import { FaGithub, FaGoogle } from "react-icons/fa";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { motion } from "framer-motion";
-import { useAuth } from "../../shared/hooks/useAuth";
+import { useRouter } from "next/navigation";
+import { AUTH_ENDPOINTS } from '../../shared/config/api.config';
 
 const MotionBox = motion(Box);
 const MotionStack = motion(Stack);
@@ -52,13 +53,54 @@ const itemVariants = {
 };
 
 const AuthForm: React.FC = () => {
-  const bgColor = useColorModeValue("white", "gray.800");
-  const borderColor = useColorModeValue("gray.200", "gray.700");
-  const textColor = useColorModeValue("gray.600", "gray.400");
-  const headingColor = useColorModeValue("gray.700", "white");
+  const bgColor = useColorModeValue("white", "white");
+  const borderColor = useColorModeValue("gray.300", "gray.300");
+  const textColor = useColorModeValue("black", "black");
+  const headingColor = useColorModeValue("black", "black");
 
-  const { formData, handleChange, handleSubmit, showCookies } = useAuth();
+  const router = useRouter();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = event.target;
+    setFormData((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
+
+  const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setError("");
+
+    try {
+      const response = await fetch(AUTH_ENDPOINTS.LOGIN, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+        credentials: "include",
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Login failed");
+      }
+
+      router.push("/");
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "An error occurred");
+      console.error("Login error:", error);
+    }
+  };
+
   return (
     <MotionStack
       spacing="8"
@@ -79,11 +121,11 @@ const AuthForm: React.FC = () => {
 
       <MotionBox
         variants={itemVariants}
-        py={{ base: "0", sm: "8" }}
-        px={{ base: "4", sm: "10" }}
+        py={{ base: "6", sm: "8" }}
+        px={{ base: "6", sm: "10" }}
         bg={bgColor}
-        boxShadow={{ base: "none", sm: "md" }}
-        borderRadius={{ base: "none", sm: "xl" }}
+        boxShadow="none"
+        borderRadius="xl"
         borderWidth="1px"
         borderColor={borderColor}
       >
@@ -143,6 +185,12 @@ const AuthForm: React.FC = () => {
             </MotionBox>
           </Stack>
 
+          {error && (
+            <Text color="red.500" textAlign="center">
+              {error}
+            </Text>
+          )}
+
           <MotionBox variants={itemVariants}>
             <Button
               size="lg"
@@ -158,25 +206,13 @@ const AuthForm: React.FC = () => {
               Sign in
             </Button>
           </MotionBox>
-
-          <MotionBox variants={itemVariants}>
-            <Button
-              size="lg"
-              variant="outline"
-              borderRadius="xl"
-              width="100%"
-              onClick={showCookies}
-            >
-              Show Cookies
-            </Button>
-          </MotionBox>
         </Stack>
 
         <Stack spacing="6" mt="8">
           <Stack spacing="3">
             <Flex align="center" gap={4}>
               <Divider flex="1" />
-              <Text color={textColor} fontSize="sm" whiteSpace="nowrap">
+              <Text color="black" fontSize="sm" whiteSpace="nowrap">
                 OR CONTINUE WITH
               </Text>
               <Divider flex="1" />
@@ -196,6 +232,7 @@ const AuthForm: React.FC = () => {
                 leftIcon={<FaGoogle />}
                 size="lg"
                 borderRadius="xl"
+                color="black"
                 _hover={{
                   bg: "gray.50",
                   borderColor: "brand.400",
@@ -216,6 +253,7 @@ const AuthForm: React.FC = () => {
                 leftIcon={<FaGithub />}
                 size="lg"
                 borderRadius="xl"
+                color="black"
                 _hover={{
                   bg: "gray.50",
                   borderColor: "brand.400",
@@ -230,12 +268,17 @@ const AuthForm: React.FC = () => {
 
       <MotionText
         textAlign="center"
-        color={textColor}
+        color="black"
         variants={itemVariants}
         whileHover={{ scale: 1.02 }}
       >
         Don&apos;t have an account?{" "}
-        <Link as={Link} href="/signup" color="brand.400" _hover={{ color: "brand.500" }}>
+        <Link
+          as={Link}
+          href="/signup"
+          color="brand.400"
+          _hover={{ color: "brand.500" }}
+        >
           Sign up
         </Link>
       </MotionText>

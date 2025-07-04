@@ -3,8 +3,23 @@
 import { Box, Heading } from "@chakra-ui/react";
 import InovateSection from "./InovateSection";
 import PricingDemoSection from "./PricingDemoSection";
+import { useAuthCheck } from "../shared/hooks/useAuthCheck";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../shared/hooks/useAuth";
 
-export default function PowerfulFeatures() {
+const DemoSection: React.FC = () => {
+  const router = useRouter();
+  const { handleProtectedRoute } = useAuthCheck();
+  const { isAuthenticated, isLoading } = useAuth();
+
+  const handleClick = () => {
+    if (isAuthenticated) {
+      router.push("/trainings");
+    } else {
+      router.push("/auth");
+    }
+  };
+
   return (
     <Box
       id="features-section"
@@ -25,4 +40,6 @@ export default function PowerfulFeatures() {
       <PricingDemoSection />
     </Box>
   );
-}
+};
+
+export default DemoSection;

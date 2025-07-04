@@ -1,8 +1,7 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import {
+  Box,
   Button,
   Flex,
   IconButton,
@@ -15,22 +14,97 @@ import {
   DrawerBody,
   VStack,
   Spacer,
-  Box,
   HStack,
   Text,
   Avatar,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useSpring } from "framer-motion";
 import { useEffect, useState } from "react";
 import navbarItems, { NavbarItem } from "../../shared/utils/navbarItems";
-import { useUserStore } from "../../shared/store/userStore";
+import { AUTH_ENDPOINTS } from "../../shared/config/api.config";
+import { useRouter } from "next/navigation";
+
+interface User {
+  id: number;
+  username: string;
+  email: string;
+}
 
 const Navbar: React.FC = () => {
   const pathname = usePathname();
   const isPricingPage = pathname?.startsWith("/pricing");
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
+  const navbarSpringWidth = useSpring(700, { stiffness: 100, damping: 20 });
 
-  const { user, isAuthenticated } = useUserStore();
+  const MotionFlex = motion(Flex);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        setIsVisible(true);
+        navbarSpringWidth.set(900);
+      } else {
+        setIsVisible(false);
+        navbarSpringWidth.set(700);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [navbarSpringWidth]);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await fetch(AUTH_ENDPOINTS.ME, {
+          credentials: 'include'
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data.user);
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.error('Auth check failed:', error);
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await fetch(AUTH_ENDPOINTS.LOGOUT, {
+        method: 'POST',
+        credentials: 'include'
+      });
+      setUser(null);
+      router.push('/');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
+  const filteredItems = navbarItems.filter(item => {
+    if (user) {
+      return !item.guestOnly;
+    }
+    return !item.authOnly;
+  });
 
   const hoverGlow = {
     transition: "all 0.2s ease-in-out",
@@ -56,7 +130,7 @@ const Navbar: React.FC = () => {
     const isActive = pathname === href;
     return {
       variant: "ghost",
-      color: isPricingPage ? "white" : "gray.800",
+      color: isPricingPage ? "white" : "black",
       _hover: {
         bg: "transparent",
         transform: "translateY(-1px)",
@@ -83,31 +157,6 @@ const Navbar: React.FC = () => {
     };
   };
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isVisible, setIsVisible] = useState(false);
-
-  const navbarSpringWidth = useSpring(700, { stiffness: 100, damping: 20 });
-
-  const MotionFlex = motion(Flex);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 100) {
-        setIsVisible(true);
-        navbarSpringWidth.set(900);
-      } else {
-        setIsVisible(false);
-        navbarSpringWidth.set(700);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [navbarSpringWidth]);
-
   return (
     <MotionFlex
       position="fixed"
@@ -128,10 +177,11 @@ const Navbar: React.FC = () => {
       display="flex"
       justifyContent="space-between"
       alignItems="center"
-      color={isPricingPage ? "white" : "gray.800"}
+      color={isPricingPage ? "white" : "black"}
       transform="translateX(-50%)"
       _hover={hoverGlow}
       backdropFilter="blur(10px)"
+      bg={isPricingPage ? "rgba(0, 0, 0, 0.3)" : "rgba(255, 255, 255, 0.7)"}
     >
       <IconButton
         aria-label="Open menu"
@@ -139,7 +189,7 @@ const Navbar: React.FC = () => {
         display={{ base: "flex", md: "none" }}
         onClick={onOpen}
         variant="ghost"
-        color={isPricingPage ? "white" : "gray.800"}
+        color={isPricingPage ? "white" : "black"}
         _hover={{
           bg: "transparent",
           transform: "translateY(-1px)",
@@ -153,7 +203,7 @@ const Navbar: React.FC = () => {
         href="/"
         aria-label="Go to homepage"
         className={`p-2 tracking-tight text-2xl font-bold transition-all ${
-          isPricingPage ? "text-white" : "text-gray.800"
+          isPricingPage ? "text-white" : "text-black"
         } hover:opacity-80`}
       >
         HandFit
@@ -162,7 +212,7 @@ const Navbar: React.FC = () => {
       <Spacer display={{ base: "none", md: "block" }} />
 
       <Flex display={{ base: "none", md: "flex" }} alignItems="center" gap={4}>
-        {navbarItems.map(({ href, label }: NavbarItem) => (
+        {filteredItems.map(({ href, label }: NavbarItem) => (
           <Link
             key={href}
             href={href}
@@ -185,32 +235,49 @@ const Navbar: React.FC = () => {
             exit={{ x: 70, opacity: 0 }}
             transition={{ type: "spring", stiffness: 60, damping: 15 }}
           >
-            {isAuthenticated ? (
-              <HStack spacing={3}>
-                <Avatar
-                  size="sm"
-                  name={user?.username}
-                  bg="green.500"
-                  color="white"
-                />
-                <Text fontSize="18px" fontWeight="medium">
-                  {user?.username}
-                </Text>
-              </HStack>
-            ) : (
-              <Link href="/auth" passHref>
-                <Button
-                  bg={pathname === "/login" ? "brand.400" : "brand.300"}
-                  _hover={{
-                    bg: "brand.400",
-                    transform: "translateY(-1px)",
-                    boxShadow: "0 0 20px rgba(170, 255, 3, 0.3)",
-                  }}
-                  borderRadius={20}
-                >
-                  Sign In
-                </Button>
-              </Link>
+            {!isLoading && (
+              user ? (
+                <HStack spacing={3}>
+                  <Avatar
+                    size="sm"
+                    name={user.username}
+                    bg="green.500"
+                    color="white"
+                  />
+                  <Text fontSize="18px" fontWeight="medium" color={isPricingPage ? "white" : "black"}>
+                    {user.username}
+                  </Text>
+                  <Button
+                    variant="ghost"
+                    onClick={handleLogout}
+                    color={isPricingPage ? "white" : "black"}
+                    _hover={{
+                      bg: "transparent",
+                      transform: "translateY(-1px)",
+                      textShadow: isPricingPage
+                        ? "0 0 8px rgba(255, 255, 255, 0.5)"
+                        : "0 0 8px rgba(0, 0, 0, 0.2)",
+                    }}
+                  >
+                    Logout
+                  </Button>
+                </HStack>
+              ) : (
+                <Link href="/auth" passHref>
+                  <Button
+                    bg={pathname === "/login" ? "brand.400" : "brand.300"}
+                    color="black"
+                    _hover={{
+                      bg: "brand.400",
+                      transform: "translateY(-1px)",
+                      boxShadow: "0 0 20px rgba(170, 255, 3, 0.3)",
+                    }}
+                    borderRadius={20}
+                  >
+                    Sign In
+                  </Button>
+                </Link>
+              )
             )}
           </motion.div>
         )}
@@ -218,12 +285,12 @@ const Navbar: React.FC = () => {
 
       <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
-        <DrawerContent bg="white" color="gray.800">
+        <DrawerContent bg="white">
           <DrawerCloseButton />
-          <DrawerHeader borderBottomWidth="1px">Navigation</DrawerHeader>
+          <DrawerHeader borderBottomWidth="1px" color="black">Navigation</DrawerHeader>
           <DrawerBody>
             <VStack alignItems="flex-start" spacing={4}>
-              {navbarItems.map(({ href, label }: NavbarItem) => (
+              {filteredItems.map(({ href, label }: NavbarItem) => (
                 <Link
                   key={href}
                   href={href}
@@ -235,7 +302,7 @@ const Navbar: React.FC = () => {
                     position: "relative",
                     padding: "4px 0",
                     width: "100%",
-                    color: pathname === href ? "black" : "inherit",
+                    color: pathname === href ? "black" : "#4A5568",
                     fontWeight: pathname === href ? "bold" : "normal",
                   }}
                 >

@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 import { Box } from "@chakra-ui/react";
 import { useMotionValue, useTransform, animate } from "framer-motion";
 import { useEffect } from "react";
-import { useUserStore } from "../../shared/store/userStore";
 import { useRouter } from "next/navigation";
+import { useAuth } from "../../shared/hooks/useAuth";
 
 const fadeIn = (delay: number = 0) => ({
   initial: { opacity: 0, y: 20 },
@@ -27,8 +27,8 @@ const Hero: React.FC = () => {
   const rounded = useTransform(count, (latest) =>
     Math.round(latest).toLocaleString()
   );
-  const { isAuthenticated } = useUserStore();
   const router = useRouter();
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     const animation = animate(count, 14000, { duration: 3 });

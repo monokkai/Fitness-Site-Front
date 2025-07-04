@@ -21,7 +21,8 @@ import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useSignup } from "../../shared/hooks/useSignup";
+import { useRouter } from 'next/navigation';
+import { AUTH_ENDPOINTS } from '../../shared/config/api.config';
 
 const MotionBox = motion(Box);
 const MotionStack = motion(Stack);
@@ -52,16 +53,88 @@ const itemVariants = {
 };
 
 const SignupForm: React.FC = () => {
-  const bgColor = useColorModeValue("white", "gray.800");
-  const borderColor = useColorModeValue("gray.200", "gray.700");
-  const textColor = useColorModeValue("gray.600", "gray.400");
-  const headingColor = useColorModeValue("gray.700", "white");
+  const bgColor = useColorModeValue("white", "white");
+  const borderColor = useColorModeValue("gray.300", "gray.300");
+  const textColor = useColorModeValue("black", "black");
+  const headingColor = useColorModeValue("black", "black");
   const errorColor = useColorModeValue("red.500", "red.300");
 
-  const { formData, errors, handleChange, handleSubmit } = useSignup();
+  const router = useRouter();
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState<{
+    username?: string;
+    email?: string;
+    password?: string;
+  }>({});
   const [showPassword, setShowPassword] = useState(false);
 
-  // console.log("formData", formData);
+  const validateForm = () => {
+    const newErrors: typeof errors = {};
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+
+    if (!formData.username || formData.username.length < 3) {
+      newErrors.username = "Username must be at least 3 characters";
+    }
+    if (!formData.email || !emailRegex.test(formData.email)) {
+      newErrors.email = "Invalid email address";
+    }
+    if (!formData.password || formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = event.target;
+    setFormData(prev => ({
+      ...prev,
+      [id]: value
+    }));
+  };
+
+  const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    if (!validateForm()) return;
+
+    try {
+      const response = await fetch(AUTH_ENDPOINTS.SIGNUP, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+        credentials: 'include'
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (data.modelState) {
+          const validationErrors: typeof errors = {};
+          Object.entries(data.modelState).forEach(([key, messages]) => {
+            const field = key.toLowerCase().split('.').pop() || '';
+            validationErrors[field as keyof typeof errors] = Array.isArray(messages) ? messages[0] : messages;
+          });
+          setErrors(validationErrors);
+          return;
+        }
+        throw new Error(data.message || 'Registration failed');
+      }
+
+      router.push('/');
+    } catch (error) {
+      console.error('Registration error:', error);
+      setErrors({
+        username: error instanceof Error ? error.message : 'Registration failed'
+      });
+    }
+  };
 
   return (
     <MotionStack
@@ -76,18 +149,18 @@ const SignupForm: React.FC = () => {
             Create Your Account
           </Heading>
           <Text color={textColor}>
-            Join HandFit+ to start your fitness journey
+            Join HandFit to start your fitness journey
           </Text>
         </Stack>
       </MotionStack>
 
       <MotionBox
         variants={itemVariants}
-        py={{ base: "0", sm: "8" }}
-        px={{ base: "4", sm: "10" }}
+        py={{ base: "6", sm: "8" }}
+        px={{ base: "6", sm: "10" }}
         bg={bgColor}
-        boxShadow={{ base: "none", sm: "md" }}
-        borderRadius={{ base: "none", sm: "xl" }}
+        boxShadow="none"
+        borderRadius="xl"
         borderWidth="1px"
         borderColor={borderColor}
         color={textColor}
@@ -205,7 +278,7 @@ const SignupForm: React.FC = () => {
           <Stack spacing="3">
             <Flex align="center" gap={4}>
               <Divider flex="1" />
-              <Text color={textColor} fontSize="sm" whiteSpace="nowrap">
+              <Text color="black" fontSize="sm" whiteSpace="nowrap">
                 OR CONTINUE WITH
               </Text>
               <Divider flex="1" />
@@ -225,6 +298,7 @@ const SignupForm: React.FC = () => {
                 leftIcon={<FaGoogle />}
                 size="lg"
                 borderRadius="xl"
+                color="black"
                 _hover={{
                   bg: "gray.50",
                   borderColor: "brand.400",
@@ -245,6 +319,7 @@ const SignupForm: React.FC = () => {
                 leftIcon={<FaGithub />}
                 size="lg"
                 borderRadius="xl"
+                color="black"
                 _hover={{
                   bg: "gray.50",
                   borderColor: "brand.400",
@@ -259,7 +334,7 @@ const SignupForm: React.FC = () => {
 
       <MotionText
         textAlign="center"
-        color={textColor}
+        color="black"
         variants={itemVariants}
         whileHover={{ scale: 1.02 }}
       >

@@ -6,7 +6,6 @@ import SignupForm from "./components/SignupForm";
 const SignupPage = () => {
   return (
     <Container
-      color={"black"}
       maxW="lg"
       py={{ base: "12", md: "24" }}
       px={{ base: "0", sm: "8" }}
