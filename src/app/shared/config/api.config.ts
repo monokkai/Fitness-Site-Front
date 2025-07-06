@@ -1,4 +1,4 @@
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
 export const GUARDS_SERVICE_URL = process.env.NEXT_PUBLIC_GUARDS_SERVICE_URL || 'http://localhost:3003';
 
 export const AUTH_ENDPOINTS = {

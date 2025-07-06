@@ -26,14 +26,24 @@ import api from "../../shared/api/axios";
 import { AUTH_ENDPOINTS } from "../../shared/config/api.config";
 
 interface AuthResponse {
-  success: boolean;
-  error?: string;
-  token?: string;
+  token: string;
   user?: {
     id: number;
     username: string;
     email: string;
   };
+  message?: string;
+}
+
+interface ApiError {
+  response?: {
+    status: number;
+    data: {
+      message: string;
+    };
+  };
+  request?: XMLHttpRequest;
+  message: string;
 }
 
 const MotionBox = motion(Box);
@@ -91,26 +101,42 @@ const AuthForm: React.FC = () => {
     setError("");
 
     try {
+      const requestData = {
+        email: formData.email,
+        password: formData.password
+      };
+      
       console.log('Sending login request to:', AUTH_ENDPOINTS.LOGIN);
-      console.log('With data:', { ...formData, password: formData.password.length + ' chars' });
+      console.log('Request data:', { email: formData.email, passwordLength: formData.password.length });
 
-      const response = await api.post<AuthResponse>(AUTH_ENDPOINTS.LOGIN, formData);
-      console.log('Server response:', response.data);
+      const response = await api.post<AuthResponse>(AUTH_ENDPOINTS.LOGIN, requestData);
 
-      if (response.data.success) {
+      console.log('Response headers:', response.headers);
+      console.log('Response status:', response.status);
+      console.log('Response data:', response.data);
+
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
         router.push("/");
       } else {
-        setError(response.data.error || "Login failed");
+        setError("Invalid response from server - no token received");
       }
-    } catch (error: any) {
-      console.error('Full error object:', error);
-      if (error.response) {
-        console.error('Error status:', error.response.status);
-        console.error('Error headers:', error.response.headers);
-        console.error('Error data:', error.response.data);
+    } catch (error) {
+      const apiError = error as ApiError;
+      console.error('Login error details:', {
+        hasResponse: !!apiError.response,
+        status: apiError.response?.status,
+        message: apiError.message,
+        responseData: apiError.response?.data
+      });
+      
+      if (apiError.response) {
+        setError(apiError.response.data.message || "Authentication failed");
+      } else if (apiError.request) {
+        setError("No response from server. Please check your connection.");
+      } else {
+        setError("An error occurred during login");
       }
-      setError(error.response?.data?.message || error.message || "An error occurred during login");
-      console.error("Login error:", error);
     }
   };
 
