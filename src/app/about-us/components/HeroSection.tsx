@@ -64,7 +64,7 @@ export default function HeroSection() {
         }}
       >
         <source
-          src="http://localhost:8080/media/about_run.mp4"
+          src="http://localhost:80/media/about_run.mp4"
           type="video/mp4"
         />
       </Box>

@@ -3,13 +3,12 @@
 import { Box, Heading } from "@chakra-ui/react";
 import InovateSection from "./InovateSection";
 import PricingDemoSection from "./PricingDemoSection";
-import { useAuthCheck } from "../shared/hooks/useAuthCheck";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../shared/hooks/useAuth";
 
 const DemoSection: React.FC = () => {
   const router = useRouter();
-  const { handleProtectedRoute } = useAuthCheck();
+//   const { handleProtectedRoute } = useAuthCheck();
   const { isAuthenticated, isLoading } = useAuth();
 
   const handleClick = () => {
