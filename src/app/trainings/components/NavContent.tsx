@@ -31,7 +31,7 @@ const NavContent: React.FC = () => {
   const router = useRouter();
   const isMobile = useBreakpointValue({ base: true, md: false });
 
-  const handleLogout: () => Promise<void> = async () => {
+  const handleLogout = async () => {
     await logout();
     router.push("/");
   };
@@ -44,6 +44,7 @@ const NavContent: React.FC = () => {
       gap={4}
       backdropFilter="blur(10px)"
     >
+      {/* Навигационные кнопки */}
       {navItems.map((item, index) => (
         <Button
           key={index}
@@ -55,7 +56,7 @@ const NavContent: React.FC = () => {
           alignItems="center"
         >
           {item.label}
-          {item.streak && (
+          {item.streak && item.streak !== "0" && (
             <Badge
               ml={2}
               borderRadius="full"
@@ -67,6 +68,8 @@ const NavContent: React.FC = () => {
           )}
         </Button>
       ))}
+
+      {/* Меню пользователя */}
       <Menu gutter={4}>
         <MenuButton
           as={Button}
@@ -80,16 +83,21 @@ const NavContent: React.FC = () => {
             <Avatar
               size="sm"
               name={user?.username || "Unknown"}
-              src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.username}`}
+              src={
+                user?.username
+                  ? `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.username)}`
+                  : undefined
+              }
             />
             <Box fontSize="20px" display={{ base: "none", md: "block" }}>
-              {user?.username ? user.username : "Guest"}
+              {user?.username || "Guest"}
             </Box>
           </Box>
         </MenuButton>
+
         <MenuList
           bg="white"
-          color={"black"}
+          color="black"
           border="1px solid"
           borderColor="gray.100"
           boxShadow="sm"
@@ -109,6 +117,7 @@ const NavContent: React.FC = () => {
           >
             Profile Settings
           </MenuItem>
+
           <MenuItem
             color="green.500"
             icon={<FaFire />}
@@ -118,7 +127,9 @@ const NavContent: React.FC = () => {
           >
             Current Streak: 7 days
           </MenuItem>
+
           <Divider my={2} />
+
           <MenuItem
             icon={<FaSignOutAlt />}
             onClick={handleLogout}
