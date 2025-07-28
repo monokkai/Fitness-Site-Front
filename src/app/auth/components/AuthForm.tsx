@@ -101,37 +101,23 @@ const AuthForm: React.FC = () => {
     setError("");
 
     try {
-      const requestData = {
-        email: formData.email,
-        password: formData.password,
-      };
-
-      console.log("Sending login request to:", AUTH_ENDPOINTS.LOGIN);
-      console.log("Request data:", {
-        email: formData.email,
-        passwordLength: formData.password.length,
-      });
-
       const response = await api.post<AuthResponse>(
         AUTH_ENDPOINTS.LOGIN,
-        requestData
+        formData
       );
-      console.log(response)
-      console.log(response.data)
-      if (response.data.token) {
+
+      if (response.status === 200 && response.data.token) {
         localStorage.setItem("token", response.data.token);
-        router.push("/");
+
+        setTimeout(() => {
+          router.replace("/");
+        }, 50);
       } else {
-        setError("Invalid response from server - no token received");
+        setError("Invalid credentials or server response");
       }
     } catch (error) {
       const apiError = error as ApiError;
-      console.error("Login error details:", {
-        hasResponse: !!apiError.response,
-        status: apiError.response?.status,
-        message: apiError.message,
-        responseData: apiError.response?.data,
-      });
+      console.error("Login error details:", apiError);
 
       if (apiError.response) {
         setError(apiError.response.data.message || "Authentication failed");

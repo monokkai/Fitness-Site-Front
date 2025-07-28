@@ -26,12 +26,7 @@ import { useEffect, useState } from "react";
 import navbarItems, { NavbarItem } from "../../shared/utils/navbarItems";
 import { AUTH_ENDPOINTS } from "../../shared/config/api.config";
 import { useRouter } from "next/navigation";
-
-interface User {
-  id: number;
-  username: string;
-  email: string;
-}
+import User from "../../shared/interfaces/IUser";
 
 const Navbar: React.FC = () => {
   const pathname = usePathname();
@@ -66,9 +61,9 @@ const Navbar: React.FC = () => {
     const checkAuth = async () => {
       try {
         const response = await fetch(AUTH_ENDPOINTS.ME, {
-          credentials: 'include'
+          credentials: "include",
         });
-        
+
         if (response.ok) {
           const data = await response.json();
           setUser(data.user);
@@ -76,7 +71,7 @@ const Navbar: React.FC = () => {
           setUser(null);
         }
       } catch (error) {
-        console.error('Auth check failed:', error);
+        console.error("Auth check failed:", error);
         setUser(null);
       } finally {
         setIsLoading(false);
@@ -89,17 +84,17 @@ const Navbar: React.FC = () => {
   const handleLogout = async () => {
     try {
       await fetch(AUTH_ENDPOINTS.LOGOUT, {
-        method: 'POST',
-        credentials: 'include'
+        method: "POST",
+        credentials: "include",
       });
       setUser(null);
-      router.push('/');
+      router.push("/");
     } catch (error) {
-      console.error('Logout failed:', error);
+      console.error("Logout failed:", error);
     }
   };
 
-  const filteredItems = navbarItems.filter(item => {
+  const filteredItems = navbarItems.filter((item) => {
     if (user) {
       return !item.guestOnly;
     }
@@ -235,8 +230,8 @@ const Navbar: React.FC = () => {
             exit={{ x: 70, opacity: 0 }}
             transition={{ type: "spring", stiffness: 60, damping: 15 }}
           >
-            {!isLoading && (
-              user ? (
+            {!isLoading &&
+              (user ? (
                 <HStack spacing={3}>
                   <Avatar
                     size="sm"
@@ -244,7 +239,11 @@ const Navbar: React.FC = () => {
                     bg="green.500"
                     color="white"
                   />
-                  <Text fontSize="18px" fontWeight="medium" color={isPricingPage ? "white" : "black"}>
+                  <Text
+                    fontSize="18px"
+                    fontWeight="medium"
+                    color={isPricingPage ? "white" : "black"}
+                  >
                     {user.username}
                   </Text>
                   <Button
@@ -277,8 +276,7 @@ const Navbar: React.FC = () => {
                     Sign In
                   </Button>
                 </Link>
-              )
-            )}
+              ))}
           </motion.div>
         )}
       </AnimatePresence>
@@ -287,7 +285,9 @@ const Navbar: React.FC = () => {
         <DrawerOverlay />
         <DrawerContent bg="white">
           <DrawerCloseButton />
-          <DrawerHeader borderBottomWidth="1px" color="black">Navigation</DrawerHeader>
+          <DrawerHeader borderBottomWidth="1px" color="black">
+            Navigation
+          </DrawerHeader>
           <DrawerBody>
             <VStack alignItems="flex-start" spacing={4}>
               {filteredItems.map(({ href, label }: NavbarItem) => (

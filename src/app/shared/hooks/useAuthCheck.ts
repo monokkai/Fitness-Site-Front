@@ -9,9 +9,14 @@ export const useAuthCheck = () => {
   const checkAuth = async () => {
     try {
       const response = await fetch(AUTH_ENDPOINTS.LOGIN, {
-        credentials: 'include'
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
+        }
       });
-      
+
       if (!response.ok) {
         router.push('/auth');
         return false;
@@ -39,9 +44,8 @@ export const useAuthCheck = () => {
     }
   };
 
-  return {
-    checkAuth,
-    handleProtectedAction,
-    handleProtectedRoute
-  };
-}; 
+  return { checkAuth, handleProtectedAction, handleProtectedRoute };
+};
+
+
+

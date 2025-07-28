@@ -7,6 +7,7 @@ export const AUTH_ENDPOINTS = {
     LOGOUT: `${API_URL}/auth/logout`,
     REFRESH: `${API_URL}/auth/refresh`,
     ME: `${API_URL}/auth/me`,
+    PROFILE: `${API_URL}/auth/profile`,
 } as const;
 
 export const GUARDS_ENDPOINTS = {

@@ -8,11 +8,10 @@ import StatsSection from "./components/StatsSection";
 import CategoriesSection from "./components/CategoriesSection";
 import WorkoutsSection from "./components/WorkoutsSection";
 import LearningPathSection from "./components/LearningPathSection";
-import { useAuthGuardStore } from "../shared/store/authGuardStore";
-import { AuthGuardPopup } from "@/app/components/ui/AuthGuardPopup";
+import { useAuthCheck } from "../shared/hooks/useAuthCheck";
 
 const TrainingsPage = () => {
-  const { checkAuth } = useAuthGuardStore();
+  const { checkAuth } = useAuthCheck();
 
   useEffect(() => {
     checkAuth();
@@ -20,7 +19,6 @@ const TrainingsPage = () => {
 
   return (
     <>
-      <AuthGuardPopup />
       <LayoutWrapper>
         <Box as="main" minH="100vh" bg="gray.50">
           <Container maxW="container.xl" py={10}>

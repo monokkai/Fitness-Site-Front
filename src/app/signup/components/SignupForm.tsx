@@ -76,13 +76,13 @@ const SignupForm: React.FC = () => {
     const newErrors: typeof errors = {};
     const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
-    if (!formData.username && formData.username.length < 3) {
+    if (!formData.username || formData.username.length < 3) {
       newErrors.username = "Username must be at least 3 characters";
     }
-    if (!formData.email && !emailRegex.test(formData.email)) {
+    if (!formData.email || !emailRegex.test(formData.email)) {
       newErrors.email = "Invalid email address";
     }
-    if (!formData.password && formData.password.length < 6) {
+    if (!formData.password || formData.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters";
     }
 
