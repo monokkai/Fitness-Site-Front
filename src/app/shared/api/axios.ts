@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_URL } from '../config/api.config';
+import { API_URL, AUTH_ENDPOINTS } from '../config/api.config';
 
 const api = axios.create({
     baseURL: API_URL,
@@ -39,5 +39,9 @@ api.interceptors.response.use(
         return Promise.reject(error);
     }
 );
+
+export async function fetchMe() {
+    return api.get(AUTH_ENDPOINTS.ME);
+}
 
 export default api;

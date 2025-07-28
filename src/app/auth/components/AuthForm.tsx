@@ -103,33 +103,36 @@ const AuthForm: React.FC = () => {
     try {
       const requestData = {
         email: formData.email,
-        password: formData.password
+        password: formData.password,
       };
-      
-      console.log('Sending login request to:', AUTH_ENDPOINTS.LOGIN);
-      console.log('Request data:', { email: formData.email, passwordLength: formData.password.length });
 
-      const response = await api.post<AuthResponse>(AUTH_ENDPOINTS.LOGIN, requestData);
+      console.log("Sending login request to:", AUTH_ENDPOINTS.LOGIN);
+      console.log("Request data:", {
+        email: formData.email,
+        passwordLength: formData.password.length,
+      });
 
-      console.log('Response headers:', response.headers);
-      console.log('Response status:', response.status);
-      console.log('Response data:', response.data);
-
+      const response = await api.post<AuthResponse>(
+        AUTH_ENDPOINTS.LOGIN,
+        requestData
+      );
+      console.log(response)
+      console.log(response.data)
       if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
+        localStorage.setItem("token", response.data.token);
         router.push("/");
       } else {
         setError("Invalid response from server - no token received");
       }
     } catch (error) {
       const apiError = error as ApiError;
-      console.error('Login error details:', {
+      console.error("Login error details:", {
         hasResponse: !!apiError.response,
         status: apiError.response?.status,
         message: apiError.message,
-        responseData: apiError.response?.data
+        responseData: apiError.response?.data,
       });
-      
+
       if (apiError.response) {
         setError(apiError.response.data.message || "Authentication failed");
       } else if (apiError.request) {

@@ -8,7 +8,7 @@ export const useAuthCheck = () => {
 
   const checkAuth = async () => {
     try {
-      const response = await fetch(AUTH_ENDPOINTS.ME, {
+      const response = await fetch(AUTH_ENDPOINTS.LOGIN, {
         credentials: 'include'
       });
       

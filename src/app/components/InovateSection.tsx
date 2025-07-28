@@ -31,7 +31,7 @@ const InovateSection: React.FC = () => {
           borderColor={borderColor}
         >
           <Image
-            src="http://localhost:8081/photo/macbook.png"
+            src="http://localhost:80/photo/macbook.png"
             alt="MacBook with website"
             style={{ width: "100%", height: "auto", display: "block" }}
           />
@@ -121,7 +121,7 @@ const InovateSection: React.FC = () => {
           justifyContent={"center"}
         >
           <Image
-            src="http://localhost:8081/photo/iphone.png"
+            src="http://localhost:80/photo/iphone.png"
             alt="Workout plans interface"
             width={"40%"}
           />

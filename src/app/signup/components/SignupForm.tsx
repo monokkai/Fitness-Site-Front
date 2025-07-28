@@ -21,8 +21,8 @@ import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useRouter } from 'next/navigation';
-import { AUTH_ENDPOINTS } from '../../shared/config/api.config';
+import { useRouter } from "next/navigation";
+import { AUTH_ENDPOINTS } from "../../shared/config/api.config";
 
 const MotionBox = motion(Box);
 const MotionStack = motion(Stack);
@@ -74,15 +74,15 @@ const SignupForm: React.FC = () => {
 
   const validateForm = () => {
     const newErrors: typeof errors = {};
-    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
-    if (!formData.username || formData.username.length < 3) {
+    if (!formData.username && formData.username.length < 3) {
       newErrors.username = "Username must be at least 3 characters";
     }
-    if (!formData.email || !emailRegex.test(formData.email)) {
+    if (!formData.email && !emailRegex.test(formData.email)) {
       newErrors.email = "Invalid email address";
     }
-    if (!formData.password || formData.password.length < 6) {
+    if (!formData.password && formData.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters";
     }
 
@@ -92,9 +92,9 @@ const SignupForm: React.FC = () => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [id]: value
+      [id]: value,
     }));
   };
 
@@ -104,12 +104,12 @@ const SignupForm: React.FC = () => {
 
     try {
       const response = await fetch(AUTH_ENDPOINTS.SIGNUP, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
-        credentials: 'include'
+        credentials: "include",
       });
 
       const data = await response.json();
@@ -118,24 +118,32 @@ const SignupForm: React.FC = () => {
         if (data.modelState) {
           const validationErrors: typeof errors = {};
           Object.entries(data.modelState).forEach(([key, messages]) => {
-            const field = key.toLowerCase().split('.').pop() || '';
-            validationErrors[field as keyof typeof errors] = Array.isArray(messages) ? messages[0] : messages;
+            const field = key.toLowerCase().split(".").pop();
+            validationErrors[field as keyof typeof errors] = Array.isArray(
+              messages
+            )
+              ? messages[0]
+              : messages;
           });
           setErrors(validationErrors);
           return;
         }
-        throw new Error(data.message || 'Registration failed');
+        throw new Error(data.message || "Registration failed");
       }
 
-      router.push('/');
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
+
+      router.push("/");
     } catch (error) {
-      console.error('Registration error:', error);
+      console.error("Registration error:", error);
       setErrors({
-        username: error instanceof Error ? error.message : 'Registration failed'
+        username:
+          error instanceof Error ? error.message : "Registration failed",
       });
     }
   };
-
   return (
     <MotionStack
       spacing="8"
@@ -218,7 +226,6 @@ const SignupForm: React.FC = () => {
                 )}
               </FormControl>
             </MotionBox>
-
             <MotionBox variants={itemVariants}>
               <FormControl isInvalid={!!errors.password}>
                 <FormLabel htmlFor="password" color={headingColor}>
