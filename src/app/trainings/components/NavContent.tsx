@@ -112,6 +112,16 @@ const NavContent: React.FC = () => {
           </MenuItem>
 
           <MenuItem
+            icon={<FaUserCircle />}
+            onClick={() => router.push("/trainings")}
+            py={2}
+            px={4}
+            _hover={{ bg: "gray.50" }}
+          >
+            Trainings
+          </MenuItem>
+
+          <MenuItem
             color="green.500"
             icon={<FaFire />}
             py={2}

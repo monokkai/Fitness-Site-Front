@@ -8,8 +8,8 @@ export const useAuthCheck = () => {
 
   const checkAuth = async () => {
     try {
-      const response = await fetch(AUTH_ENDPOINTS.LOGIN, {
-        method: 'POST',
+      const response = await fetch(AUTH_ENDPOINTS.ME, {
+        method: 'GET',
         credentials: 'include',
         headers: {
           'Accept': 'application/json',
@@ -46,6 +46,3 @@ export const useAuthCheck = () => {
 
   return { checkAuth, handleProtectedAction, handleProtectedRoute };
 };
-
-
-
