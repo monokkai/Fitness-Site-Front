@@ -10,7 +10,7 @@
 ✔ Make Guard and Popup for unauthorized user if he wants to go to /trainings page! @started(25-06-25 12:30) @done(25-06-25 13:31) @lasted(1h1m1s)
 ☐ Make checkbox with Privacy Policy on registration page!
     There is the site what will be able to create a PP document for site! 
-☐ Clean .tsx files of some rubbish like: 
+✔ Clean .tsx files of some rubbish like: @done(25-07-30 20:27)
     const progressItems = [...]
 ✔ Delete guards from frontend part! @started(25-07-04 14:01) @done(25-07-04 14:02) @lasted(1m)
     ☐ When user goes to trainings, he needs to be redirected to login page! NO BLUR! It's unsafe!
@@ -19,7 +19,7 @@
 ---BACKEND(SERVICES)---
 ✔ Make nginx-service for giving static files to frontend @done(25-06-16 18:04)
 ✔ Auth-service (C# ASP.NET Core) @started(25-06-18 19:18) @done(25-06-18 19:18) @lasted(5s)
-☐ Make independent services for databases for users, achievements, rewards
+☐ Make independent services for databases for users, rewards
 ✔ When user is logged in, show user's name in navbar @done(25-06-25 13:42)
 ✔ Use Cookies for auth + I deleted localStorage and saving user's data in saved from XSS attacks auth-service by using HttpOnly Cookies! @done(25-06-25 13:42)
     But now it doest show cookies(token) in browser!
@@ -27,4 +27,5 @@
 ---FIXING BUGS---
 ✔ Problem with axios, gives error in axios.ts @done(25-06-18 20:53)
 ✔ useAuth, useSignup hooks do not make the request to auth-service! and give error! @done(25-06-18 20:53)
-☐ Fix bug with colors on the page "/"!
+✔ Fix bug with colors on the page "/"! @done(25-07-30 20:27)
+☐ Fix bug with logout when im reloading page the session still here! @started(25-07-30 20:28)

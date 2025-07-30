@@ -73,16 +73,17 @@ const SignupForm: React.FC = () => {
     password?: string;
   }>({});
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validateForm = () => {
     const newErrors: typeof errors = {};
-    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!formData.username || formData.username.length < 3) {
       newErrors.username = "Username must be at least 3 characters";
     }
     if (!formData.email || !emailRegex.test(formData.email)) {
-      newErrors.email = "Invalid email address";
+      newErrors.email = "Please enter a valid email address";
     }
     if (!formData.password || formData.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters";
@@ -98,11 +99,18 @@ const SignupForm: React.FC = () => {
       ...prev,
       [id]: value,
     }));
+
+    if (errors[id as keyof typeof errors]) {
+      setErrors((prev) => ({ ...prev, [id]: undefined }));
+    }
   };
 
-  const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (!validateForm()) return;
+    if (!validateForm() || isSubmitting) return;
+
+    setIsSubmitting(true);
+    setErrors({});
 
     try {
       const response = await fetch(AUTH_ENDPOINTS.SIGNUP, {
@@ -117,30 +125,32 @@ const SignupForm: React.FC = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        if (data.modelState) {
-          const validationErrors: typeof errors = {};
-          Object.entries(data.modelState).forEach(([key, messages]) => {
-            const field = key.toLowerCase().split(".").pop();
-            validationErrors[field as keyof typeof errors] = Array.isArray(
-              messages
-            )
-              ? messages[0]
-              : messages;
+        if (data.errors) {
+          const serverErrors: typeof errors = {};
+          Object.entries(data.errors).forEach(([field, messages]) => {
+            if (Array.isArray(messages)) {
+              serverErrors[field as keyof typeof errors] = messages[0];
+            }
           });
-          setErrors(validationErrors);
-          return;
+          setErrors(serverErrors);
+        } else {
+          throw new Error(data.message || "Registration failed");
         }
-        throw new Error(data.message || "Registration failed");
+        return;
       }
 
       await checkAuth();
+
       router.push("/");
+      router.refresh();
     } catch (error) {
       console.error("Registration error:", error);
       setErrors({
         username:
           error instanceof Error ? error.message : "Registration failed",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -171,116 +181,119 @@ const SignupForm: React.FC = () => {
         borderRadius="xl"
         borderWidth="1px"
         borderColor={borderColor}
-        color={textColor}
       >
-        <Stack spacing="6">
-          <Stack spacing="5">
-            <MotionBox variants={itemVariants}>
-              <FormControl isInvalid={!!errors.username}>
-                <FormLabel htmlFor="username" color={headingColor}>
-                  Username
-                </FormLabel>
-                <Input
-                  id="username"
-                  type="text"
-                  placeholder="Enter your username"
-                  size="lg"
-                  borderRadius="xl"
-                  _focus={{
-                    borderColor: "brand.400",
-                    boxShadow: "0 0 0 1px var(--chakra-colors-brand-400)",
-                  }}
-                  value={formData.username}
-                  onChange={handleChange}
-                />
-                {errors.username && (
-                  <Text color={errorColor} fontSize="sm" mt={1}>
-                    {errors.username}
-                  </Text>
-                )}
-              </FormControl>
-            </MotionBox>
-
-            <MotionBox variants={itemVariants}>
-              <FormControl isInvalid={!!errors.email}>
-                <FormLabel htmlFor="email" color={headingColor}>
-                  Email
-                </FormLabel>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  size="lg"
-                  borderRadius="xl"
-                  _focus={{
-                    borderColor: "brand.400",
-                    boxShadow: "0 0 0 1px var(--chakra-colors-brand-400)",
-                  }}
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-                {errors.email && (
-                  <Text color={errorColor} fontSize="sm" mt={1}>
-                    {errors.email}
-                  </Text>
-                )}
-              </FormControl>
-            </MotionBox>
-
-            <MotionBox variants={itemVariants}>
-              <FormControl isInvalid={!!errors.password}>
-                <FormLabel htmlFor="password" color={headingColor}>
-                  Password
-                </FormLabel>
-                <InputGroup size="lg">
+        <form onSubmit={handleSubmit}>
+          <Stack spacing="6">
+            <Stack spacing="5">
+              <MotionBox variants={itemVariants}>
+                <FormControl isInvalid={!!errors.username}>
+                  <FormLabel htmlFor="username" color={headingColor}>
+                    Username
+                  </FormLabel>
                   <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Create a password"
+                    id="username"
+                    type="text"
+                    placeholder="Enter your username"
+                    size="lg"
                     borderRadius="xl"
                     _focus={{
                       borderColor: "brand.400",
                       boxShadow: "0 0 0 1px var(--chakra-colors-brand-400)",
                     }}
-                    value={formData.password}
+                    value={formData.username}
                     onChange={handleChange}
                   />
-                  <InputRightElement>
-                    <IconButton
-                      variant="ghost"
-                      aria-label={
-                        showPassword ? "Hide password" : "Show password"
-                      }
-                      icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
-                      onClick={() => setShowPassword(!showPassword)}
+                  {errors.username && (
+                    <Text color={errorColor} fontSize="sm" mt={1}>
+                      {errors.username}
+                    </Text>
+                  )}
+                </FormControl>
+              </MotionBox>
+
+              <MotionBox variants={itemVariants}>
+                <FormControl isInvalid={!!errors.email}>
+                  <FormLabel htmlFor="email" color={headingColor}>
+                    Email
+                  </FormLabel>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="Enter your email"
+                    size="lg"
+                    borderRadius="xl"
+                    _focus={{
+                      borderColor: "brand.400",
+                      boxShadow: "0 0 0 1px var(--chakra-colors-brand-400)",
+                    }}
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
+                  {errors.email && (
+                    <Text color={errorColor} fontSize="sm" mt={1}>
+                      {errors.email}
+                    </Text>
+                  )}
+                </FormControl>
+              </MotionBox>
+
+              <MotionBox variants={itemVariants}>
+                <FormControl isInvalid={!!errors.password}>
+                  <FormLabel htmlFor="password" color={headingColor}>
+                    Password
+                  </FormLabel>
+                  <InputGroup size="lg">
+                    <Input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Create a password"
+                      borderRadius="xl"
+                      _focus={{
+                        borderColor: "brand.400",
+                        boxShadow: "0 0 0 1px var(--chakra-colors-brand-400)",
+                      }}
+                      value={formData.password}
+                      onChange={handleChange}
                     />
-                  </InputRightElement>
-                </InputGroup>
-                {errors.password && (
-                  <Text color={errorColor} fontSize="sm" mt={1}>
-                    {errors.password}
-                  </Text>
-                )}
-              </FormControl>
+                    <InputRightElement>
+                      <IconButton
+                        variant="ghost"
+                        aria-label={
+                          showPassword ? "Hide password" : "Show password"
+                        }
+                        icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
+                        onClick={() => setShowPassword(!showPassword)}
+                      />
+                    </InputRightElement>
+                  </InputGroup>
+                  {errors.password && (
+                    <Text color={errorColor} fontSize="sm" mt={1}>
+                      {errors.password}
+                    </Text>
+                  )}
+                </FormControl>
+              </MotionBox>
+            </Stack>
+
+            <MotionBox variants={itemVariants}>
+              <Button
+                type="submit"
+                size="lg"
+                colorScheme="brand"
+                borderRadius="xl"
+                width="100%"
+                _hover={{
+                  bg: "brand.400",
+                  boxShadow: "0 0 12px rgba(170, 255, 3, 0.7)",
+                }}
+                isLoading={isSubmitting}
+                loadingText="Creating account..."
+              >
+                Create Account
+              </Button>
             </MotionBox>
           </Stack>
-
-          <MotionBox variants={itemVariants}>
-            <Button
-              size="lg"
-              colorScheme="brand"
-              borderRadius="xl"
-              width="100%"
-              _hover={{
-                bg: "brand.400",
-                boxShadow: "0 0 12px rgba(170, 255, 3, 0.7)",
-              }}
-              onClick={handleSubmit}
-            >
-              Create Account
-            </Button>
-          </MotionBox>
-        </Stack>
+        </form>
 
         <Stack spacing="6" mt="8">
           <Stack spacing="3">

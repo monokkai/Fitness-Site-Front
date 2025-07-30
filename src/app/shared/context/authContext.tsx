@@ -24,7 +24,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(true);
     try {
       const response = await fetch(AUTH_ENDPOINTS.ME, {
+        method: "GET",
         credentials: "include",
+        headers: {
+          Accept: "application/json",
+        },
       });
 
       if (response.ok) {
@@ -33,11 +37,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         setUser(null);
         localStorage.removeItem("token");
+        document.cookie =
+          "session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
       }
     } catch (error) {
       console.error("Auth check failed:", error);
       setUser(null);
       localStorage.removeItem("token");
+      document.cookie =
+        "session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
     } finally {
       setIsLoading(false);
     }
@@ -80,9 +88,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         method: "POST",
         credentials: "include",
       });
+
       setUser(null);
       localStorage.removeItem("token");
+      document.cookie =
+        "session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+      document.cookie =
+        "token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+
+      await checkAuth();
+
       router.push("/");
+      router.refresh();
     } catch (error) {
       console.error("Logout failed:", error);
     }
