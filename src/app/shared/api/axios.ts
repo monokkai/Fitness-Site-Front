@@ -10,32 +10,21 @@ const api = axios.create({
     timeout: 10000,
 });
 
-api.interceptors.request.use(
-    (config) => {
-        const token = localStorage.getItem('token');
-        if (token && config.headers) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => {
-        console.error('Request error:', error);
-        return Promise.reject(error);
+api.interceptors.request.use(config => {
+    const token = localStorage.getItem("token");
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
     }
-);
+    return config;
+});
 
 api.interceptors.response.use(
-    (response) => response,
-    async (error) => {
-        if (!error.response) {
-            console.error('Network Error:', error);
-            throw new Error('Network error - please check your connection');
+    response => response,
+    error => {
+        if (error.response?.status === 401) {
+            localStorage.removeItem("token");
+            document.cookie = "auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
         }
-
-        if (error.response.status === 401) {
-            localStorage.removeItem('token');
-        }
-
         return Promise.reject(error);
     }
 );

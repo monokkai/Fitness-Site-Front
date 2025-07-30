@@ -1,20 +1,25 @@
 import User from "./IUser";
 
-export interface LoginResponse {
-  accessToken?: string;
-  token?: string;
-  access_token?: string;
-  user?: User;
-  id?: number;
-  email?: string;
-  username?: string;
-  createdAt?: string;
+export interface AuthResponse {
+    success: boolean;
+    token?: string;
+    user?: UserDto;
+    error?: string;
+}
+
+export interface UserDto {
+    id: number;
+    username: string;
+    email: string;
+}
+
+export interface LoginResponse extends AuthResponse {
+    token: string;
+    user: UserDto;
 }
 
 export interface MeResponse {
-  user?: User;
-  id?: number;
-  email?: string;
-  username?: string;
-  createdAt?: string;
+    success: boolean;
+    user?: UserDto;
+    error?: string;
 }

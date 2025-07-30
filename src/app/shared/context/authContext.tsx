@@ -31,12 +31,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const clearAuthState = useCallback(() => {
     setUser(null);
     localStorage.removeItem("token");
-    sessionStorage.removeItem("token");
-    document.cookie.split(";").forEach((c) => {
-      document.cookie = c
-        .replace(/^ +/, "")
-        .replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`);
-    });
+    document.cookie =
+      "auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
   }, []);
 
   const checkAuth = useCallback(async () => {
@@ -44,15 +40,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const response = await api.get<MeResponse>(AUTH_ENDPOINTS.ME);
 
-      const userData = response.data?.user || {
-        id: response.data?.id,
-        email: response.data?.email,
-        username: response.data?.username,
-        createdAt: response.data?.createdAt,
-      };
-
-      if (userData?.id) {
-        setUser(userData as User);
+      if (response.data?.success && response.data.user) {
+        setUser({
+          id: response.data.user.id,
+          email: response.data.user.email,
+          username: response.data.user.username,
+          createdAt: new Date().toISOString(),
+        });
       } else {
         await clearAuthState();
       }
@@ -73,25 +67,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           password,
         });
 
-        const token =
-          response.data?.accessToken ||
-          response.data?.token ||
-          response.data?.access_token;
-
-        if (!token) {
-          throw new Error("Authentication token not found in server response");
+        if (!response.data?.token) {
+          throw new Error(response.data?.error || "No token received");
         }
 
-        localStorage.setItem("token", token);
+        localStorage.setItem("token", response.data.token);
 
-        const userData = response.data?.user || {
-          id: response.data?.id,
-          email: response.data?.email || email,
-          username: response.data?.username || email.split("@")[0],
-          createdAt: response.data?.createdAt || new Date().toISOString(),
-        };
+        if (response.data.user) {
+          setUser({
+            id: response.data.user.id,
+            email: response.data.user.email,
+            username: response.data.user.username,
+            createdAt: new Date().toISOString(),
+          });
+        }
 
-        setUser(userData as User);
+        router.push("/");
       } catch (error) {
         console.error("Login error:", error);
         await clearAuthState();
@@ -100,7 +91,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setIsLoading(false);
       }
     },
-    [clearAuthState]
+    [clearAuthState, router]
   );
 
   const logout = useCallback(async () => {
@@ -109,7 +100,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await api.post(AUTH_ENDPOINTS.LOGOUT);
       await clearAuthState();
       router.push("/auth");
-      router.refresh();
     } catch (error) {
       console.error("Logout failed:", error);
       await clearAuthState();
