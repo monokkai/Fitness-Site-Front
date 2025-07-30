@@ -143,7 +143,7 @@ const Navbar: React.FC = () => {
       color={isPricingPage ? "white" : "black"}
       transform="translateX(-50%)"
       _hover={hoverGlow}
-      backdropFilter="blur(10px)"
+      backdropFilter="blur(8px)"
       bg={isPricingPage ? "rgba(0, 0, 0, 0.3)" : "rgba(255, 255, 255, 0.7)"}
     >
       <IconButton

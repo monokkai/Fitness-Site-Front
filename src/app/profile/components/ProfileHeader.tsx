@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Spinner,
   Text,
@@ -9,13 +11,14 @@ import {
   Heading,
   Badge,
 } from "@chakra-ui/react";
-import { useCurrentUser } from "../../shared/hooks/useCurrentUser";
+import { useAuth } from "../../shared/context/authContext";
 
 const ProfileHeader: React.FC = () => {
-  const { user, loading } = useCurrentUser();
+  const { user, isLoading } = useAuth();
 
-  if (loading) return <Spinner />;
+  if (isLoading) return <Spinner />;
   if (!user) return <Text color="red.500">User not authenticated</Text>;
+  
   const createdAtDate = user?.createdAt ? new Date(user.createdAt) : null;
 
   return (
@@ -26,7 +29,15 @@ const ProfileHeader: React.FC = () => {
           spacing={8}
           align="center"
         >
-          <Avatar size="2xl" name={user.username} />
+          <Avatar 
+            size="2xl" 
+            name={user.username}
+            src={
+              user?.username
+                ? `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.username)}`
+                : undefined
+            }
+          />
           <Box flex={1}>
             <Heading size="lg" mb={2}>
               Profile: {user.username}

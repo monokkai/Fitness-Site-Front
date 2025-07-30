@@ -5,7 +5,7 @@ import { Box } from "@chakra-ui/react";
 import { useMotionValue, useTransform, animate } from "framer-motion";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "../../shared/hooks/useAuth";
+import { useAuth } from "../../shared/context/authContext"; 
 
 const fadeIn = (delay: number = 0) => ({
   initial: { opacity: 0, y: 20 },
@@ -28,7 +28,7 @@ const Hero: React.FC = () => {
     Math.round(latest).toLocaleString()
   );
   const router = useRouter();
-  const { isAuthenticated = false } = useAuth();
+  const { user, isLoading } = useAuth();
 
   useEffect(() => {
     const animation = animate(count, 14000, { duration: 3 });
@@ -36,12 +36,20 @@ const Hero: React.FC = () => {
   }, [count]);
 
   const handleClick = () => {
-    if (isAuthenticated) {
+    if (isLoading) return;
+
+    if (user) {
       router.push("/trainings");
     } else {
       router.push("/auth");
     }
   };
+
+  const buttonText = isLoading
+    ? "Loading..."
+    : user
+      ? "Go to Trainings! 💪"
+      : "Try it free* 🚀";
 
   return (
     <Box
@@ -95,8 +103,9 @@ const Hero: React.FC = () => {
             onClick={handleClick}
             className="inline-flex rounded-[30px] items-center px-8 py-4 text-base font-medium text-black bg-[#AAFF03] hover:bg-[#8cdb00] transition-all group shadow-lg shadow-[#AAFF03]/20"
             aria-label="Start your fitness journey"
+            disabled={isLoading}
           >
-            {isAuthenticated ? "Go to Trainings! 💪" : "Try it free* 🚀"}
+            {buttonText}
           </motion.button>
         </motion.div>
 

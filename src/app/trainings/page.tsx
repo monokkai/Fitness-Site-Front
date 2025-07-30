@@ -1,39 +1,32 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Box, Container, Spinner } from "@chakra-ui/react";
 import LayoutWrapper from "./components/LayoutWrapper";
 import HeroSection from "./components/HeroSection";
+import { useAuth } from "../shared/context/authContext";
+import { useRouter } from "next/navigation";
 import StatsSection from "./components/StatsSection";
 import CategoriesSection from "./components/CategoriesSection";
 import WorkoutsSection from "./components/WorkoutsSection";
 import LearningPathSection from "./components/LearningPathSection";
-import { useAuthCheck } from "../shared/hooks/useAuthCheck";
 
 const TrainingsPage = () => {
-  const { checkAuth } = useAuthCheck();
-  const [isAuthChecked, setIsAuthChecked] = useState(false);
+  const { user, isLoading } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
-    const verifyAuth = async () => {
-      const isAuthenticated = await checkAuth();
-      setIsAuthChecked(true);
+    if (!isLoading && !user) {
+      router.push("/auth");
+    }
+  }, [user, isLoading, router]);
 
-      if (!isAuthenticated) {
-        return;
-      }
-    };
-
-    verifyAuth();
-  }, [checkAuth]);
-
-  if (!isAuthChecked) {
+  if (isLoading || !user) {
     return (
       <LayoutWrapper>
         <Box
           as="main"
           minH="100vh"
-          bg="gray.50"
           display="flex"
           alignItems="center"
           justifyContent="center"
