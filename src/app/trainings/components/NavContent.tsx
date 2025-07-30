@@ -14,7 +14,7 @@ import {
   useBreakpointValue,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { FaFire, FaUserCircle, FaSignOutAlt } from "react-icons/fa";
+import { FaFire, FaUserCircle, FaSignOutAlt, FaDumbbell } from "react-icons/fa";
 import { IoMdTrophy } from "react-icons/io";
 
 const navItems = [
@@ -112,7 +112,7 @@ const NavContent: React.FC = () => {
           </MenuItem>
 
           <MenuItem
-            icon={<FaUserCircle />}
+            icon={<FaDumbbell />}
             onClick={() => router.push("/trainings")}
             py={2}
             px={4}
@@ -128,7 +128,7 @@ const NavContent: React.FC = () => {
             px={4}
             _hover={{ bg: "gray.50" }}
           >
-            Current Streak: 7 days
+            Current Streak: 0 days
           </MenuItem>
 
           <Divider my={2} />
