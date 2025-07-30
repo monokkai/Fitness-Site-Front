@@ -28,7 +28,7 @@ const Hero: React.FC = () => {
     Math.round(latest).toLocaleString()
   );
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated = false } = useAuth();
 
   useEffect(() => {
     const animation = animate(count, 14000, { duration: 3 });

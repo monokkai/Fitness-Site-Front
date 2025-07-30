@@ -14,9 +14,13 @@ import {
   DrawerBody,
   VStack,
   Spacer,
-  HStack,
-  Text,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuDivider,
   Avatar,
+  Text,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import Link from "next/link";
@@ -25,6 +29,7 @@ import { motion, AnimatePresence, useSpring } from "framer-motion";
 import { useEffect, useState } from "react";
 import navbarItems, { NavbarItem } from "../../shared/utils/navbarItems";
 import { useAuth } from "../../shared/context/authContext";
+import { FaDumbbell, FaUser, FaSignOutAlt } from "react-icons/fa";
 
 const Navbar: React.FC = () => {
   const pathname = usePathname();
@@ -59,6 +64,10 @@ const Navbar: React.FC = () => {
     }
     return !item.authOnly;
   });
+
+  const topMenuItems = filteredItems.filter(
+    (item) => !["/trainings", "/profile"].includes(item.href)
+  );
 
   const hoverGlow = {
     transition: "all 0.2s ease-in-out",
@@ -166,7 +175,7 @@ const Navbar: React.FC = () => {
       <Spacer display={{ base: "none", md: "block" }} />
 
       <Flex display={{ base: "none", md: "flex" }} alignItems="center" gap={4}>
-        {filteredItems.map(({ href, label }: NavbarItem) => (
+        {topMenuItems.map(({ href, label }: NavbarItem) => (
           <Link
             key={href}
             href={href}
@@ -179,63 +188,77 @@ const Navbar: React.FC = () => {
             <Button {...getActiveStyles(href)}>{label}</Button>
           </Link>
         ))}
+
+        {!isLoading && user && (
+          <Menu>
+            <MenuButton
+              as={Button}
+              variant="ghost"
+              color={isPricingPage ? "white" : "black"}
+              _hover={{
+                bg: "transparent",
+                transform: "translateY(-1px)",
+                textShadow: isPricingPage
+                  ? "0 0 8px rgba(255, 255, 255, 0.5)"
+                  : "0 0 8px rgba(0, 0, 0, 0.2)",
+              }}
+            >
+              <Avatar size="sm" name={user.username} color="white" />
+            </MenuButton>
+            <MenuList
+              bg="white"
+              color="black"
+              border="1px solid"
+              borderColor="gray.100"
+              boxShadow="md"
+            >
+              <MenuItem
+                icon={<FaDumbbell />}
+                onClick={() => (window.location.href = "/trainings")}
+              >
+                Trainings
+              </MenuItem>
+              <MenuItem
+                icon={<FaUser />}
+                onClick={() => (window.location.href = "/profile")}
+              >
+                Profile
+              </MenuItem>
+              <MenuDivider />
+              <MenuItem
+                icon={<FaSignOutAlt />}
+                onClick={logout}
+                color="red.500"
+              >
+                Logout
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        )}
       </Flex>
 
       <AnimatePresence>
-        {isVisible && (
+        {isVisible && !isLoading && !user && (
           <motion.div
             initial={{ x: 70, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 70, opacity: 0 }}
             transition={{ type: "spring", stiffness: 60, damping: 15 }}
           >
-            {!isLoading &&
-              (user ? (
-                <HStack spacing={3}>
-                  <Avatar
-                    size="sm"
-                    name={user.username}
-                    bg="green.500"
-                    color="white"
-                  />
-                  <Text
-                    fontSize="18px"
-                    fontWeight="medium"
-                    color={isPricingPage ? "white" : "black"}
-                  >
-                    {user.username}
-                  </Text>
-                  <Button
-                    variant="ghost"
-                    onClick={logout}
-                    color={isPricingPage ? "white" : "black"}
-                    _hover={{
-                      bg: "transparent",
-                      transform: "translateY(-1px)",
-                      textShadow: isPricingPage
-                        ? "0 0 8px rgba(255, 255, 255, 0.5)"
-                        : "0 0 8px rgba(0, 0, 0, 0.2)",
-                    }}
-                  >
-                    Logout
-                  </Button>
-                </HStack>
-              ) : (
-                <Link href="/auth" passHref>
-                  <Button
-                    bg={pathname === "/login" ? "brand.400" : "brand.300"}
-                    color="black"
-                    _hover={{
-                      bg: "brand.400",
-                      transform: "translateY(-1px)",
-                      boxShadow: "0 0 20px rgba(170, 255, 3, 0.3)",
-                    }}
-                    borderRadius={20}
-                  >
-                    Sign In
-                  </Button>
-                </Link>
-              ))}
+            <Link href="/auth" passHref>
+              <Button
+                bg={pathname === "/login" ? "brand.400" : "brand.300"}
+                color="black"
+                _hover={{
+                  bg: "brand.400",
+                  transform: "translateY(-1px)",
+                  boxShadow: "0 0 20px rgba(170, 255, 3, 0.3)",
+                }}
+                borderRadius={20}
+              >
+                Sign In
+              </Button>
+            </Link>
           </motion.div>
         )}
       </AnimatePresence>
@@ -249,7 +272,7 @@ const Navbar: React.FC = () => {
           </DrawerHeader>
           <DrawerBody>
             <VStack alignItems="flex-start" spacing={4}>
-              {filteredItems.map(({ href, label }: NavbarItem) => (
+              {topMenuItems.map(({ href, label }: NavbarItem) => (
                 <Link
                   key={href}
                   href={href}
@@ -279,6 +302,84 @@ const Navbar: React.FC = () => {
                   )}
                 </Link>
               ))}
+
+              {!isLoading && user ? (
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    variant="ghost"
+                    rightIcon={
+                      <Avatar
+                        size="sm"
+                        name={user.username}
+                        bg="green.500"
+                        color="white"
+                      />
+                    }
+                    color={isPricingPage ? "white" : "black"}
+                    _hover={{
+                      bg: "transparent",
+                      transform: "translateY(-1px)",
+                      textShadow: isPricingPage
+                        ? "0 0 8px rgba(255, 255, 255, 0.5)"
+                        : "0 0 8px rgba(0, 0, 0, 0.2)",
+                    }}
+                  >
+                    <Text
+                      fontSize="18px"
+                      fontWeight="medium"
+                      color={isPricingPage ? "white" : "black"}
+                    >
+                      {user.username}
+                    </Text>
+                  </MenuButton>
+                  <MenuList
+                    bg="white"
+                    color="black"
+                    border="1px solid"
+                    borderColor="gray.100"
+                    boxShadow="md"
+                  >
+                    <MenuItem
+                      icon={<FaDumbbell />}
+                      onClick={() => (window.location.href = "/trainings")}
+                    >
+                      Trainings
+                    </MenuItem>
+                    <MenuItem
+                      icon={<FaUser />}
+                      onClick={() => (window.location.href = "/profile")}
+                    >
+                      Profile
+                    </MenuItem>
+                    <MenuDivider />
+                    <MenuItem
+                      icon={<FaSignOutAlt />}
+                      onClick={logout}
+                      color="red.500"
+                    >
+                      Sing Out
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              ) : (
+                !isLoading && (
+                  <Link href="/auth" passHref>
+                    <Button
+                      bg={pathname === "/login" ? "brand.400" : "brand.300"}
+                      color="black"
+                      _hover={{
+                        bg: "brand.400",
+                        transform: "translateY(-1px)",
+                        boxShadow: "0 0 20px rgba(170, 255, 3, 0.3)",
+                      }}
+                      borderRadius={20}
+                    >
+                      Sign In
+                    </Button>
+                  </Link>
+                )
+              )}
             </VStack>
           </DrawerBody>
         </DrawerContent>
