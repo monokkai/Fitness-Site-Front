@@ -1,8 +1,16 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
-import { AUTH_ENDPOINTS } from "../config/api.config";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import { useRouter } from "next/navigation";
+import { AUTH_ENDPOINTS } from "../config/api.config";
+import api from "../api/axios";
+import { LoginResponse, MeResponse } from "../interfaces/IApiResponses";
 import User from "../interfaces/IUser";
 
 type AuthContextType = {
@@ -20,94 +28,99 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  const checkAuth = async () => {
+  const clearAuthState = useCallback(() => {
+    setUser(null);
+    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
+    document.cookie.split(";").forEach((c) => {
+      document.cookie = c
+        .replace(/^ +/, "")
+        .replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`);
+    });
+  }, []);
+
+  const checkAuth = useCallback(async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(AUTH_ENDPOINTS.ME, {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          Accept: "application/json",
-        },
-      });
+      const response = await api.get<MeResponse>(AUTH_ENDPOINTS.ME);
 
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data.user);
+      const userData = response.data?.user || {
+        id: response.data?.id,
+        email: response.data?.email,
+        username: response.data?.username,
+        createdAt: response.data?.createdAt,
+      };
+
+      if (userData?.id) {
+        setUser(userData as User);
       } else {
-        setUser(null);
-        localStorage.removeItem("token");
-        document.cookie =
-          "session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+        await clearAuthState();
       }
     } catch (error) {
       console.error("Auth check failed:", error);
-      setUser(null);
-      localStorage.removeItem("token");
-      document.cookie =
-        "session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+      await clearAuthState();
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [clearAuthState]);
 
-  const login = async (email: string, password: string) => {
+  const login = useCallback(
+    async (email: string, password: string) => {
+      setIsLoading(true);
+      try {
+        const response = await api.post<LoginResponse>(AUTH_ENDPOINTS.LOGIN, {
+          email,
+          password,
+        });
+
+        const token =
+          response.data?.accessToken ||
+          response.data?.token ||
+          response.data?.access_token;
+
+        if (!token) {
+          throw new Error("Authentication token not found in server response");
+        }
+
+        localStorage.setItem("token", token);
+
+        const userData = response.data?.user || {
+          id: response.data?.id,
+          email: response.data?.email || email,
+          username: response.data?.username || email.split("@")[0],
+          createdAt: response.data?.createdAt || new Date().toISOString(),
+        };
+
+        setUser(userData as User);
+      } catch (error) {
+        console.error("Login error:", error);
+        await clearAuthState();
+        throw error;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [clearAuthState]
+  );
+
+  const logout = useCallback(async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(AUTH_ENDPOINTS.LOGIN, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-        credentials: "include",
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Login failed");
-      }
-
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-      }
-
-      await checkAuth();
-    } catch (error) {
-      console.error("Login error:", error);
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const logout = async () => {
-    try {
-      await fetch(AUTH_ENDPOINTS.LOGOUT, {
-        method: "POST",
-        credentials: "include",
-      });
-
-      setUser(null);
-      localStorage.removeItem("token");
-      document.cookie =
-        "session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-      document.cookie =
-        "token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-
-      await checkAuth();
-
-      router.push("/");
+      await api.post(AUTH_ENDPOINTS.LOGOUT);
+      await clearAuthState();
+      router.push("/auth");
       router.refresh();
     } catch (error) {
       console.error("Logout failed:", error);
+      await clearAuthState();
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, [clearAuthState, router]);
 
   useEffect(() => {
     checkAuth();
-  }, []);
+  }, [checkAuth]);
 
   return (
     <AuthContext.Provider value={{ user, isLoading, login, logout, checkAuth }}>

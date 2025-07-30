@@ -181,6 +181,7 @@ const SignupForm: React.FC = () => {
         borderRadius="xl"
         borderWidth="1px"
         borderColor={borderColor}
+        color={"black"}
       >
         <form onSubmit={handleSubmit}>
           <Stack spacing="6">
