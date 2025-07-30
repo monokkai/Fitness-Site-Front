@@ -23,6 +23,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { AUTH_ENDPOINTS } from "../../shared/config/api.config";
+import { useAuth } from "../../shared/context/authContext";
 
 const MotionBox = motion(Box);
 const MotionStack = motion(Stack);
@@ -53,6 +54,7 @@ const itemVariants = {
 };
 
 const SignupForm: React.FC = () => {
+  const { checkAuth } = useAuth();
   const bgColor = useColorModeValue("white", "white");
   const borderColor = useColorModeValue("gray.300", "gray.300");
   const textColor = useColorModeValue("black", "black");
@@ -131,10 +133,7 @@ const SignupForm: React.FC = () => {
         throw new Error(data.message || "Registration failed");
       }
 
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-      }
-
+      await checkAuth();
       router.push("/");
     } catch (error) {
       console.error("Registration error:", error);
@@ -144,6 +143,7 @@ const SignupForm: React.FC = () => {
       });
     }
   };
+
   return (
     <MotionStack
       spacing="8"
@@ -226,6 +226,7 @@ const SignupForm: React.FC = () => {
                 )}
               </FormControl>
             </MotionBox>
+
             <MotionBox variants={itemVariants}>
               <FormControl isInvalid={!!errors.password}>
                 <FormLabel htmlFor="password" color={headingColor}>

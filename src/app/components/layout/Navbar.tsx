@@ -24,17 +24,13 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useSpring } from "framer-motion";
 import { useEffect, useState } from "react";
 import navbarItems, { NavbarItem } from "../../shared/utils/navbarItems";
-import { AUTH_ENDPOINTS } from "../../shared/config/api.config";
-import { useRouter } from "next/navigation";
-import User from "../../shared/interfaces/IUser";
+import { useAuth } from "../../shared/context/authContext";
 
 const Navbar: React.FC = () => {
   const pathname = usePathname();
   const isPricingPage = pathname?.startsWith("/pricing");
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { user, isLoading, logout } = useAuth();
   const [isVisible, setIsVisible] = useState(false);
   const navbarSpringWidth = useSpring(700, { stiffness: 100, damping: 20 });
 
@@ -56,43 +52,6 @@ const Navbar: React.FC = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [navbarSpringWidth]);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await fetch(AUTH_ENDPOINTS.ME, {
-          credentials: "include",
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setUser(data.user);
-        } else {
-          setUser(null);
-        }
-      } catch (error) {
-        console.error("Auth check failed:", error);
-        setUser(null);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    checkAuth();
-  }, []);
-
-  const handleLogout = async () => {
-    try {
-      await fetch(AUTH_ENDPOINTS.LOGOUT, {
-        method: "POST",
-        credentials: "include",
-      });
-      setUser(null);
-      router.push("/");
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  };
 
   const filteredItems = navbarItems.filter((item) => {
     if (user) {
@@ -248,7 +207,7 @@ const Navbar: React.FC = () => {
                   </Text>
                   <Button
                     variant="ghost"
-                    onClick={handleLogout}
+                    onClick={logout}
                     color={isPricingPage ? "white" : "black"}
                     _hover={{
                       bg: "transparent",

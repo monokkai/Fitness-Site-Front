@@ -22,29 +22,8 @@ import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import api from "../../shared/api/axios";
 import { AUTH_ENDPOINTS } from "../../shared/config/api.config";
-
-interface AuthResponse {
-  token: string;
-  user?: {
-    id: number;
-    username: string;
-    email: string;
-  };
-  message?: string;
-}
-
-interface ApiError {
-  response?: {
-    status: number;
-    data: {
-      message: string;
-    };
-  };
-  request?: XMLHttpRequest;
-  message: string;
-}
+import { useAuth } from "../../shared/context/authContext";
 
 const MotionBox = motion(Box);
 const MotionStack = motion(Stack);
@@ -75,6 +54,7 @@ const itemVariants = {
 };
 
 const AuthForm: React.FC = () => {
+  const { checkAuth } = useAuth();
   const bgColor = useColorModeValue("white", "white");
   const borderColor = useColorModeValue("gray.300", "gray.300");
   const textColor = useColorModeValue("black", "black");
@@ -101,31 +81,30 @@ const AuthForm: React.FC = () => {
     setError("");
 
     try {
-      const response = await api.post<AuthResponse>(
-        AUTH_ENDPOINTS.LOGIN,
-        formData
-      );
+      const response = await fetch(AUTH_ENDPOINTS.LOGIN, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+        credentials: "include",
+      });
 
-      if (response.status === 200 && response.data.token) {
-        localStorage.setItem("token", response.data.token);
+      const data = await response.json();
 
-        setTimeout(() => {
-          router.replace("/");
-        }, 50);
-      } else {
-        setError("Invalid credentials or server response");
+      if (!response.ok) {
+        throw new Error(data.message || "Authentication failed");
       }
+
+      await checkAuth();
+      router.push("/");
     } catch (error) {
-      const apiError = error as ApiError;
-      console.error("Login error details:", apiError);
-
-      if (apiError.response) {
-        setError(apiError.response.data.message || "Authentication failed");
-      } else if (apiError.request) {
-        setError("No response from server. Please check your connection.");
-      } else {
-        setError("An error occurred during login");
-      }
+      console.error("Login error:", error);
+      setError(
+        error instanceof Error
+          ? error.message
+          : "An error occurred during login"
+      );
     }
   };
 
@@ -301,13 +280,14 @@ const AuthForm: React.FC = () => {
         whileHover={{ scale: 1.02 }}
       >
         Don&apos;t have an account?{" "}
-        <Link
-          as={Link}
-          href="/signup"
-          color="brand.400"
-          _hover={{ color: "brand.500" }}
-        >
-          Sign up
+        <Link href="/signup">
+          <Button
+            variant="link"
+            color="brand.400"
+            _hover={{ color: "brand.500" }}
+          >
+            Sign up
+          </Button>
         </Link>
       </MotionText>
     </MotionStack>

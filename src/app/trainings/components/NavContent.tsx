@@ -1,6 +1,6 @@
 "use client";
 
-import { useUserStore } from "@/app/shared/store/userStore";
+import { useAuth } from "@/app/shared/context/authContext";
 import {
   Avatar,
   Badge,
@@ -27,14 +27,9 @@ const navItems = [
 ];
 
 const NavContent: React.FC = () => {
-  const { user, logout } = useUserStore();
+  const { user, logout } = useAuth();
   const router = useRouter();
   const isMobile = useBreakpointValue({ base: true, md: false });
-
-  const handleLogout = async () => {
-    await logout();
-    router.push("/");
-  };
 
   return (
     <Box
@@ -44,7 +39,6 @@ const NavContent: React.FC = () => {
       gap={4}
       backdropFilter="blur(10px)"
     >
-      {/* Навигационные кнопки */}
       {navItems.map((item, index) => (
         <Button
           key={index}
@@ -69,7 +63,6 @@ const NavContent: React.FC = () => {
         </Button>
       ))}
 
-      {/* Меню пользователя */}
       <Menu gutter={4}>
         <MenuButton
           as={Button}
@@ -132,14 +125,14 @@ const NavContent: React.FC = () => {
 
           <MenuItem
             icon={<FaSignOutAlt />}
-            onClick={handleLogout}
-            isDisabled={!user?.username}
+            onClick={logout}
+            isDisabled={!user}
             py={2}
             px={4}
-            color={user?.username ? "red.500" : "gray.400"}
-            opacity={user?.username ? 1 : 0.6}
-            cursor={user?.username ? "pointer" : "not-allowed"}
-            _hover={user?.username ? { bg: "gray.50" } : {}}
+            color={user ? "red.500" : "gray.400"}
+            opacity={user ? 1 : 0.6}
+            cursor={user ? "pointer" : "not-allowed"}
+            _hover={user ? { bg: "gray.50" } : {}}
           >
             Sign Out
           </MenuItem>
