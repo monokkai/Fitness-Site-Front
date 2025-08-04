@@ -71,4 +71,4 @@ const WorkoutsSection: React.FC = () => {
   );
 };
 
-export default WorkoutsSection; 
+export default WorkoutsSection;

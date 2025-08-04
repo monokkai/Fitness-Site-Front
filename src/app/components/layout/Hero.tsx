@@ -5,7 +5,7 @@ import { Box } from "@chakra-ui/react";
 import { useMotionValue, useTransform, animate } from "framer-motion";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "../../shared/context/authContext"; 
+import { useAuth } from "../../shared/context/authContext";
 
 const fadeIn = (delay: number = 0) => ({
   initial: { opacity: 0, y: 20 },

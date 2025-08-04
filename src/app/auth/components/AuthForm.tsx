@@ -74,7 +74,6 @@ const AuthForm: React.FC = () => {
       ...prev,
       [id]: value,
     }));
-    // Clear error when user starts typing
     if (error) setError("");
   };
 
@@ -82,7 +81,6 @@ const AuthForm: React.FC = () => {
     event.preventDefault();
     if (isSubmitting) return;
 
-    // Basic validation
     if (!formData.email || !formData.password) {
       setError("Please fill in all fields");
       return;
