@@ -48,4 +48,4 @@ const StatsGrid: React.FC = () => {
   );
 };
 
-export default StatsGrid; 
+export default StatsGrid;

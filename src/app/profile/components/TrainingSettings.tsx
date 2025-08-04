@@ -57,4 +57,4 @@ const TrainingSettings: React.FC = () => {
   );
 };
 
-export default TrainingSettings; 
+export default TrainingSettings;
