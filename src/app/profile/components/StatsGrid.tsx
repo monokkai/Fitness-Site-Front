@@ -10,11 +10,12 @@ import {
   StatLabel,
   StatNumber,
   Skeleton,
+  Text,
 } from "@chakra-ui/react";
 import { FaFire, FaMedal, FaDumbbell, FaTrophy } from "react-icons/fa";
 import { useAuth } from "../../shared/context/authContext";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import useUserProfile from "../../shared/hooks/useUserProfile";
+import { useState, useEffect } from "react";
 
 interface StatsData {
   label: string;
@@ -25,41 +26,45 @@ interface StatsData {
 
 const StatsGrid: React.FC = () => {
   const { user } = useAuth();
+  const { data: profile, loading, error } = useUserProfile(user?.id);
   const [stats, setStats] = useState<StatsData[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user?.id) {
-      axios
-        .get(`http://localhost:5002/api/user-profiles/${user.id}`)
-        .then((response) => {
-          const profile = response.data;
-          setStats([
-            {
-              label: "Current Streak",
-              value: profile.currentStreak || "0",
-              icon: FaFire,
-              color: "orange",
-            },
-            { label: "Total XP", value: "0", icon: FaTrophy, color: "yellow" },
-            {
-              label: "Exercises Done",
-              value: profile.totalWorkouts || "0",
-              icon: FaDumbbell,
-              color: "blue",
-            },
-            {
-              label: "Achievements",
-              value: "0",
-              icon: FaMedal,
-              color: "purple",
-            },
-          ]);
-          setLoading(false);
-        })
-        .catch(() => setLoading(false));
+    if (profile) {
+      const { currentStreak = 0, totalWorkouts = 0 } = profile;
+
+      setStats([
+        {
+          label: "Current Streak",
+          value: currentStreak,
+          icon: FaFire,
+          color: "orange",
+        },
+        {
+          label: "Total XP",
+          value: totalWorkouts * 10,
+          icon: FaTrophy,
+          color: "yellow",
+        },
+        {
+          label: "Exercises Done",
+          value: totalWorkouts,
+          icon: FaDumbbell,
+          color: "blue",
+        },
+        {
+          label: "Achievements",
+          value: Math.floor(totalWorkouts / 5),
+          icon: FaMedal,
+          color: "purple",
+        },
+      ]);
     }
-  }, [user]);
+  }, [profile]);
+
+  if (error) {
+    return <Text color="red.500">Failed to load stats</Text>;
+  }
 
   return (
     <SimpleGrid columns={{ base: 1, md: 4 }} spacing={4}>

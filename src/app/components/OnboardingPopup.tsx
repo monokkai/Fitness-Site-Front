@@ -26,6 +26,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
+import { TRAINING_URL } from "../shared/config/api.config";
 
 interface UserProfileData {
   age: number;
@@ -90,7 +91,7 @@ const OnboardingPopup = () => {
       };
 
       const response = await axios.post(
-        "http://localhost:5002/api/user-profiles",
+        `${TRAINING_URL}/user-profiles`,
         payload
       );
 

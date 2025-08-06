@@ -12,90 +12,46 @@ import {
   Skeleton,
 } from "@chakra-ui/react";
 import { useAuth } from "../../shared/context/authContext";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import User from "../../shared/interfaces/IUser";
+import useUserProfile from "../../shared/hooks/useUserProfile";
 
 const ProgressSection: React.FC = () => {
   const { user } = useAuth();
-  const [progressItems, setProgressItems] = useState([
+  const { data: profile, loading, error } = useUserProfile(user?.id);
+
+  const progressItems = [
     {
       label: "Daily Goal",
-      value: "0/0 exercises",
+      value: "0/1 exercises",
       progress: 0,
       color: "green",
     },
     {
       label: "Weekly Goal",
-      value: "0/0 exercises",
-      progress: 0,
+      value: profile
+        ? `${Math.min(profile.totalWorkouts || 0, profile.workoutsPerWeek || 3)}/${profile.workoutsPerWeek || 3} exercises`
+        : "0/3 exercises",
+      progress: profile
+        ? Math.min(
+            100,
+            ((profile.totalWorkouts || 0) / (profile.workoutsPerWeek || 3)) *
+              100
+          )
+        : 0,
       color: "blue",
     },
     {
       label: "Monthly Challenge",
-      value: "Level 0",
-      progress: 0,
+      value: profile
+        ? `Level ${Math.floor((profile.totalWorkouts || 0) / 12)}`
+        : "Level 0",
+      progress: profile ? (((profile.totalWorkouts || 0) % 12) / 12) * 100 : 0,
       color: "purple",
     },
-  ]);
-  const [loading, setLoading] = useState(true);
+  ];
 
-  // ProgressSection.tsx
-  useEffect(() => {
-    if (user?.id) {
-      setLoading(true);
-      axios
-        .get(`http://localhost:5002/api/user-profiles/${user.id}`)
-        .then((response) => {
-          const profile = response.data || {};
-          const completed = profile.totalWorkouts || 0;
-          const target = profile.workoutsPerWeek || 3;
-
-          setProgressItems([
-            {
-              label: "Daily Goal",
-              value: "0/1 exercises",
-              progress: 0,
-              color: "green",
-            },
-            {
-              label: "Weekly Goal",
-              value: `${Math.min(completed, target)}/${target} exercises`,
-              progress: Math.min(100, (completed / target) * 100),
-              color: "blue",
-            },
-            {
-              label: "Monthly Challenge",
-              value: `Level ${Math.floor(completed / 12)}`,
-              progress: ((completed % 12) / 12) * 100,
-              color: "purple",
-            },
-          ]);
-        })
-        .catch(() => {
-          setProgressItems([
-            {
-              label: "Daily Goal",
-              value: "0/1 exercises",
-              progress: 0,
-              color: "green",
-            },
-            {
-              label: "Weekly Goal",
-              value: "0/3 exercises",
-              progress: 0,
-              color: "blue",
-            },
-            {
-              label: "Monthly Challenge",
-              value: "Level 0",
-              progress: 0,
-              color: "purple",
-            },
-          ]);
-        });
-    }
-  }, [user]);
+  if (error) {
+    return <Text color="red.500">Failed to load progress data</Text>;
+  }
 
   return (
     <Card>

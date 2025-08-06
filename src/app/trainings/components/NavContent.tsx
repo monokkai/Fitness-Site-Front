@@ -1,9 +1,9 @@
 "use client";
 
 import { useAuth } from "@/app/shared/context/authContext";
+import useUserProfile from "../../shared/hooks/useUserProfile";
 import {
   Avatar,
-  Badge,
   Box,
   Button,
   Divider,
@@ -22,14 +22,16 @@ const navItems = [
     label: "Rewards",
     icon: <IoMdTrophy size={20} />,
     path: "/rewards",
-    streak: "0",
   },
 ];
 
 const NavContent: React.FC = () => {
   const { user, logout } = useAuth();
+  const { data: profile } = useUserProfile(user?.id);
   const router = useRouter();
   const isMobile = useBreakpointValue({ base: true, md: false });
+
+  const currentStreak = profile?.currentStreak || 0;
 
   return (
     <Box
@@ -50,16 +52,6 @@ const NavContent: React.FC = () => {
           alignItems="center"
         >
           {item.label}
-          {item.streak && item.streak !== "0" && (
-            <Badge
-              ml={2}
-              borderRadius="full"
-              colorScheme="orange"
-              variant="solid"
-            >
-              {item.streak}
-            </Badge>
-          )}
         </Button>
       ))}
 
@@ -128,7 +120,8 @@ const NavContent: React.FC = () => {
             px={4}
             _hover={{ bg: "gray.50" }}
           >
-            Current Streak: 0 days
+            Current Streak: {currentStreak}{" "}
+            {currentStreak === 1 ? "day" : "days"}
           </MenuItem>
 
           <Divider my={2} />

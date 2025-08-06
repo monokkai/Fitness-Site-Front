@@ -12,14 +12,36 @@ import {
   Badge,
 } from "@chakra-ui/react";
 import { useAuth } from "../../shared/context/authContext";
+import useUserProfile from "../../shared/hooks/useUserProfile";
 
 const ProfileHeader: React.FC = () => {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading: isAuthLoading } = useAuth();
+  const {
+    data: profile,
+    loading: isProfileLoading,
+    error,
+  } = useUserProfile(user?.id);
 
-  if (isLoading) return <Spinner />;
+  if (isAuthLoading || isProfileLoading) return <Spinner />;
   if (!user) return <Text color="red.500">User not authenticated</Text>;
-  
+  if (error) return <Text color="red.500">{error}</Text>;
+
   const createdAtDate = user?.createdAt ? new Date(user.createdAt) : null;
+  const trainingGoal = profile?.trainingGoal || "Not Set";
+
+  // Форматируем цель тренировки для отображения
+  const formatTrainingGoal = (goal: string) => {
+    switch (goal) {
+      case "WeightGain":
+        return "Weight Gain";
+      case "WeightLoss":
+        return "Weight Loss";
+      case "Cardio":
+        return "Cardio Training";
+      default:
+        return goal;
+    }
+  };
 
   return (
     <Card>
@@ -29,8 +51,8 @@ const ProfileHeader: React.FC = () => {
           spacing={8}
           align="center"
         >
-          <Avatar 
-            size="2xl" 
+          <Avatar
+            size="2xl"
             name={user.username}
             src={
               user?.username
@@ -49,7 +71,7 @@ const ProfileHeader: React.FC = () => {
                 : "Unknown"}
             </Text>
             <Badge colorScheme="blue" borderRadius="full" fontSize="md" p={3}>
-              Goal: {user.goal ?? "Not Set"}
+              Goal: {formatTrainingGoal(trainingGoal)}
             </Badge>
           </Box>
         </Stack>
