@@ -94,6 +94,8 @@ const OnboardingPopup = () => {
         payload
       );
 
+      console.log(payload);
+
       if (response.status === 200 || response.status === 201) {
         localStorage.setItem("isQualified", "true");
         setIsOpen(false);

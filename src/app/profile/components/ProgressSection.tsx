@@ -40,12 +40,14 @@ const ProgressSection: React.FC = () => {
   ]);
   const [loading, setLoading] = useState(true);
 
+  // ProgressSection.tsx
   useEffect(() => {
     if (user?.id) {
+      setLoading(true);
       axios
         .get(`http://localhost:5002/api/user-profiles/${user.id}`)
         .then((response) => {
-          const profile = response.data;
+          const profile = response.data || {};
           const completed = profile.totalWorkouts || 0;
           const target = profile.workoutsPerWeek || 3;
 
@@ -69,9 +71,29 @@ const ProgressSection: React.FC = () => {
               color: "purple",
             },
           ]);
-          setLoading(false);
         })
-        .catch(() => setLoading(false));
+        .catch(() => {
+          setProgressItems([
+            {
+              label: "Daily Goal",
+              value: "0/1 exercises",
+              progress: 0,
+              color: "green",
+            },
+            {
+              label: "Weekly Goal",
+              value: "0/3 exercises",
+              progress: 0,
+              color: "blue",
+            },
+            {
+              label: "Monthly Challenge",
+              value: "Level 0",
+              progress: 0,
+              color: "purple",
+            },
+          ]);
+        });
     }
   }, [user]);
 

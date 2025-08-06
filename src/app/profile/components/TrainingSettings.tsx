@@ -26,27 +26,42 @@ const TrainingSettings: React.FC = () => {
 
   useEffect(() => {
     if (user?.id) {
+      setLoading(true);
       axios
         .get(`http://localhost:5002/api/user-profiles/${user.id}`)
         .then((response) => {
-          const profile = response.data;
+          const profile = response.data || {};
           setSettings([
             {
               label: "Training Goal",
               value: profile.trainingGoal || "Not Set",
               color: "blue",
             },
-            { label: "Difficulty Level", value: "Not Set", color: "orange" },
+            {
+              label: "Difficulty Level",
+              value: "Not Set",
+              color: "orange",
+            },
             {
               label: "Weekly Target",
-              value: `${profile.workoutsPerWeek || 0} workouts`,
+              value: `${profile.workoutsPerWeek ?? 3} workouts`,
               color: "green",
             },
+            {
+              label: "Rest Days",
+              value: "Not Set",
+              color: "purple",
+            },
+          ]);
+        })
+        .catch(() => {
+          setSettings([
+            { label: "Training Goal", value: "Not Set", color: "blue" },
+            { label: "Difficulty Level", value: "Not Set", color: "orange" },
+            { label: "Weekly Target", value: "3 workouts", color: "green" },
             { label: "Rest Days", value: "Not Set", color: "purple" },
           ]);
-          setLoading(false);
-        })
-        .catch(() => setLoading(false));
+        });
     }
   }, [user]);
 
