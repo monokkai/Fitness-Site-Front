@@ -43,6 +43,7 @@ const OnboardingPopup = () => {
   const toast = useToast();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [profileCreated, setProfileCreated] = useState(false);
 
   const [formData, setFormData] = useState<UserProfileData>({
     age: 0,
@@ -56,11 +57,15 @@ const OnboardingPopup = () => {
 
   useEffect(() => {
     if (user?.id) {
-      const isQualified = localStorage.getItem("isQualified");
-      if (!isQualified || isQualified === "false") {
-        setIsOpen(true);
-        setFormData((prev) => ({ ...prev, userId: user.id }));
-      }
+      axios
+        .get(`${TRAINING_URL}/user-profiles/${user.id}`)
+        .then(() => {
+          setProfileCreated(true);
+        })
+        .catch(() => {
+          setIsOpen(true);
+          setFormData((prev) => ({ ...prev, userId: user.id }));
+        });
     }
   }, [user]);
 
@@ -88,6 +93,9 @@ const OnboardingPopup = () => {
         sex: formData.sex,
         trainingGoal: formData.trainingGoal,
         workoutsPerWeek: formData.workoutsPerWeek,
+        currentStreak: 0,
+        longestStreak: 0,
+        totalWorkouts: 0,
       };
 
       const response = await axios.post(
@@ -95,17 +103,17 @@ const OnboardingPopup = () => {
         payload
       );
 
-      console.log(payload);
-
       if (response.status === 200 || response.status === 201) {
         localStorage.setItem("isQualified", "true");
         setIsOpen(false);
+        setProfileCreated(true);
         toast({
           title: "Profile updated successfully",
           status: "success",
           duration: 3000,
           isClosable: true,
         });
+        window.location.reload();
       }
     } catch (error: any) {
       console.error("Error updating profile:", error);
@@ -123,7 +131,7 @@ const OnboardingPopup = () => {
     }
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || profileCreated) return null;
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}} closeOnOverlayClick={false}>
