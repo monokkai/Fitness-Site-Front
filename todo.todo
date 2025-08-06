@@ -8,7 +8,7 @@
 ☐ Remade some design on /training page!
 ✔ Make custom 404 page? @started(25-06-25 12:17) @done(25-06-25 12:22) @lasted(5m42s)
 ✔ Make Guard and Popup for unauthorized user if he wants to go to /trainings page! @started(25-06-25 12:30) @done(25-06-25 13:31) @lasted(1h1m1s)
-☐ Make checkbox with Privacy Policy on registration page!
+✔ Make checkbox with Privacy Policy on registration page! @started(25-08-06 21:20) @done(25-08-06 21:36) @lasted(16m1s)
     There is the site what will be able to create a PP document for site!
 ✔ Clean .tsx files of some rubbish like: @done(25-07-30 20:27)
     const progressItems = [...]
@@ -22,10 +22,11 @@
 ☐ Make independent services for databases for users, rewards
 ✔ When user is logged in, show user's name in navbar @done(25-06-25 13:42)
 ✔ Use Cookies for auth + I deleted localStorage and saving user's data in saved from XSS attacks auth-service by using HttpOnly Cookies! @done(25-06-25 13:42)
-    But now it doest show cookies(token) in browser!
+But now it doest show cookies(token) in browser!
 
 ---FIXING BUGS---
 ✔ Problem with axios, gives error in axios.ts @done(25-06-18 20:53)
 ✔ useAuth, useSignup hooks do not make the request to auth-service! and give error! @done(25-06-18 20:53)
 ✔ Fix bug with colors on the page "/"! @done(25-07-30 20:27)
 ✔ Fix bug with logout when im reloading page the session still here! @done(25-08-04 17:45)
+☐ The popup works only with new accounts. If i created it earlier it won't gonna be showed!

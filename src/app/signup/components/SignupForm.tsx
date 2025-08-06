@@ -15,6 +15,7 @@ import {
   InputGroup,
   InputRightElement,
   IconButton,
+  Checkbox,
 } from "@chakra-ui/react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { useState } from "react";
@@ -275,6 +276,21 @@ const SignupForm: React.FC = () => {
                 </FormControl>
               </MotionBox>
             </Stack>
+
+            <MotionBox display={"flex"} gap={2} flexDirection={"row"}>
+              <Checkbox />
+              <Text color={"gray.500"}>
+                I agree with{" "}
+                <Link
+                  href="http://localhost:80
+                  /docs/privacy.pdf"
+                  className="text-gray-500 underline"
+                >
+                  privacy policy
+                </Link>{" "}
+                politics
+              </Text>
+            </MotionBox>
 
             <MotionBox variants={itemVariants}>
               <Button
