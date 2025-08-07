@@ -23,6 +23,57 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const collectCookieData = () => {
+  if (typeof window === "undefined") return;
+
+  try {
+    const cookieData = {
+      country: navigator.language.split("-")[1] || "unknown",
+      language: navigator.language,
+      userAgent: navigator.userAgent,
+      platform: navigator.platform,
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      timezoneOffset: new Date().getTimezoneOffset(),
+      localTime: new Date().toISOString(),
+      referer: document.referrer || "none",
+      screenResolution: `${window.screen.width}x${window.screen.height}`,
+      viewportSize: `${window.innerWidth}x${window.innerHeight}`,
+      deviceType: /Mobi|Android/i.test(navigator.userAgent)
+        ? "mobile"
+        : "desktop",
+      cookieEnabled: navigator.cookieEnabled,
+      online: navigator.onLine,
+      languagePreferences: navigator.languages,
+      connectionType: (navigator as any).connection?.effectiveType || "unknown",
+    };
+
+    document.cookie = `env_metrics=${encodeURIComponent(
+      JSON.stringify(cookieData)
+    )}; path=/; max-age=86400;`;
+
+    document.cookie = `cd_location=${encodeURIComponent(
+      JSON.stringify({
+        country: cookieData.country,
+        timezone: cookieData.timezone,
+      })
+    )}; path=/; max-age=86400;`;
+    document.cookie = `cd_browser=${encodeURIComponent(
+      JSON.stringify({
+        userAgent: cookieData.userAgent,
+        platform: cookieData.platform,
+      })
+    )}; path=/; max-age=86400;`;
+    document.cookie = `cd_screen=${encodeURIComponent(
+      JSON.stringify({
+        screenResolution: cookieData.screenResolution,
+        viewportSize: cookieData.viewportSize,
+      })
+    )}; path=/; max-age=86400;`;
+  } catch (error) {
+    console.error("Cookie collection failed:", error);
+  }
+};
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -31,8 +82,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const clearAuthState = useCallback(() => {
     setUser(null);
     localStorage.removeItem("token");
+
     document.cookie =
       "auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    document.cookie =
+      "user_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
   }, []);
 
   const checkAuth = useCallback(async () => {
@@ -47,6 +101,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           username: response.data.user.username,
           createdAt: response.data.user.createdAt,
         });
+
+        const token = localStorage.getItem("token");
+        if (token) {
+          document.cookie = `user_session=${token}; path=/; max-age=604800; samesite=lax`;
+        }
+
+        await collectCookieData();
       } else {
         await clearAuthState();
       }
@@ -73,6 +134,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         localStorage.setItem("token", response.data.token);
 
+        document.cookie = `user_session=${response.data.token}; path=/; max-age=604800; samesite=lax`;
+
         if (response.data.user) {
           setUser({
             id: response.data.user.id,
@@ -80,6 +143,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             username: response.data.user.username,
             createdAt: response.data.user.createdAt,
           });
+
+          await collectCookieData();
         }
 
         router.push("/");
