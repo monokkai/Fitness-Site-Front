@@ -30,7 +30,7 @@ But now it doest show cookies(token) in browser!
 ✔ useAuth, useSignup hooks do not make the request to auth-service! and give error! @done(25-06-18 20:53)
 ✔ Fix bug with colors on the page "/"! @done(25-07-30 20:27)
 ✔ Fix bug with logout when im reloading page the session still here! @done(25-08-04 17:45)
-☐ The popup works only with new accounts. If i created it earlier it won't gonna be showed!
+✔ The popup works only with new accounts. If i created it earlier it won't gonna be showed! @done(25-08-07 23:27)
 ☐ Fix bug with bugrer menu on /profile and /trainings page! Has some troubles with avatar, but needs to be writed fully!
 
 ---FRONTED CONTAINER(Now it has a lot of errors, i'll get into it after"---
