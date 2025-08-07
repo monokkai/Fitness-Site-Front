@@ -33,7 +33,9 @@ const ProfileHeader: React.FC = () => {
   if (!user) return <Text color="red.500">User not authenticated</Text>;
   if (error) return <Text color="red.500">{error}</Text>;
 
-  const createdAtDate = user?.createdAt ? new Date(user.createdAt) : null;
+  const createdAtDate = user?.createdAt
+    ? new Date(user.createdAt.replace(" ", "T"))
+    : null;
   const trainingGoal = profile?.trainingGoal || "Not Set";
 
   const formatTrainingGoal = (goal: string) => {

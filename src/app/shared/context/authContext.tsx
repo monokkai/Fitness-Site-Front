@@ -45,7 +45,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           id: response.data.user.id,
           email: response.data.user.email,
           username: response.data.user.username,
-          createdAt: new Date().toISOString(),
+          createdAt: response.data.user.createdAt,
         });
       } else {
         await clearAuthState();
@@ -78,7 +78,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             id: response.data.user.id,
             email: response.data.user.email,
             username: response.data.user.username,
-            createdAt: new Date().toISOString(),
+            createdAt: response.data.user.createdAt,
           });
         }
 

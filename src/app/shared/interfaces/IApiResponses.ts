@@ -1,4 +1,3 @@
-import User from "./IUser";
 
 export interface AuthResponse {
     success: boolean;
@@ -11,6 +10,8 @@ export interface UserDto {
     id: number;
     username: string;
     email: string;
+    createdAt: string;
+    goal?: string;
 }
 
 export interface LoginResponse extends AuthResponse {
