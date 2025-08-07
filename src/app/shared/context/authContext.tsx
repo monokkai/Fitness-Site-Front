@@ -46,7 +46,7 @@ const sendCookieDataToServer = async (token?: string) => {
       token,
     };
 
-    await fetch("http://localhost:5003/cookie/set", {
+    const response = await fetch("http://localhost:5003/cookie/set", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -54,6 +54,13 @@ const sendCookieDataToServer = async (token?: string) => {
       },
       body: JSON.stringify(cookieData),
     });
+
+    if (!response.ok) {
+      throw new Error(`Failed to set cookie: ${response.statusText}`);
+    }
+
+    const result = await response.json();
+    console.log("Cookie set response:", result);
   } catch (error) {
     console.error("Failed to send cookie data:", error);
   }
