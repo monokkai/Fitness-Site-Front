@@ -15,7 +15,7 @@
 ✔ Delete guards from frontend part! @started(25-07-04 14:01) @done(25-07-04 14:02) @lasted(1m)
     ✔ When user goes to trainings, he needs to be redirected to login page! NO BLUR! It's unsafe! @done(25-08-04 17:45)
 ☐ Use zustand instead of useState in Signup page
-☐ Make CI/CD pipeline only for pushing it to dockerhub! @started(25-08-07 14:49)
+✔ Make CI/CD pipeline only for pushing it to dockerhub! @started(25-08-07 14:49) @done(25-08-07 18:11) @lasted(3h22m10s)
 
 ---BACKEND(SERVICES)---
 ✔ Make nginx-service for giving static files to frontend @done(25-06-16 18:04)
@@ -31,10 +31,7 @@ But now it doest show cookies(token) in browser!
 ✔ Fix bug with colors on the page "/"! @done(25-07-30 20:27)
 ✔ Fix bug with logout when im reloading page the session still here! @done(25-08-04 17:45)
 ☐ The popup works only with new accounts. If i created it earlier it won't gonna be showed!
-
-
-
-
+☐ Fix bug with bugrer menu on /profile and /trainings page! Has some troubles with avatar, but needs to be writed fully!
 
 ---FRONTED CONTAINER(Now it has a lot of errors, i'll get into it after"---
 
