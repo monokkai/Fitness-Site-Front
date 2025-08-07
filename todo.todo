@@ -31,3 +31,148 @@ But now it doest show cookies(token) in browser!
 ✔ Fix bug with colors on the page "/"! @done(25-07-30 20:27)
 ✔ Fix bug with logout when im reloading page the session still here! @done(25-08-04 17:45)
 ☐ The popup works only with new accounts. If i created it earlier it won't gonna be showed!
+
+
+
+
+
+---FRONTED CONTAINER(Now it has a lot of errors, i'll get into it after"---
+
+```
+FROM node:18-alpine
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+
+CMD ["npm", "run", "dev"]
+# Or in future to production:
+# RUN npm run build
+# CMD ["npm", "start"]
+
+```
+
+```
+version: '3.9'
+
+services:
+  auth-db:
+    container_name: auth-db
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: authdb
+    volumes:
+      - ./mysql/init:/docker-entrypoint-initdb.d
+      - ./mysql/conf.d:/etc/mysql/conf.d
+      - auth_db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 10s
+      retries: 15
+    networks:
+      - auth-network
+
+  auth-service:
+    container_name: auth-service
+    build: ./auth-service
+    ports:
+      - "5001:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5000
+      - ConnectionStrings__DefaultConnection=Server=auth-db;Database=authdb;User=root;Password=root
+      - JWT_SECRET=+6kiwPVT+4zRBK9fX0o5rPM+cM/Oz+ermezTkYs9D20=
+    depends_on:
+      auth-db:
+        condition: service_healthy
+    networks:
+      - auth-network
+
+  frontend:
+    container_name: frontend
+    build: ../frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://auth-service:5000
+    depends_on:
+      - auth-service
+    networks:
+      - auth-network
+
+  nginx-service:
+    container_name: nginx-service
+    build: ./nginx-service
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx-service/nginx-static:/usr/share/nginx/html
+    depends_on:
+      - auth-service
+    networks:
+      - auth-network
+
+  guards-service:
+    container_name: guards-service
+    build: ./guards-service
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=development
+      - GUARDS_SERVICE_PORT=3003
+      - JWT_SECRET=your-secret-key-here
+      - FRONTEND_URL=http://frontend:3000
+      - AUTH_SERVICE_URL=http://auth-service:5000
+    depends_on:
+      - auth-service
+    networks:
+      - auth-network
+
+  training-db:
+    image: postgres:13
+    container_name: training-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: trainingdb
+    volumes:
+      - training_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - auth-network
+
+  training-service:
+    container_name: training-service
+    build: ./training-service
+    ports:
+      - "5002:3000"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgres://postgres:postgres@training-db:5432/trainingdb
+      - JWT_SECRET=your-secret-key-here
+      - AUTH_SERVICE_URL=http://auth-service:5000
+    depends_on:
+      training-db:
+        condition: service_healthy
+    networks:
+      - auth-network
+
+networks:
+  auth-network:
+    driver: bridge
+
+volumes:
+  auth_db_data:
+  training_db_data:
+
+```
