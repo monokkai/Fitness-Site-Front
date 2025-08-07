@@ -10,9 +10,13 @@ import {
   Text,
   Progress,
   Skeleton,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useAuth } from "../../shared/context/authContext";
 import useUserProfile from "../../shared/hooks/useUserProfile";
+import { motion } from "framer-motion";
+
+const MotionBox = motion(Box);
 
 const ProgressSection: React.FC = () => {
   const { user } = useAuth();
@@ -49,14 +53,26 @@ const ProgressSection: React.FC = () => {
     },
   ];
 
+  const bg = useColorModeValue("white", "gray.800");
+  const shadow = useColorModeValue("lg", "dark-lg");
+
   if (error) {
     return <Text color="red.500">Failed to load progress data</Text>;
   }
 
   return (
-    <Card>
+    <MotionBox
+      as={Card}
+      bg={bg}
+      boxShadow={shadow}
+      borderRadius="2xl"
+      p={{ base: 4, md: 6 }}
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
       <CardBody>
-        <Heading size="md" mb={6}>
+        <Heading size="lg" mb={6} fontWeight="semibold" letterSpacing="-0.5px">
           Current Progress
         </Heading>
         <VStack spacing={6} align="stretch">
@@ -65,25 +81,30 @@ const ProgressSection: React.FC = () => {
               <HStack justify="space-between" mb={2}>
                 <Text fontWeight="medium">{item.label}</Text>
                 {loading ? (
-                  <Skeleton height="20px" width="100px" />
+                  <Skeleton height="20px" width="100px" borderRadius="md" />
                 ) : (
-                  <Text color={`${item.color}.500`}>{item.value}</Text>
+                  <Text color={`${item.color}.500`} fontWeight="semibold">
+                    {item.value}
+                  </Text>
                 )}
               </HStack>
               {loading ? (
-                <Skeleton height="10px" width="100%" />
+                <Skeleton height="12px" borderRadius="full" />
               ) : (
                 <Progress
                   value={item.progress}
                   colorScheme={item.color}
+                  height="10px"
                   borderRadius="full"
+                  bg={`${item.color}.100`}
+                  transition="all 0.4s ease"
                 />
               )}
             </Box>
           ))}
         </VStack>
       </CardBody>
-    </Card>
+    </MotionBox>
   );
 };
 

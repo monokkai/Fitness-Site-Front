@@ -11,11 +11,13 @@ import {
   StatNumber,
   Skeleton,
   Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { FaFire, FaMedal, FaDumbbell, FaTrophy } from "react-icons/fa";
 import { useAuth } from "../../shared/context/authContext";
 import useUserProfile from "../../shared/hooks/useUserProfile";
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 interface StatsData {
   label: string;
@@ -23,6 +25,8 @@ interface StatsData {
   icon: React.ElementType;
   color: string;
 }
+
+const MotionCard = motion(Card);
 
 const StatsGrid: React.FC = () => {
   const { user } = useAuth();
@@ -62,37 +66,56 @@ const StatsGrid: React.FC = () => {
     }
   }, [profile]);
 
+  const bg = useColorModeValue("white", "gray.800");
+  const shadow = useColorModeValue("md", "dark-lg");
+
   if (error) {
     return <Text color="red.500">Failed to load stats</Text>;
   }
 
   return (
-    <SimpleGrid columns={{ base: 1, md: 4 }} spacing={4}>
+    <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={6}>
       {stats.map((stat, index) => (
-        <Card key={index}>
+        <MotionCard
+          key={index}
+          bg={bg}
+          boxShadow={shadow}
+          borderRadius="2xl"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.1, duration: 0.5 }}
+        >
           <CardBody>
             <Stat>
-              <HStack spacing={4}>
+              <HStack spacing={4} align="center">
                 <Box
-                  p={2}
+                  p={3}
                   bg={`${stat.color}.100`}
                   color={`${stat.color}.500`}
-                  borderRadius="lg"
+                  borderRadius="full"
+                  boxSize="48px"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
                 >
-                  <stat.icon size={24} />
+                  <stat.icon size={20} />
                 </Box>
                 <Box>
-                  <StatLabel>{stat.label}</StatLabel>
+                  <StatLabel fontSize="sm" color="gray.500">
+                    {stat.label}
+                  </StatLabel>
                   {loading ? (
-                    <Skeleton height="20px" width="50px" />
+                    <Skeleton height="24px" width="60px" borderRadius="md" />
                   ) : (
-                    <StatNumber>{stat.value}</StatNumber>
+                    <StatNumber fontSize="xl" fontWeight="bold">
+                      {stat.value}
+                    </StatNumber>
                   )}
                 </Box>
               </HStack>
             </Stat>
           </CardBody>
-        </Card>
+        </MotionCard>
       ))}
     </SimpleGrid>
   );

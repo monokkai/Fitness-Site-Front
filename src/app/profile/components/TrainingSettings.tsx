@@ -9,12 +9,16 @@ import {
   Text,
   Button,
   Skeleton,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useAuth } from "../../shared/context/authContext";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { TRAINING_URL } from "@/app/shared/config/api.config";
 import ProfileData from "@/app/shared/interfaces/IProfileData";
+import { motion } from "framer-motion";
+
+const MotionCard = motion(Card);
 
 const TrainingSettings: React.FC = () => {
   const { user } = useAuth();
@@ -71,30 +75,49 @@ const TrainingSettings: React.FC = () => {
     fetchData();
   }, [user]);
 
+  const bg = useColorModeValue("white", "gray.800");
+  const shadow = useColorModeValue("lg", "dark-lg");
+
   if (error) {
     return <Text color="red.500">{error}</Text>;
   }
 
   return (
-    <Card>
+    <MotionCard
+      bg={bg}
+      boxShadow={shadow}
+      borderRadius="2xl"
+      p={{ base: 4, md: 6 }}
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
       <CardBody>
-        <Heading size="md" mb={6}>
+        <Heading size="lg" mb={6} fontWeight="semibold" letterSpacing="-0.5px">
           Training Settings
         </Heading>
+
         {loading ? (
-          <Skeleton height="100px" />
+          <Skeleton height="160px" borderRadius="lg" />
         ) : (
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
             {settings.map((item, index) => (
               <Box key={index}>
-                <Text fontWeight="medium" mb={2}>
+                <Text fontWeight="medium" fontSize="sm" color="gray.500" mb={2}>
                   {item.label}
                 </Text>
                 <Button
                   colorScheme={item.color}
                   variant="outline"
-                  minW="150px"
+                  size="lg"
+                  fontWeight="semibold"
+                  borderRadius="xl"
+                  px={6}
+                  width="100%"
                   textAlign="left"
+                  _hover={{
+                    bg: `${item.color}.50`,
+                  }}
                 >
                   {item.value}
                 </Button>
@@ -103,7 +126,7 @@ const TrainingSettings: React.FC = () => {
           </SimpleGrid>
         )}
       </CardBody>
-    </Card>
+    </MotionCard>
   );
 };
 
