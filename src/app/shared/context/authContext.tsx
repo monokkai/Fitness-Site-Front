@@ -23,9 +23,7 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const collectCookieData = () => {
-  if (typeof window === "undefined") return;
-
+const sendCookieDataToServer = async (token?: string) => {
   try {
     const cookieData = {
       country: navigator.language.split("-")[1] || "unknown",
@@ -45,32 +43,19 @@ const collectCookieData = () => {
       online: navigator.onLine,
       languagePreferences: navigator.languages,
       connectionType: (navigator as any).connection?.effectiveType || "unknown",
+      token,
     };
 
-    document.cookie = `env_metrics=${encodeURIComponent(
-      JSON.stringify(cookieData)
-    )}; path=/; max-age=86400;`;
-
-    document.cookie = `cd_location=${encodeURIComponent(
-      JSON.stringify({
-        country: cookieData.country,
-        timezone: cookieData.timezone,
-      })
-    )}; path=/; max-age=86400;`;
-    document.cookie = `cd_browser=${encodeURIComponent(
-      JSON.stringify({
-        userAgent: cookieData.userAgent,
-        platform: cookieData.platform,
-      })
-    )}; path=/; max-age=86400;`;
-    document.cookie = `cd_screen=${encodeURIComponent(
-      JSON.stringify({
-        screenResolution: cookieData.screenResolution,
-        viewportSize: cookieData.viewportSize,
-      })
-    )}; path=/; max-age=86400;`;
+    await fetch("http://localhost:5003/cookie/set", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(cookieData),
+    });
   } catch (error) {
-    console.error("Cookie collection failed:", error);
+    console.error("Failed to send cookie data:", error);
   }
 };
 
@@ -82,17 +67,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const clearAuthState = useCallback(() => {
     setUser(null);
     localStorage.removeItem("token");
-
-    document.cookie =
-      "auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-    document.cookie =
-      "user_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
   }, []);
 
   const checkAuth = useCallback(async () => {
     setIsLoading(true);
     try {
-      const response = await api.get<MeResponse>(AUTH_ENDPOINTS.ME);
+      const response = await api.get<MeResponse>(AUTH_ENDPOINTS.ME, {
+        withCredentials: true,
+      });
 
       if (response.data?.success && response.data.user) {
         setUser({
@@ -103,11 +85,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         });
 
         const token = localStorage.getItem("token");
-        if (token) {
-          document.cookie = `user_session=${token}; path=/; max-age=604800; samesite=lax`;
-        }
-
-        await collectCookieData();
+        await sendCookieDataToServer(token ?? undefined);
       } else {
         await clearAuthState();
       }
@@ -134,7 +112,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         localStorage.setItem("token", response.data.token);
 
-        document.cookie = `user_session=${response.data.token}; path=/; max-age=604800; samesite=lax`;
+        await sendCookieDataToServer(response.data.token);
 
         if (response.data.user) {
           setUser({
@@ -143,8 +121,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             username: response.data.user.username,
             createdAt: response.data.user.createdAt,
           });
-
-          await collectCookieData();
         }
 
         router.push("/");
@@ -162,7 +138,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = useCallback(async () => {
     setIsLoading(true);
     try {
-      await api.post(AUTH_ENDPOINTS.LOGOUT);
+      await api.post(AUTH_ENDPOINTS.LOGOUT, {}, { withCredentials: true });
       await clearAuthState();
       router.push("/auth");
     } catch (error) {
