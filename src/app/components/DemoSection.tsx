@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Heading } from "@chakra-ui/react";
-import InovateSection from "./InovateSection";
+import InovateSection from "./ui/InovateSection";
 import PricingDemoSection from "./PricingDemoSection";
 
 const DemoSection: React.FC = () => {
