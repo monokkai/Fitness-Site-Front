@@ -5,8 +5,6 @@ import InovateSection from "./InovateSection";
 import PricingDemoSection from "./PricingDemoSection";
 
 const DemoSection: React.FC = () => {
-  //   const { handleProtectedRoute } = useAuthCheck();
-
   return (
     <Box
       id="features-section"

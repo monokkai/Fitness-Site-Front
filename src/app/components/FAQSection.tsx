@@ -21,15 +21,13 @@ const MotionContainer = motion(Container);
 const MotionAccordionItem = motion(AccordionItem);
 
 const fadeInUp = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5 }
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
 };
 
 const fadeInLeft = {
-  initial: { opacity: 0, x: -20 },
-  animate: { opacity: 1, x: 0 },
-  transition: { duration: 0.5 }
+  hidden: { opacity: 0, x: -20 },
+  visible: { opacity: 1, x: 0 },
 };
 
 export default function FAQSection() {
@@ -42,9 +40,7 @@ export default function FAQSection() {
   useEffect(() => {
     if (window.location.hash === "#faq-section") {
       const element = document.getElementById("faq-section");
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
+      if (element) element.scrollIntoView({ behavior: "smooth" });
     }
   }, []);
 
@@ -54,20 +50,20 @@ export default function FAQSection() {
       bg="transparent"
       py={{ base: 16, md: 24 }}
       px={{ base: 4, md: 12 }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
       variants={fadeInUp}
-      initial="initial"
-      whileInView="animate"
-      viewport={{ amount: 0.3 }}
       transition={{ duration: 0.6 }}
     >
       <MotionContainer
         maxW="3xl"
         textAlign="center"
         mb={16}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
         variants={fadeInUp}
-        initial="initial"
-        whileInView="animate"
-        viewport={{ amount: 0.3 }}
         transition={{ duration: 0.6, delay: 0.2 }}
       >
         <Heading as="h2" size="2xl" mb={4} color={headingColor}>
@@ -83,19 +79,18 @@ export default function FAQSection() {
           {faqItems.map((item, index) => (
             <MotionAccordionItem
               key={index}
-              fontSize={25}
               borderTopWidth="1px"
               borderColor={itemBorderColor}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
               variants={fadeInLeft}
-              initial="initial"
-              whileInView="animate"
-              viewport={{ amount: 0.3 }}
               transition={{ duration: 0.4, delay: index * 0.1 }}
             >
               <Heading as="h2">
                 <AccordionButton
                   py={4}
-                  fontSize={30}
+                  fontSize={{ base: "xl", md: "2xl" }}
                   _hover={{ bg: accordionButtonHoverBg }}
                   _expanded={{ bg: accordionButtonExpandedBg }}
                   color={textColor}
