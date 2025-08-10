@@ -90,10 +90,10 @@ const InovateSection: React.FC = () => {
           </Heading>
           <Text fontSize="lg" mb={8} lineHeight="tall">
             Get customized workout routines tailored to your fitness level and
-            goals. Our AI-powered system adapts to your progress, ensuring
-            you&apos;re always challenged but never overwhelmed. Track your
-            performance metrics and celebrate your achievements with our
-            comprehensive progress tracking system.
+            goals. Our system adapts to your progress, ensuring you&apos;re
+            always challenged but never overwhelmed. Track your performance
+            metrics and celebrate your achievements with our comprehensive
+            progress tracking system.
           </Text>
           <Button
             size="lg"
