@@ -36,7 +36,8 @@ But now it doest show cookies(token) in browser!
 ✔ The popup works only with new accounts. If i created it earlier it won't gonna be showed! @done(25-08-07 23:27)
 ☐ Fix bug with bugrer menu on /profile and /trainings page! Has some troubles with avatar, but needs to be writed fully!
 ☐ Fix bug on /about-us page when user logged in, "Start Training" button redirects to /profile, not to /auth pages
-☐ Fix a big quantity of components in Navbar.tsx. Due to that, Sign In button works slow!
+☐ Fix FROM START Navbar.tsx dark charka ui theme!
+
 
 ---FRONTED CONTAINER(Now it has a lot of errors, i'll get into it after"---
 

@@ -224,12 +224,20 @@ const Navbar: React.FC = () => {
               <MenuItem
                 icon={<FaUser />}
                 onClick={() => (window.location.href = "/profile")}
+                bg="white"
+                _hover={{
+                  bg: "gray.100",
+                }}
               >
                 Profile
               </MenuItem>
               <MenuItem
                 icon={<FaDumbbell />}
                 onClick={() => (window.location.href = "/trainings")}
+                bg="white"
+                _hover={{
+                  bg: "gray.100",
+                }}
               >
                 Trainings
               </MenuItem>
@@ -237,7 +245,11 @@ const Navbar: React.FC = () => {
               <MenuItem
                 icon={<FaSignOutAlt />}
                 onClick={logout}
-                color="red.500"
+                bg="white"
+                color={"red.400"}
+                _hover={{
+                  bg: "gray.100",
+                }}
               >
                 Logout
               </MenuItem>
@@ -258,7 +270,7 @@ const Navbar: React.FC = () => {
               bg={pathname === "/login" ? "brand.400" : "brand.300"}
               color="black"
               _hover={{
-                bg: "brand.400",
+                bg: "gray.100",
                 transform: "translateY(-1px)",
                 boxShadow: "0 0 20px rgba(170, 255, 3, 0.3)",
               }}
