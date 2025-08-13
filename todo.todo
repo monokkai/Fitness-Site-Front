@@ -16,7 +16,7 @@
     ✔ When user goes to trainings, he needs to be redirected to login page! NO BLUR! It's unsafe! @done(25-08-04 17:45)
 ✔ Use zustand instead of useState in Signup page @done(25-08-13 19:11)
 ✔ Make CI/CD pipeline only for pushing it to dockerhub! @started(25-08-07 14:49) @done(25-08-07 18:11) @lasted(3h22m10s)
-☐ Split AuthForm and Signup Form to little components @started(25-08-13 21:05)
+☐ Split AuthForm and Signup Form to little components
 
 ---BACKEND(SERVICES)---
 ✔ Make nginx-service for giving static files to frontend @done(25-06-16 18:04)
@@ -25,7 +25,7 @@
 ✔ When user is logged in, show user's name in navbar @done(25-06-25 13:42)
 ✔ Use Cookies for auth + I deleted localStorage and saving user's data in saved from XSS attacks auth-service by using HttpOnly Cookies! @done(25-06-25 13:42)
 But now it doest show cookies(token) in browser!
-✔ Make special "bruteforce" for: rushing /auth/login page and MYSQL database. @done(25-08-08 14:32)
+✔ Make special "bruteforce" for: rushing /auth/login page and MYSQL database. @done(25-08-13 21:26)
 ☐ Ability do delete your account!
 
 ---FIXING BUGS---

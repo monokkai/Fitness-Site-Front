@@ -6,7 +6,6 @@ export const navbarItems: NavbarItem[] = [
   { href: "/pricing", label: "Pricing" },
   { href: "/trainings", label: "Trainings", authOnly: true },
   { href: "/profile", label: "Profile", authOnly: true },
-  { href: "/auth", label: "Sign In", guestOnly: true },
 ];
 
 export const filterNavbarItems = (userExists: boolean, items: NavbarItem[]) => {
