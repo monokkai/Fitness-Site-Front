@@ -64,7 +64,7 @@ const NavContent: React.FC = () => {
           gap={2}
           px={2}
         >
-          <Box display="flex" flexDirection="row" alignItems="center" gap={2}>
+          <Box display="flex" color={"black"} flexDirection="row" alignItems="center" gap={2}>
             <Avatar
               size="sm"
               name={user?.username || "Unknown"}
@@ -98,6 +98,7 @@ const NavContent: React.FC = () => {
             onClick={() => router.push("/profile")}
             py={2}
             px={4}
+            bg={"white"}
             _hover={{ bg: "gray.50" }}
           >
             Profile Settings
@@ -108,6 +109,7 @@ const NavContent: React.FC = () => {
             onClick={() => router.push("/trainings")}
             py={2}
             px={4}
+            bg={"white"}
             _hover={{ bg: "gray.50" }}
           >
             Trainings
@@ -118,6 +120,7 @@ const NavContent: React.FC = () => {
             icon={<FaFire />}
             py={2}
             px={4}
+            bg={"white"}
             _hover={{ bg: "gray.50" }}
           >
             Current Streak: {currentStreak}{" "}
@@ -136,6 +139,7 @@ const NavContent: React.FC = () => {
             opacity={user ? 1 : 0.6}
             cursor={user ? "pointer" : "not-allowed"}
             _hover={user ? { bg: "gray.50" } : {}}
+            bg={"white"}
           >
             Sign Out
           </MenuItem>

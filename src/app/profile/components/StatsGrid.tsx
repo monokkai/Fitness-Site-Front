@@ -11,7 +11,6 @@ import {
   StatNumber,
   Skeleton,
   Text,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import { FaFire, FaMedal, FaDumbbell, FaTrophy } from "react-icons/fa";
 import { useAuth } from "../../shared/context/authContext";
@@ -66,9 +65,6 @@ const StatsGrid: React.FC = () => {
     }
   }, [profile]);
 
-  const bg = useColorModeValue("white", "gray.800");
-  const shadow = useColorModeValue("md", "dark-lg");
-
   if (error) {
     return <Text color="red.500">Failed to load stats</Text>;
   }
@@ -78,8 +74,9 @@ const StatsGrid: React.FC = () => {
       {stats.map((stat, index) => (
         <MotionCard
           key={index}
-          bg={bg}
-          boxShadow={shadow}
+          bg="white"
+          color="black"
+          boxShadow="md"
           borderRadius="2xl"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}

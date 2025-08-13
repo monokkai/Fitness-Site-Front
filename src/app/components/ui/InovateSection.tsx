@@ -11,7 +11,7 @@ import React from "react";
 
 const InovateSection: React.FC = () => {
   const borderColor = useColorModeValue("gray.200", "gray.700");
-  const textColor = useColorModeValue("gray.800", "gray.100");
+  const textColor = useColorModeValue("gray.500", "gray.400");
   return (
     <Box>
       <Flex

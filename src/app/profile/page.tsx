@@ -36,7 +36,7 @@ const ProfilePage: React.FC = () => {
 
   return (
     <LayoutWrapper>
-      <Box minH="100vh" bg="gray.50" pt={20}>
+      <Box minH="100vh" bg="white" pt={20}>
         <OnboardingPopup />
         <Container maxW="container.xl">
           <VStack spacing={8} align="stretch">

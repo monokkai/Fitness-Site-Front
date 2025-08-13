@@ -52,19 +52,29 @@ export const NavbarUserMenu = ({ isPricingPage }: NavbarUserMenuProps) => {
         boxShadow="md"
       >
         <MenuItem
+          bg={"white"}
+          _hover={{ bg: "gray.50" }}
           icon={<FaUser />}
           onClick={() => (window.location.href = "/profile")}
         >
           Profile
         </MenuItem>
         <MenuItem
+          bg={"white"}
+          _hover={{ bg: "gray.50" }}
           icon={<FaDumbbell />}
           onClick={() => (window.location.href = "/trainings")}
         >
           Trainings
         </MenuItem>
         <MenuDivider />
-        <MenuItem icon={<FaSignOutAlt />} onClick={logout} color="red.500">
+        <MenuItem
+          bg={"white"}
+          _hover={{ bg: "gray.50" }}
+          icon={<FaSignOutAlt />}
+          onClick={logout}
+          color="red.500"
+        >
           Logout
         </MenuItem>
       </MenuList>

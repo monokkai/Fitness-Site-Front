@@ -10,7 +10,6 @@ import {
   Text,
   Progress,
   Skeleton,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import { useAuth } from "../../shared/context/authContext";
 import useUserProfile from "../../shared/hooks/useUserProfile";
@@ -53,9 +52,6 @@ const ProgressSection: React.FC = () => {
     },
   ];
 
-  const bg = useColorModeValue("white", "gray.800");
-  const shadow = useColorModeValue("lg", "dark-lg");
-
   if (error) {
     return <Text color="red.500">Failed to load progress data</Text>;
   }
@@ -63,8 +59,9 @@ const ProgressSection: React.FC = () => {
   return (
     <MotionBox
       as={Card}
-      bg={bg}
-      boxShadow={shadow}
+      bg="white"
+      color="black"
+      boxShadow="lg"
       borderRadius="2xl"
       p={{ base: 4, md: 6 }}
       initial={{ opacity: 0, y: 40 }}

@@ -1,7 +1,7 @@
 "use client";
 
-import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
-import { useState, useEffect } from 'react';
+import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
+import { useState, useEffect } from "react";
 import theme from "./theme";
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -17,8 +17,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <ColorModeScript initialColorMode="light" />
       <ChakraProvider theme={theme}>
+        <ColorModeScript initialColorMode="light" />
         {children}
       </ChakraProvider>
     </>

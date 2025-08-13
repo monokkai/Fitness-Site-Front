@@ -31,11 +31,11 @@ const fadeInLeft = {
 };
 
 export default function FAQSection() {
-  const textColor = useColorModeValue("gray.800", "gray.100");
-  const headingColor = useColorModeValue("black", "white");
+  const textColor = useColorModeValue("gray.800", "gray.800");
+  const headingColor = useColorModeValue("black", "black");
   const itemBorderColor = useColorModeValue("gray.200", "gray.700");
-  const accordionButtonHoverBg = useColorModeValue("gray.50", "gray.700");
-  const accordionButtonExpandedBg = useColorModeValue("gray.100", "gray.800");
+  const accordionButtonHoverBg = useColorModeValue("white", "gray.50");
+  const accordionButtonExpandedBg = useColorModeValue("white", "gray.50");
 
   useEffect(() => {
     if (window.location.hash === "#faq-section") {

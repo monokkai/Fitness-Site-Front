@@ -17,9 +17,9 @@ export default function LayoutWrapper({
   );
 
   return (
-    <Box>
+    <Box bg="white">
       <TrainingNavbar />
-      <Box as="main" className="bg-white text-white">
+      <Box as="main" bg="white">
         {children}
       </Box>
       {!shouldHideNavbar && <Footer />}

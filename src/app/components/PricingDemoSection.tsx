@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 
 const PricingDemoSection: React.FC = () => {
-  const textColor = useColorModeValue("gray.800", "gray.100");
+  const textColor = useColorModeValue("gray.800", "gray.800");
   const borderColor = useColorModeValue("gray.200", "gray.700");
   return (
     <Box mt={24} maxW="7xl" mx="auto" textAlign="center">

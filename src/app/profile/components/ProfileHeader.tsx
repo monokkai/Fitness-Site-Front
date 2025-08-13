@@ -10,7 +10,6 @@ import {
   Stack,
   Heading,
   Badge,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import { useAuth } from "../../shared/context/authContext";
 import useUserProfile from "../../shared/hooks/useUserProfile";
@@ -20,8 +19,6 @@ const MotionBox = motion(Box);
 
 const ProfileHeader: React.FC = () => {
   const { user, isLoading: isAuthLoading } = useAuth();
-  const bgColor = useColorModeValue("white", "gray.800");
-  const cardShadow = useColorModeValue("lg", "dark-lg");
   const {
     data: profile,
     loading: isProfileLoading,
@@ -54,8 +51,9 @@ const ProfileHeader: React.FC = () => {
   return (
     <MotionBox
       as={Card}
-      bg={bgColor}
-      boxShadow={cardShadow}
+      bg="white"
+      color="black"
+      boxShadow="lg"
       borderRadius="2xl"
       p={{ base: 4, md: 6 }}
       initial={{ opacity: 0, y: 40 }}
@@ -85,6 +83,7 @@ const ProfileHeader: React.FC = () => {
             <Heading
               size="lg"
               mb={2}
+              color="black"
               fontWeight="semibold"
               letterSpacing="-0.5px"
             >
@@ -101,6 +100,7 @@ const ProfileHeader: React.FC = () => {
               py={2}
               fontSize="0.9em"
               borderRadius="full"
+              color={"blue.600"}
               colorScheme="blue"
               variant="subtle"
               boxShadow="sm"

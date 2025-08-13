@@ -1,10 +1,12 @@
-import { extendTheme } from '@chakra-ui/react'
+import { extendTheme, ThemeConfig } from "@chakra-ui/react";
+
+const config: ThemeConfig = {
+  initialColorMode: "light",
+  useSystemColorMode: false,
+};
 
 const theme = extendTheme({
-  config: {
-    initialColorMode: 'light',
-    useSystemColorMode: false,
-  },
+  config,
   colors: {
     brand: {
       50: '#f0ffe0',
@@ -25,25 +27,20 @@ const theme = extendTheme({
   },
   styles: {
     global: {
+      html: {
+        backgroundColor: "white !important",
+        color: "#2D3748 !important",
+      },
       body: {
-        bg: 'white',
-        color: 'gray.800',
+        bg: "white !important",
+        color: "gray.800 !important",
         fontFamily: "'Inter', sans-serif",
         letterSpacing: "-0.011em",
-        backgroundImage: 'none',
+        backgroundImage: "none !important",
       },
-      h1: {
-        letterSpacing: "-0.02em",
-        color: 'gray.800',
-      },
-      h2: {
-        letterSpacing: "-0.02em",
-        color: 'gray.800',
-      },
-      h3: {
-        letterSpacing: "-0.02em",
-        color: 'gray.800',
-      },
+      h1: { letterSpacing: "-0.02em", color: "gray.800" },
+      h2: { letterSpacing: "-0.02em", color: "gray.800" },
+      h3: { letterSpacing: "-0.02em", color: "gray.800" },
     },
   },
   components: {
@@ -54,11 +51,9 @@ const theme = extendTheme({
       },
       variants: {
         solid: {
-          bg: 'brand.300',
-          color: 'black',
-          _hover: {
-            bg: 'brand.400',
-          },
+          bg: "brand.300",
+          color: "black",
+          _hover: { bg: "brand.400" },
         },
       },
     },
@@ -73,7 +68,13 @@ const theme = extendTheme({
         letterSpacing: "-0.011em",
       },
     },
+    AccordionButton: {
+      baseStyle: {
+        _hover: { bg: "rgba(0,0,0,0.05)" },
+        _expanded: { bg: "rgba(0,0,0,0.08)" },
+      },
+    },
   },
-})
+});
 
-export default theme 
+export default theme;

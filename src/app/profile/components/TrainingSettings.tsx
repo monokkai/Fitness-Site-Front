@@ -9,7 +9,6 @@ import {
   Text,
   Button,
   Skeleton,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import { useAuth } from "../../shared/context/authContext";
 import { useEffect, useState } from "react";
@@ -75,17 +74,15 @@ const TrainingSettings: React.FC = () => {
     fetchData();
   }, [user]);
 
-  const bg = useColorModeValue("white", "gray.800");
-  const shadow = useColorModeValue("lg", "dark-lg");
-
   if (error) {
     return <Text color="red.500">{error}</Text>;
   }
 
   return (
     <MotionCard
-      bg={bg}
-      boxShadow={shadow}
+      bg="white"
+      color="black"
+      boxShadow="lg"
       borderRadius="2xl"
       p={{ base: 4, md: 6 }}
       initial={{ opacity: 0, y: 40 }}
@@ -93,7 +90,13 @@ const TrainingSettings: React.FC = () => {
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
       <CardBody>
-        <Heading size="lg" mb={6} fontWeight="semibold" letterSpacing="-0.5px">
+        <Heading
+          size="lg"
+          color="black"
+          mb={6}
+          fontWeight="semibold"
+          letterSpacing="-0.5px"
+        >
           Training Settings
         </Heading>
 

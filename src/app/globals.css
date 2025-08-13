@@ -8,13 +8,15 @@
   --foreground-rgb: 255, 255, 255;
   --background-start-rgb: 10, 10, 10;
   --background-end-rgb: 26, 26, 26;
+
+  color-scheme: light !important;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
+    /* --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0; */
   }
 }
 
@@ -34,8 +36,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   letter-spacing: -0.011em;
-  background-color: white;
-  color: #2D3748; /* gray.800 */
+  background-color: white !important;
+  color: #2d3748 !important;
   min-height: 100vh;
   scroll-behavior: smooth;
 }

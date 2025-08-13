@@ -8,6 +8,7 @@ import {
   VStack,
   Box,
   Button,
+  Divider,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { NavbarItem } from "../../types";
@@ -34,13 +35,14 @@ export const NavbarMobile = ({
   return (
     <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
       <DrawerOverlay />
-      <DrawerContent bg="white">
+      <DrawerContent bg="white" color="black">
         <DrawerCloseButton />
         <DrawerHeader borderBottomWidth="1px" color="black">
-          Navigation
+          HandFit
         </DrawerHeader>
-        <DrawerBody>
-          <VStack alignItems="flex-start" spacing={4}>
+        <DrawerBody p={0}>
+          {/* Навигационные пункты */}
+          <VStack alignItems="flex-start" spacing={4} p={4} w="100%">
             {items.map(({ href, label }: NavbarItem) => (
               <Link
                 key={href}
@@ -55,6 +57,7 @@ export const NavbarMobile = ({
                   width: "100%",
                   color: pathname === href ? "black" : "#4A5568",
                   fontWeight: pathname === href ? "bold" : "normal",
+                  textAlign: "left",
                 }}
               >
                 {label}
@@ -71,7 +74,11 @@ export const NavbarMobile = ({
                 )}
               </Link>
             ))}
+          </VStack>
 
+          <Divider borderColor="gray.300" />
+
+          <VStack alignItems="flex-start" spacing={2} p={4} w="100%">
             {!isLoading && user ? (
               <>
                 <Link href="/profile" passHref>
@@ -80,6 +87,9 @@ export const NavbarMobile = ({
                     variant="ghost"
                     justifyContent="flex-start"
                     width="100%"
+                    bg="white"
+                    color="gray.700"
+                    _hover={{ bg: "gray.50", color: "black" }}
                   >
                     Profile
                   </Button>
@@ -90,6 +100,9 @@ export const NavbarMobile = ({
                     variant="ghost"
                     justifyContent="flex-start"
                     width="100%"
+                    bg="white"
+                    color="gray.700"
+                    _hover={{ bg: "gray.50", color: "black" }}
                   >
                     Trainings
                   </Button>
@@ -99,7 +112,9 @@ export const NavbarMobile = ({
                   variant="ghost"
                   justifyContent="flex-start"
                   width="100%"
+                  bg="white"
                   color="red.500"
+                  _hover={{ bg: "gray.50" }}
                   onClick={logout}
                 >
                   Sign Out
@@ -117,6 +132,8 @@ export const NavbarMobile = ({
                       boxShadow: "0 0 20px rgba(170, 255, 3, 0.3)",
                     }}
                     borderRadius={20}
+                    width="100%"
+                    justifyContent="center"
                   >
                     Sign In
                   </Button>
