@@ -289,7 +289,7 @@ const Navbar: React.FC = () => {
         <DrawerContent bg="white">
           <DrawerCloseButton />
           <DrawerHeader borderBottomWidth="1px" color="black">
-            Navigation
+            HandFit
           </DrawerHeader>
           <DrawerBody>
             <VStack alignItems="flex-start" spacing={4}>

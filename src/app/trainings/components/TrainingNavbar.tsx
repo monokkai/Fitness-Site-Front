@@ -52,7 +52,7 @@ const TrainingNavbar: React.FC = () => {
             </Link>
 
             {isMobile ? (
-              <>
+              <Box>
                 <IconButton
                   aria-label="Open menu"
                   icon={<FaBars />}
@@ -61,17 +61,17 @@ const TrainingNavbar: React.FC = () => {
                 />
                 <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
                   <DrawerOverlay />
-                  <DrawerContent>
+                  <DrawerContent bg={"white"} color="black">
                     <DrawerCloseButton />
-                    <DrawerHeader>Menu</DrawerHeader>
-                    <DrawerBody>
-                      <VStack spacing={4} align="stretch">
+                    <DrawerHeader>HandFit</DrawerHeader>
+                    <DrawerBody bg={"white"} color={"black"}>
+                      <VStack color={"black"} spacing={4} align="stretch">
                         <NavContent />
                       </VStack>
                     </DrawerBody>
                   </DrawerContent>
                 </Drawer>
-              </>
+              </Box>
             ) : (
               <HStack spacing={4}>
                 <NavContent />
