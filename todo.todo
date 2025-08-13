@@ -25,6 +25,7 @@
 ✔ Use Cookies for auth + I deleted localStorage and saving user's data in saved from XSS attacks auth-service by using HttpOnly Cookies! @done(25-06-25 13:42)
 But now it doest show cookies(token) in browser!
 ✔ Make special "bruteforce" for: rushing /auth/login page and MYSQL database. @done(25-08-08 14:32)
+☐ Ability do delete your account!
 
 ---FIXING BUGS---
 ✔ Problem with axios, gives error in axios.ts @done(25-06-18 20:53)
