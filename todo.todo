@@ -27,6 +27,8 @@
 But now it doest show cookies(token) in browser!
 ✔ Make special "bruteforce" for: rushing /auth/login page and MYSQL database. @done(25-08-13 21:26)
 ☐ Ability do delete your account!
+☐ Add new service notification-service(GoLang)
+  It will be my latest service! After all services.
 
 ---FIXING BUGS---
 ✔ Problem with axios, gives error in axios.ts @done(25-06-18 20:53)
