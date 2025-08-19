@@ -61,7 +61,7 @@ const InovateSection: React.FC = () => {
               bg: "brand.400",
               boxShadow: useColorModeValue(
                 "0 0 12px rgba(170, 255, 3, 0.7)",
-                "0 0 12px rgba(170, 255, 3, 0.7)"
+                "0 0 12px rgba(170, 255, 3, 0.7)",
               ),
             }}
           >
@@ -103,7 +103,7 @@ const InovateSection: React.FC = () => {
               bg: "brand.400",
               boxShadow: useColorModeValue(
                 "0 0 12px rgba(170, 255, 3, 0.7)",
-                "0 0 12px rgba(170, 255, 3, 0.7)"
+                "0 0 12px rgba(170, 255, 3, 0.7)",
               ),
             }}
           >

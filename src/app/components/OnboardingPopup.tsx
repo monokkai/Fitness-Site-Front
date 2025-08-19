@@ -70,7 +70,7 @@ const OnboardingPopup = () => {
   }, [user]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -100,7 +100,7 @@ const OnboardingPopup = () => {
 
       const response = await axios.post(
         `${TRAINING_URL}/user-profiles`,
-        payload
+        payload,
       );
 
       if (response.status === 200 || response.status === 201) {
@@ -173,7 +173,7 @@ const OnboardingPopup = () => {
             </FormControl>
 
             <FormControl isRequired>
-              <FormLabel>Height (cm)</FormLabel>
+              <FormLabel>Height (sm)</FormLabel>
               <NumberInput
                 min={100}
                 max={250}

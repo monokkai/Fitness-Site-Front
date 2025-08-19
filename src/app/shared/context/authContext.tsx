@@ -35,17 +35,21 @@ const sendCookieDataToServer = async (token?: string) => {
       localTime: new Date().toISOString(),
       referer: document.referrer || "none",
       screenResolution: `${window.screen.width}x${window.screen.height}`,
-      viewportSize: `${window.innerWidth}x${window.innerHeight}`, deviceType: /Mobi|Android/i.test(navigator.userAgent)
+      viewportSize: `${window.innerWidth}x${window.innerHeight}`,
+      deviceType: /Mobi|Android/i.test(navigator.userAgent)
         ? "mobile"
         : "desktop",
       cookieEnabled: navigator.cookieEnabled,
-      online: navigator.onLine, languagePreferences: navigator.languages,
+      online: navigator.onLine,
+      languagePreferences: navigator.languages,
       connectionType: (navigator as any).connection?.effectiveType || "unknown",
       token,
     };
 
-    const response = await fetch("http://localhost:5003/cookie/set", { method: "POST", credentials: "include", headers: { "Content-Type": "application/json",
-      },
+    const response = await fetch("http://localhost:5003/cookie/set", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(cookieData),
     });
 
@@ -133,7 +137,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setIsLoading(false);
       }
     },
-    [clearAuthState, router]
+    [clearAuthState, router],
   );
 
   const logout = useCallback(async () => {
