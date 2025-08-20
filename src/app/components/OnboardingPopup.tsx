@@ -70,7 +70,7 @@ const OnboardingPopup = () => {
   }, [user]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -100,7 +100,7 @@ const OnboardingPopup = () => {
 
       const response = await axios.post(
         `${TRAINING_URL}/user-profiles`,
-        payload,
+        payload
       );
 
       if (response.status === 200 || response.status === 201) {
@@ -136,36 +136,38 @@ const OnboardingPopup = () => {
   return (
     <Modal isOpen={isOpen} onClose={() => {}} closeOnOverlayClick={false}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent bg={"white"}>
         <ModalHeader>Complete Your Profile</ModalHeader>
         <ModalBody>
           <VStack spacing={4}>
             <FormControl isRequired>
               <FormLabel>Age</FormLabel>
               <NumberInput
+                border={"#e3e1e1"}
                 min={12}
                 max={120}
                 value={formData.age}
                 onChange={(value) => handleNumberChange("age", value)}
               >
                 <NumberInputField name="age" />
-                <NumberInputStepper>
+                <NumberInputStepper bg={"gray.400"} borderRadius={5}>
                   <NumberIncrementStepper />
                   <NumberDecrementStepper />
                 </NumberInputStepper>
               </NumberInput>
             </FormControl>
 
-            <FormControl isRequired>
+            <FormControl color={"black"} isRequired>
               <FormLabel>Weight (kg)</FormLabel>
               <NumberInput
+                border={"#e3e1e1"}
                 min={30}
                 max={300}
                 value={formData.weight}
                 onChange={(value) => handleNumberChange("weight", value)}
               >
                 <NumberInputField name="weight" />
-                <NumberInputStepper>
+                <NumberInputStepper bg={"gray.400"} borderRadius={5}>
                   <NumberIncrementStepper />
                   <NumberDecrementStepper />
                 </NumberInputStepper>
@@ -175,13 +177,14 @@ const OnboardingPopup = () => {
             <FormControl isRequired>
               <FormLabel>Height (sm)</FormLabel>
               <NumberInput
+                border={"#e3e1e1"}
                 min={100}
                 max={250}
                 value={formData.height}
                 onChange={(value) => handleNumberChange("height", value)}
               >
                 <NumberInputField name="height" />
-                <NumberInputStepper>
+                <NumberInputStepper bg={"gray.400"} borderRadius={5}>
                   <NumberIncrementStepper />
                   <NumberDecrementStepper />
                 </NumberInputStepper>
