@@ -21,7 +21,8 @@
 ---BACKEND(SERVICES)---
 ✔ Make nginx-service for giving static files to frontend @done(25-06-16 18:04)
 ✔ Auth-service (C# ASP.NET Core) @started(25-06-18 19:18) @done(25-06-18 19:18) @lasted(5s)
-☐ Make independent services for databases for users, rewards
+✔ Make independent service for database for users @done(25-08-20 15:22)
+☐ Make independent service for rewares for users
 ✔ When user is logged in, show user's name in navbar @done(25-06-25 13:42)
 ✔ Use Cookies for auth + I deleted localStorage and saving user's data in saved from XSS attacks auth-service by using HttpOnly Cookies! @done(25-06-25 13:42)
 But now it doest show cookies(token) in browser!
@@ -31,6 +32,8 @@ But now it doest show cookies(token) in browser!
   For training service and etc...(otherwise i'll do only for training service, dont know now!).
 ☐ Add logging for services
 ☐ Work with transactions(Databases)
+☐ Add documentations with README.md files and Swagger(Or others for DX and documenting server logic!)
+
 
 After all I can touch thease tools to integrate:
 ---
