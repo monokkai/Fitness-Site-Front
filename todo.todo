@@ -33,6 +33,8 @@ But now it doest show cookies(token) in browser!
 ☐ Add logging for services
 ☐ Work with transactions(Databases)
 ☐ Add documentations with README.md files and Swagger(Or others for DX and documenting server logic!)
+☐ Add API Gateway service!
+  For proxing the request, securing and etc...
 
 
 After all I can touch thease tools to integrate:
