@@ -27,16 +27,21 @@
 But now it doest show cookies(token) in browser!
 ✔ Make special "bruteforce" for: rushing /auth/login page and MYSQL database. @done(25-08-13 21:26)
 ☐ Ability do delete your account!(On backend and frontend)
-☐ Add new service notification-service(GoLang)
-  It will be my latest service! After all services.
 ☐ Add cash manager(Redis or inMemory)
   For training service and etc...(otherwise i'll do only for training service, dont know now!).
 ☐ Add logging for services
+☐ Work with transactions(Databases)
 
+After all I can touch thease tools to integrate:
 ---
 ☐ Add Excel or Word intergation when user would like to download and check his data or progress.
   ☐ Split service called metrica-service
     Will be wrote on C# ASP NET because of powerful integration with Word and Excel(Microsoft) programs.
+☐ Add new service notification-service(GoLang)
+  It will be my latest service! After all services.
+☐ Create chat-service(python) with ML.
+  As i have API key, i can integrate AI Chat support for example, for some types of users that cant understand something and they will have full support for 24/7.
+  Gemini, Copilot, ChatGPT API Keys.
 ---
 
 ---FIXING BUGS---

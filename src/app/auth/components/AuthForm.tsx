@@ -76,7 +76,6 @@ const AuthForm: React.FC = () => {
     }));
     if (error) setError("");
   };
-  
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
