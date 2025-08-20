@@ -22,7 +22,7 @@
 ✔ Make nginx-service for giving static files to frontend @done(25-06-16 18:04)
 ✔ Auth-service (C# ASP.NET Core) @started(25-06-18 19:18) @done(25-06-18 19:18) @lasted(5s)
 ✔ Make independent service for database for users @done(25-08-20 15:22)
-☐ Make independent service for rewares for users
+☐ Make independent service for rewards for users
 ✔ When user is logged in, show user's name in navbar @done(25-06-25 13:42)
 ✔ Use Cookies for auth + I deleted localStorage and saving user's data in saved from XSS attacks auth-service by using HttpOnly Cookies! @done(25-06-25 13:42)
 But now it doest show cookies(token) in browser!
