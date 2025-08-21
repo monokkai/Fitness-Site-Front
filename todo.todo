@@ -5,7 +5,7 @@
 ✔ Use Zustand for state management, not useState @done(25-06-16 17:44)
 ✔ Cookies, not localStorage! @done(25-06-16 18:03)
 ✔ After login, ask user in popup to enter his goals and parameters for trainings! Then, in /profile, it will be shown! But it will save in another database in PostgreSQL for params for every user! There, the id of user, and his params! @started(25-08-06 19:53) @done(25-08-06 19:53) @lasted(45s)
-☐ Remade some design on /training page!
+✔ Remade some design on /training page! @done(25-08-21 10:45)
 ✔ Make custom 404 page? @started(25-06-25 12:17) @done(25-06-25 12:22) @lasted(5m42s)
 ✔ Make Guard and Popup for unauthorized user if he wants to go to /trainings page! @started(25-06-25 12:30) @done(25-06-25 13:31) @lasted(1h1m1s)
 ✔ Make checkbox with Privacy Policy on registration page! @started(25-08-06 21:20) @done(25-08-06 21:36) @lasted(16m1s)
@@ -16,7 +16,6 @@
     ✔ When user goes to trainings, he needs to be redirected to login page! NO BLUR! It's unsafe! @done(25-08-04 17:45)
 ✔ Use zustand instead of useState in Signup page @done(25-08-13 19:11)
 ✔ Make CI/CD pipeline only for pushing it to dockerhub! @started(25-08-07 14:49) @done(25-08-07 18:11) @lasted(3h22m10s)
-☐ Split AuthForm and Signup Form to little components
 
 ---BACKEND(SERVICES)---
 ✔ Make nginx-service for giving static files to frontend @done(25-06-16 18:04)
@@ -33,7 +32,7 @@ But now it doest show cookies(token) in browser!
 ☐ Add logging for services
 ☐ Work with transactions(Databases)
 ☐ Add documentations with README.md files and Swagger(Or others for DX and documenting server logic!)
-☐ Add API Gateway service!
+x Add API Gateway service!
   For proxing the request, securing and etc...
 ☐ Add new service notification-service(GoLang)
   It will be my latest service! After all services.
@@ -43,7 +42,7 @@ After all I can touch thease tools to integrate:
 ---
 ☐ Add Excel or Word intergation when user would like to download and check his data or progress.
   ☐ Split service called metrica-service
-    Will be wrote on C# ASP NET because of powerful integration with Word and Excel(Microsoft) programs.
+    Integrate Prometheus and Grafana. Service will be wrote on FasAPI/Litestar Python.
 ☐ Create chat-service(python) with ML.
   As i have API key, i can integrate AI Chat support for example, for some types of users that cant understand something and they will have full support for 24/7.
   Gemini, Copilot, ChatGPT API Keys.
@@ -62,6 +61,7 @@ After all I can touch thease tools to integrate:
 ✔ Fix mobile menu on /trainings page(colors and links) @done(25-08-20 20:47)
 ☐ When registered, doesn't throw to main page(since i did the AGW service)
 ☐ Delete logging from frontend side(in browser writes token and etc...)
+☐ After bad parameters on login gives "Request failed with status code 401".
 
 
 ---FRONTED CONTAINER(Now it has a lot of errors, i'll get into it after"---
