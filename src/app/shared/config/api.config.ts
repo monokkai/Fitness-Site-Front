@@ -1,5 +1,5 @@
-// export const API_URL = 'http://localhost:5001/api';
-export const API_URL = 'http://localhost:8000';
+export const API_URL = 'http://localhost:5001/api';
+// export const API_URL = 'http://localhost:8000';
 export const GUARDS_SERVICE_URL = 'http://localhost:3003';
 export const TRAINING_URL = 'http://localhost:5002'
 

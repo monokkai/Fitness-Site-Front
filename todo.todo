@@ -33,7 +33,7 @@ But now it doest show cookies(token) in browser!
 ☐ Add logging for services
 ☐ Work with transactions(Databases)
 ☐ Add documentations with README.md files and Swagger(Or others for DX and documenting server logic!)
-✔ Add API Gateway service! @done(25-08-20 20:07)
+☐ Add API Gateway service!
   For proxing the request, securing and etc...
 ☐ Add new service notification-service(GoLang)
   It will be my latest service! After all services.
@@ -56,7 +56,7 @@ After all I can touch thease tools to integrate:
 ✔ Fix bug with logout when im reloading page the session still here! @done(25-08-04 17:45)
 ✔ The popup works only with new accounts. If i created it earlier it won't gonna be showed! @done(25-08-07 23:27)
 ✔ Fix bug with bugrer menu on /profile and /trainings page! Has some troubles with avatar, but needs to be writed fully! @done(25-08-20 20:48)
-☐ Fix bug on /about-us page when user logged in, "Start Training" button redirects to /profile, not to /auth pages
+✔ Fix bug on /about-us page when user logged in, "Start Training" button redirects to /profile, not to /auth pages @done(25-08-20 21:03)
 ✔ Fix FROM START Navbar.tsx dark charka ui theme! @done(25-08-13 21:42)
 ✔ Fix bug with mobile menu on Navbar.tsx when it doesn't convert it to a links, stays like burger menu @done(25-08-20 20:47)
 ✔ Fix mobile menu on /trainings page(colors and links) @done(25-08-20 20:47)
