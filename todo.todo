@@ -62,6 +62,8 @@ After all I can touch thease tools to integrate:
 ☐ When registered, doesn't throw to main page(since i did the AGW service)
 ☐ Delete logging from frontend side(in browser writes token and etc...)
 ☐ After bad parameters on login gives "Request failed with status code 401".
+☐ Fix bug on / page when its mobile, old error with likns and avatar and colorscheme.
+☐ Bug on auth-db when user is not acitve, on database it's 1. But needs to be 0.
 
 
 ---FRONTED CONTAINER(Now it has a lot of errors, i'll get into it after"---

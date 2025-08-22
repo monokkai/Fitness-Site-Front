@@ -16,7 +16,7 @@ const MotionCard = motion(Card);
 
 const StatsSection: React.FC = () => {
   const shouldReduceMotion = useReducedMotion();
-  
+
   const cards = [
     {
       icon: FaTrophy,
@@ -55,7 +55,7 @@ const StatsSection: React.FC = () => {
             <VStack align="start" spacing={4}>
               <Icon as={card.icon} w={8} h={8} color={card.color} />
               <Stack spacing={2}>
-                <Text fontSize="2xl" fontWeight="bold">
+                <Text fontSize="2xl" color={"gray.500"} fontWeight="bold">
                   {card.value}
                 </Text>
                 <Text color="gray.600">{card.label}</Text>
@@ -68,4 +68,4 @@ const StatsSection: React.FC = () => {
   );
 };
 
-export default StatsSection; 
+export default StatsSection;
