@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { TRAINING_URL } from "../config/api.config";
+import { TRAINING_ENDPOINTS } from "../config/api.config";
 import ProfileData from "../interfaces/IProfileData";
 
 const useUserProfile = (userId: number | undefined) => {
@@ -17,7 +17,7 @@ const useUserProfile = (userId: number | undefined) => {
 
             try {
                 const { data } = await axios.get<ProfileData>(
-                    `${TRAINING_URL}/user-profiles/${userId}`
+                    `${TRAINING_ENDPOINTS.USER_PROFILES}/${userId}`
                 );
                 setData(data);
                 setError(null);

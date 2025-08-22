@@ -46,7 +46,7 @@ const sendCookieDataToServer = async (token?: string) => {
       token,
     };
 
-    const response = await fetch("http://localhost:5003/cookie/set", {
+    const response = await fetch("http://localhost:5001/cookie/set", {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
