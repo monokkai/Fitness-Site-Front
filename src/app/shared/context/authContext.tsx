@@ -13,6 +13,7 @@ import { AUTH_ENDPOINTS, COOKIE_ENDPOINTS } from "../config/api.config";
 import api from "../api/axios";
 import { LoginResponse, MeResponse } from "../interfaces/IApiResponses";
 import User from "../interfaces/IUser";
+import { NavigatorWithConnection } from "../interfaces/INavigatorWithConnection";
 
 type AuthContextType = {
   user: User | null;
@@ -47,7 +48,9 @@ const sendCookieDataToServer = async (token?: string) => {
       cookieEnabled: navigator.cookieEnabled,
       online: navigator.onLine,
       languagePreferences: navigator.languages,
-      connectionType: (navigator as any).connection?.effectiveType || "unknown",
+      connectionType:
+        (navigator as NavigatorWithConnection).connection?.effectiveType ||
+        "unknown",
       token,
     };
 
@@ -74,7 +77,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-  const hasCheckedAuth = useRef(false); // Добавляем ref для отслеживания
+  const hasCheckedAuth = useRef(false);
 
   const clearAuthState = useCallback(() => {
     setUser(null);
