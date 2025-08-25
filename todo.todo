@@ -39,6 +39,8 @@ But now it doest show cookies(token) in browser!
   It will be my latest service! After all services.
 ☐ Add Two-Factor auth
 ✔ Delete cookie-service and collect cookie on the API-Gateway-Service side @done(25-08-25 20:51)
+☐ Split big docker-compose.yaml file to micro files in other folders to make a search a bit better
+  Create in others docker-compose.yaml files! NOT .yml - this is the main file!
 
 
 After all I can touch thease tools to integrate:
