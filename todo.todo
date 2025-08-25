@@ -21,7 +21,8 @@
 ✔ Make nginx-service for giving static files to frontend @done(25-06-16 18:04)
 ✔ Auth-service (C# ASP.NET Core) @started(25-06-18 19:18) @done(25-06-18 19:18) @lasted(5s)
 ✔ Make independent service for database for users @done(25-08-20 15:22)
-☐ Make independent service for rewards for users
+☐ Make independent service for rewards for users.
+☐ Make independent service for users-service for editting User data.
 ✔ When user is logged in, show user's name in navbar @done(25-06-25 13:42)
 ✔ Use Cookies for auth + I deleted localStorage and saving user's data in saved from XSS attacks auth-service by using HttpOnly Cookies! @done(25-06-25 13:42)
 But now it doest show cookies(token) in browser!
@@ -64,7 +65,7 @@ After all I can touch thease tools to integrate:
 ✔ When registered, doesn't throw to main page(since i did the AGW service) @done(25-08-23 18:46)
 ☐ Delete logging from frontend side(in browser writes token and etc... at the end of the project)
 ☐ After bad parameters on login gives "Request failed with status code 401".
-☐ Fix bug on / page when its mobile, old error with likns and avatar and colorscheme.
+✔ Fix bug on / page when its mobile, old error with likns and avatar and colorscheme. @done(25-08-25 21:00)
 ☐ Bug on auth-db when user is not acitve, on database it's 1. But needs to be 0.
 
 
