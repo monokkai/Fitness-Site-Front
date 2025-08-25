@@ -324,75 +324,90 @@ const Navbar: React.FC = () => {
                 </Link>
               ))}
 
+              {/* Исправленная часть для мобильного меню */}
               {!isLoading && user ? (
-                <Menu>
-                  <MenuButton
-                    as={Button}
-                    variant="ghost"
-                    rightIcon={
-                      <Avatar
-                        size="sm"
-                        name={user.username}
-                        src={
-                          user?.username
-                            ? `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user.username)}`
-                            : undefined
-                        }
-                        bg="brand.400"
-                        color="white"
-                        border="2px solid"
-                        borderColor="whiteAlpha.600"
-                      />
-                    }
-                    color={isPricingPage ? "white" : "black"}
-                    _hover={{
-                      bg: "transparent",
-                      transform: "translateY(-1px)",
-                      textShadow: isPricingPage
-                        ? "0 0 8px rgba(255, 255, 255, 0.5)"
-                        : "0 0 8px rgba(0, 0, 0, 0.2)",
+                <>
+                  <Link
+                    href="/profile"
+                    onClick={onClose}
+                    style={{
+                      position: "relative",
+                      padding: "4px 0",
+                      width: "100%",
+                      color: pathname === "/profile" ? "black" : "#4A5568",
+                      fontWeight: pathname === "/profile" ? "bold" : "normal",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
                     }}
                   >
-                    <Text
-                      fontSize="18px"
-                      fontWeight="medium"
-                      color={isPricingPage ? "white" : "black"}
-                    >
-                      {user.username}
-                    </Text>
-                  </MenuButton>
-                  <MenuList
-                    bg="white"
-                    color="black"
-                    border="1px solid"
-                    borderColor="gray.100"
-                    boxShadow="md"
+                    <FaUser size={14} />
+                    Profile
+                    {pathname === "/profile" && (
+                      <Box
+                        position="absolute"
+                        bottom="-2px"
+                        left="0"
+                        width="4px"
+                        height="4px"
+                        borderRadius="full"
+                        bg="black"
+                      />
+                    )}
+                  </Link>
+
+                  <Link
+                    href="/trainings"
+                    onClick={onClose}
+                    style={{
+                      position: "relative",
+                      padding: "4px 0",
+                      width: "100%",
+                      color: pathname === "/trainings" ? "black" : "#4A5568",
+                      fontWeight: pathname === "/trainings" ? "bold" : "normal",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                    }}
                   >
-                    <MenuItem
-                      icon={<FaUser />}
-                      onClick={() => (window.location.href = "/profile")}
-                    >
-                      Profile
-                    </MenuItem>
-                    <MenuItem
-                      icon={<FaDumbbell />}
-                      onClick={() => (window.location.href = "/trainings")}
-                    >
-                      Trainings
-                    </MenuItem>
-                    <MenuDivider />
-                    <MenuItem
-                      icon={<FaSignOutAlt />}
-                      onClick={logout}
-                      color="red.500"
-                    >
-                      Sing Out
-                    </MenuItem>
-                  </MenuList>
-                </Menu>
+                    <FaDumbbell size={14} />
+                    Trainings
+                    {pathname === "/trainings" && (
+                      <Box
+                        position="absolute"
+                        bottom="-2px"
+                        left="0"
+                        width="4px"
+                        height="4px"
+                        borderRadius="full"
+                        bg="black"
+                      />
+                    )}
+                  </Link>
+
+                  <Box
+                    onClick={() => {
+                      logout();
+                      onClose();
+                    }}
+                    style={{
+                      position: "relative",
+                      padding: "4px 0",
+                      width: "100%",
+                      color: "#E53E3E",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                    }}
+                  >
+                    <FaSignOutAlt size={14} />
+                    Logout
+                  </Box>
+                </>
               ) : (
                 !isLoading && (
-                  <Link href="/auth" passHref>
+                  <Link href="/auth" passHref onClick={onClose}>
                     <Button
                       bg={pathname === "/login" ? "brand.400" : "brand.300"}
                       color="black"

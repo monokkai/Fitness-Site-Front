@@ -1,13 +1,5 @@
-// export const API_URL = 'http://localhost:5001/api';
-// // export const API_URL = 'http://localhost:8000';
-// export const GUARDS_SERVICE_URL = 'http://localhost:3003';
-// export const TRAINING_URL = 'http://localhost:5002'
-
-// export const API_URL = 'http://localhost:5001';
-// export const GUARDS_SERVICE_URL = 'http://localhost:5001';
-// export const TRAINING_URL = 'http://localhost:5001';
 export const API_URL = 'http://localhost:5001';
-export const TRAINING_URL = API_URL
+export const TRAINING_URL = API_URL;
 
 export const AUTH_ENDPOINTS = {
     LOGIN: `${API_URL}/api/auth/login`,

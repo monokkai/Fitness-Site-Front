@@ -12,6 +12,7 @@ import {
   MenuItem,
   MenuList,
   useBreakpointValue,
+  Text,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { FaFire, FaUserCircle, FaSignOutAlt, FaDumbbell } from "react-icons/fa";
@@ -30,6 +31,7 @@ const NavContent: React.FC = () => {
   const { data: profile } = useUserProfile(user?.id);
   const router = useRouter();
   const isMobile = useBreakpointValue({ base: true, md: false });
+  console.log("User in NavContent:", user);
 
   const currentStreak = profile?.currentStreak || 0;
 
@@ -64,7 +66,13 @@ const NavContent: React.FC = () => {
           gap={2}
           px={2}
         >
-          <Box display="flex" color={"black"} flexDirection="row" alignItems="center" gap={2}>
+          <Box
+            display="flex"
+            color={"black"}
+            flexDirection="row"
+            alignItems="center"
+            gap={2}
+          >
             <Avatar
               size="sm"
               name={user?.username || "Unknown"}
@@ -75,7 +83,7 @@ const NavContent: React.FC = () => {
               }
             />
             <Box fontSize="20px" display={{ base: "none", md: "block" }}>
-              {user?.username || "Guest"}
+              <Text>{user?.username || "Guest"}</Text>
             </Box>
           </Box>
         </MenuButton>

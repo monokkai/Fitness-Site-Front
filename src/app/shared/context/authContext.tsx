@@ -6,9 +6,10 @@ import {
   useEffect,
   useState,
   useCallback,
+  useRef,
 } from "react";
 import { useRouter } from "next/navigation";
-import { AUTH_ENDPOINTS } from "../config/api.config";
+import { AUTH_ENDPOINTS, COOKIE_ENDPOINTS } from "../config/api.config";
 import api from "../api/axios";
 import { LoginResponse, MeResponse } from "../interfaces/IApiResponses";
 import User from "../interfaces/IUser";
@@ -25,6 +26,10 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const sendCookieDataToServer = async (token?: string) => {
   try {
+    if (typeof window === "undefined" || typeof navigator === "undefined") {
+      return null;
+    }
+
     const cookieData = {
       country: navigator.language.split("-")[1] || "unknown",
       language: navigator.language,
@@ -46,7 +51,7 @@ const sendCookieDataToServer = async (token?: string) => {
       token,
     };
 
-    const response = await fetch("http://localhost:5001/cookie/set", {
+    const response = await fetch(COOKIE_ENDPOINTS.SET, {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
@@ -59,6 +64,7 @@ const sendCookieDataToServer = async (token?: string) => {
 
     const result = await response.json();
     console.log("Cookie set response:", result);
+    return result;
   } catch (error) {
     console.error("Failed to send cookie data:", error);
   }
@@ -68,6 +74,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const hasCheckedAuth = useRef(false); // Добавляем ref для отслеживания
 
   const clearAuthState = useCallback(() => {
     setUser(null);
@@ -75,6 +82,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const checkAuth = useCallback(async () => {
+    if (hasCheckedAuth.current) return;
+    hasCheckedAuth.current = true;
+
     setIsLoading(true);
     try {
       const response = await api.get<MeResponse>(AUTH_ENDPOINTS.ME, {
@@ -90,7 +100,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         });
 
         const token = localStorage.getItem("token");
-        await sendCookieDataToServer(token ?? undefined);
+        if (token) {
+          sendCookieDataToServer(token).catch((error) => {
+            console.log("Cookie setup completed with warnings:", error);
+          });
+        }
       } else {
         await clearAuthState();
       }
@@ -116,8 +130,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
 
         localStorage.setItem("token", response.data.token);
-
-        await sendCookieDataToServer(response.data.token);
+        hasCheckedAuth.current = false;
 
         if (response.data.user) {
           setUser({
@@ -128,6 +141,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           });
         }
 
+        sendCookieDataToServer(response.data.token).catch((error) => {
+          console.log(
+            "Cookie setup after login completed with warnings:",
+            error
+          );
+        });
+
         router.push("/");
       } catch (error) {
         console.error("Login error:", error);
@@ -137,7 +157,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setIsLoading(false);
       }
     },
-    [clearAuthState, router],
+    [clearAuthState, router]
   );
 
   const logout = useCallback(async () => {
@@ -145,6 +165,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       await api.post(AUTH_ENDPOINTS.LOGOUT, {}, { withCredentials: true });
       await clearAuthState();
+      hasCheckedAuth.current = false;
       router.push("/auth");
     } catch (error) {
       console.error("Logout failed:", error);
@@ -155,7 +176,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [clearAuthState, router]);
 
   useEffect(() => {
-    checkAuth();
+    if (!hasCheckedAuth.current) {
+      checkAuth();
+    }
   }, [checkAuth]);
 
   return (
