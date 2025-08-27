@@ -51,6 +51,22 @@ After all I can touch thease tools to integrate:
 ☐ Create chat-service(python) with ML.
   As i have API key, i can integrate AI Chat support for example, for some types of users that cant understand something and they will have full support for 24/7.
   Gemini, Copilot, ChatGPT API Keys.
+☐ Add tests with Jest(for Nest.js)
+  yarn add --save-dev jest ts-jest @types/jest
+  ```jest.config.js
+
+  module.exports = {
+    preset: 'ts-jest',
+    testEnvironment: 'node',
+  };
+
+  ```
+  yarn jest
+☐ Add tests with (for C# ASP.NET Core)
+  dotnet new xunit -o Project.Tests
+  dotnet add Project.Tests reference Project
+
+  dotnet test
 ---
 
 ---FIXING BUGS---
