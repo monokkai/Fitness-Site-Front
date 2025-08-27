@@ -21,6 +21,7 @@ type AuthContextType = {
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
+  updateUser: (newUserData: Partial<User>) => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -82,6 +83,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const clearAuthState = useCallback(() => {
     setUser(null);
     localStorage.removeItem("token");
+  }, []);
+
+  const updateUser = useCallback((newUserData: Partial<User>) => {
+    setUser((prevData) => (prevData ? { ...prevData, ...newUserData } : null));
   }, []);
 
   const checkAuth = useCallback(async () => {
@@ -185,7 +190,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [checkAuth]);
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, logout, checkAuth }}>
+    <AuthContext.Provider
+      value={{ user, isLoading, login, logout, checkAuth, updateUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

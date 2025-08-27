@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useAuth } from "../shared/context/authContext";
 import {
   Modal,
@@ -24,9 +24,14 @@ import {
   SliderFilledTrack,
   SliderThumb,
   useToast,
+  Avatar,
+  Input,
+  HStack,
+  Text,
+  Box,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { TRAINING_URL } from "../shared/config/api.config";
+import { TRAINING_URL, API_URL } from "../shared/config/api.config";
 
 interface UserProfileData {
   age: number;
@@ -39,11 +44,14 @@ interface UserProfileData {
 }
 
 const OnboardingPopup = () => {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const toast = useToast();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [profileCreated, setProfileCreated] = useState(false);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = useState<UserProfileData>({
     age: 0,
@@ -80,11 +88,67 @@ const OnboardingPopup = () => {
     setFormData((prev) => ({ ...prev, [name]: Number(value) }));
   };
 
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setAvatarFile(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setAvatarPreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const uploadAvatar = async (): Promise<string | null> => {
+    if (!avatarFile || !user) return null;
+
+    try {
+      const formData = new FormData();
+      formData.append("avatar", avatarFile);
+
+      const response = await axios.post(
+        `${API_URL}/api/users/avatar/upload`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (
+        response.data &&
+        typeof response.data === "object" &&
+        "avatarUrl" in response.data
+      ) {
+        return (response.data as { avatarUrl: string }).avatarUrl;
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Error uploading avatar:", error);
+      return null;
+    }
+  };
+
   const handleSubmit = async () => {
     if (!user?.id) return;
 
     setIsLoading(true);
     try {
+      let avatarUrl: string | null = null;
+      if (avatarFile) {
+        avatarUrl = await uploadAvatar();
+        if (avatarUrl && updateUser) {
+          updateUser({ avatarUrl: avatarUrl });
+        }
+      }
+
       const payload = {
         userId: user.id,
         age: Number(formData.age),
@@ -134,12 +198,51 @@ const OnboardingPopup = () => {
   if (!isOpen || profileCreated) return null;
 
   return (
-    <Modal isOpen={isOpen} onClose={() => {}} closeOnOverlayClick={false}>
+    <Modal
+      isOpen={isOpen}
+      onClose={() => {}}
+      closeOnOverlayClick={false}
+      size="xl"
+    >
       <ModalOverlay />
       <ModalContent bg={"white"}>
         <ModalHeader>Complete Your Profile</ModalHeader>
         <ModalBody>
-          <VStack spacing={4}>
+          <VStack spacing={6}>
+            {/* Аватарка */}
+            <FormControl>
+              <FormLabel>Profile Picture</FormLabel>
+              <HStack spacing={4}>
+                <Box position="relative">
+                  <Avatar
+                    size="xl"
+                    name={user?.username}
+                    src={avatarPreview || undefined}
+                    cursor="pointer"
+                    onClick={handleAvatarClick}
+                    _hover={{ opacity: 0.8 }}
+                    bg="gray.200"
+                  />
+                  <Input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleAvatarChange}
+                    display="none"
+                  />
+                </Box>
+                <Box>
+                  <Text fontSize="sm" color="gray.600">
+                    Click on the avatar to upload a photo
+                  </Text>
+                  <Text fontSize="xs" color="gray.500">
+                    JPG, PNG or GIF (max 5MB)
+                  </Text>
+                </Box>
+              </HStack>
+            </FormControl>
+
+            {/* Остальные поля */}
             <FormControl isRequired>
               <FormLabel>Age</FormLabel>
               <NumberInput
@@ -175,7 +278,7 @@ const OnboardingPopup = () => {
             </FormControl>
 
             <FormControl isRequired>
-              <FormLabel>Height (sm)</FormLabel>
+              <FormLabel>Height (cm)</FormLabel>
               <NumberInput
                 border={"#e3e1e1"}
                 min={100}

@@ -22,6 +22,13 @@ export const TRAINING_ENDPOINTS = {
     USER_WORKOUTS: `${API_URL}/user-workouts`,
 } as const;
 
+export const USERS_ENDPOINTS = {
+    PROFILE: `${API_URL}/api/users/profile`,
+    AVATAR: `${API_URL}/api/users/avatar`,
+    ACCOUNT: `${API_URL}/api/users/account`,
+    ME: `${API_URL}/api/users/me`,
+} as const;
+
 export const COOKIE_ENDPOINTS = {
     SET: `${API_URL}/cookie/set`,
     CLEAR: `${API_URL}/cookie/clear`,
