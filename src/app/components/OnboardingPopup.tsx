@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../shared/context/authContext";
+import useUserProfile from "../shared/hooks/useUserProfile";
+import ProfileData from "../shared/interfaces/IProfileData";
 import {
   Modal,
   ModalOverlay,
@@ -33,169 +35,100 @@ import {
 import axios from "axios";
 import { TRAINING_URL, API_URL } from "../shared/config/api.config";
 
-interface UserProfileData {
-  age: number;
-  weight: number;
-  height: number;
-  sex: string;
-  trainingGoal: string;
-  workoutsPerWeek: number;
-  userId: number;
-}
-
 const OnboardingPopup = () => {
-  const { user, updateUser } = useAuth();
+  const { user } = useAuth();
+  const { data: profile, loading } = useUserProfile(user?.id);
   const toast = useToast();
-  const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [profileCreated, setProfileCreated] = useState(false);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const [formData, setFormData] = useState<UserProfileData>({
-    age: 0,
-    weight: 0,
-    height: 0,
-    sex: "",
-    trainingGoal: "",
-    workoutsPerWeek: 3,
-    userId: user?.id || 0,
-  });
+  const [formData, setFormData] = useState<ProfileData | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    if (user?.id) {
-      axios
-        .get(`${TRAINING_URL}/user-profiles/${user.id}`)
-        .then(() => {
-          setProfileCreated(true);
-        })
-        .catch(() => {
-          setIsOpen(true);
-          setFormData((prev) => ({ ...prev, userId: user.id }));
+    if (!loading && user) {
+      const hasProfile = localStorage.getItem("hasProfile") === "true";
+      if (!profile && !hasProfile) {
+        setIsOpen(true);
+        setFormData({
+          id: 0,
+          userId: user.id,
+          age: 0,
+          weight: "",
+          height: 0,
+          sex: "",
+          trainingGoal: "",
+          workoutsPerWeek: 3,
+          currentStreak: 0,
+          longestStreak: 0,
+          totalWorkouts: 0,
+          createdAt: "",
+          updatedAt: "",
+          goal: null,
         });
+      } else if (profile) {
+        setFormData(profile);
+        setAvatarPreview(profile.goal || null);
+        localStorage.setItem("hasProfile", "true");
+      }
     }
-  }, [user]);
+  }, [loading, profile, user]);
+
+  if (!formData) return null;
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData({ ...formData, [name]: value } as ProfileData);
   };
 
-  const handleNumberChange = (name: keyof UserProfileData, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: Number(value) }));
+  const handleNumberChange = (name: keyof ProfileData, value: string) => {
+    setFormData({ ...formData, [name]: Number(value) } as ProfileData);
   };
 
-  const handleAvatarClick = () => {
-    fileInputRef.current?.click();
-  };
+  const handleAvatarClick = () => fileInputRef.current?.click();
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setAvatarFile(file);
       const reader = new FileReader();
-      reader.onload = (e) => {
-        setAvatarPreview(e.target?.result as string);
-      };
+      reader.onload = () => setAvatarPreview(reader.result as string);
       reader.readAsDataURL(file);
     }
   };
 
-  const uploadAvatar = async (): Promise<string | null> => {
-    if (!avatarFile || !user) return null;
+  const handleSubmit = async () => {
+    if (!user || !formData) return;
 
     try {
-      const formData = new FormData();
-      formData.append("avatar", avatarFile);
-
-      const response = await axios.post(
-        `${API_URL}/api/users/avatar/upload`,
-        formData,
-        {
+      if (avatarFile) {
+        const form = new FormData();
+        form.append("avatar", avatarFile);
+        await axios.post(`${API_URL}/api/users/avatar/upload`, form, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        }
-      );
-
-      if (
-        response.data &&
-        typeof response.data === "object" &&
-        "avatarUrl" in response.data
-      ) {
-        return (response.data as { avatarUrl: string }).avatarUrl;
-      }
-
-      return null;
-    } catch (error) {
-      console.error("Error uploading avatar:", error);
-      return null;
-    }
-  };
-
-  const handleSubmit = async () => {
-    if (!user?.id) return;
-
-    setIsLoading(true);
-    try {
-      let avatarUrl: string | null = null;
-      if (avatarFile) {
-        avatarUrl = await uploadAvatar();
-        if (avatarUrl && updateUser) {
-          updateUser({ avatarUrl: avatarUrl });
-        }
-      }
-
-      const payload = {
-        userId: user.id,
-        age: Number(formData.age),
-        weight: Number(formData.weight),
-        height: Number(formData.height),
-        sex: formData.sex,
-        trainingGoal: formData.trainingGoal,
-        workoutsPerWeek: formData.workoutsPerWeek,
-        currentStreak: 0,
-        longestStreak: 0,
-        totalWorkouts: 0,
-      };
-
-      const response = await axios.post(
-        `${TRAINING_URL}/user-profiles`,
-        payload
-      );
-
-      if (response.status === 200 || response.status === 201) {
-        localStorage.setItem("isQualified", "true");
-        setIsOpen(false);
-        setProfileCreated(true);
-        toast({
-          title: "Profile updated successfully",
-          status: "success",
-          duration: 3000,
-          isClosable: true,
         });
-        window.location.reload();
       }
-    } catch (error: any) {
-      console.error("Error updating profile:", error);
+
+      const payload = { ...formData, userId: user.id };
+      await axios.post(`${TRAINING_URL}/user-profiles`, payload);
+
+      localStorage.setItem("hasProfile", "true");
+      setIsOpen(false);
+      toast({ title: "Profile created successfully", status: "success" });
+    } catch (err: any) {
+      console.error(err);
       toast({
-        title: "Error updating profile",
-        description:
-          error.response?.data?.message ||
-          "Please check your data and try again",
+        title: "Error creating profile",
         status: "error",
-        duration: 5000,
-        isClosable: true,
+        description: err.response?.data?.message || "Please try again",
       });
-    } finally {
-      setIsLoading(false);
     }
   };
-
-  if (!isOpen || profileCreated) return null;
 
   return (
     <Modal
@@ -205,11 +138,10 @@ const OnboardingPopup = () => {
       size="xl"
     >
       <ModalOverlay />
-      <ModalContent bg={"white"}>
+      <ModalContent>
         <ModalHeader>Complete Your Profile</ModalHeader>
         <ModalBody>
-          <VStack spacing={6}>
-            {/* Аватарка */}
+          <VStack spacing={4}>
             <FormControl>
               <FormLabel>Profile Picture</FormLabel>
               <HStack spacing={4}>
@@ -226,9 +158,9 @@ const OnboardingPopup = () => {
                   <Input
                     ref={fileInputRef}
                     type="file"
+                    display="none"
                     accept="image/*"
                     onChange={handleAvatarChange}
-                    display="none"
                   />
                 </Box>
                 <Box>
@@ -236,72 +168,56 @@ const OnboardingPopup = () => {
                     Click on the avatar to upload a photo
                   </Text>
                   <Text fontSize="xs" color="gray.500">
-                    JPG, PNG or GIF (max 5MB)
+                    JPG, PNG, GIF (max 5MB)
                   </Text>
                 </Box>
               </HStack>
             </FormControl>
 
-            {/* Остальные поля */}
             <FormControl isRequired>
               <FormLabel>Age</FormLabel>
               <NumberInput
-                border={"#e3e1e1"}
                 min={12}
                 max={120}
                 value={formData.age}
-                onChange={(value) => handleNumberChange("age", value)}
+                onChange={(v) => handleNumberChange("age", v)}
               >
                 <NumberInputField name="age" />
-                <NumberInputStepper bg={"gray.400"} borderRadius={5}>
+                <NumberInputStepper>
                   <NumberIncrementStepper />
                   <NumberDecrementStepper />
                 </NumberInputStepper>
               </NumberInput>
             </FormControl>
 
-            <FormControl color={"black"} isRequired>
+            <FormControl isRequired>
               <FormLabel>Weight (kg)</FormLabel>
               <NumberInput
-                border={"#e3e1e1"}
                 min={30}
                 max={300}
-                value={formData.weight}
-                onChange={(value) => handleNumberChange("weight", value)}
+                value={Number(formData.weight)}
+                onChange={(v) => handleNumberChange("weight", v)}
               >
                 <NumberInputField name="weight" />
-                <NumberInputStepper bg={"gray.400"} borderRadius={5}>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
-                </NumberInputStepper>
               </NumberInput>
             </FormControl>
 
             <FormControl isRequired>
               <FormLabel>Height (cm)</FormLabel>
               <NumberInput
-                border={"#e3e1e1"}
                 min={100}
                 max={250}
                 value={formData.height}
-                onChange={(value) => handleNumberChange("height", value)}
+                onChange={(v) => handleNumberChange("height", v)}
               >
                 <NumberInputField name="height" />
-                <NumberInputStepper bg={"gray.400"} borderRadius={5}>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
-                </NumberInputStepper>
               </NumberInput>
             </FormControl>
 
             <FormControl isRequired>
               <FormLabel>Sex</FormLabel>
-              <Select
-                name="sex"
-                value={formData.sex}
-                onChange={handleChange}
-                placeholder="Select sex"
-              >
+              <Select name="sex" value={formData.sex} onChange={handleChange}>
+                <option value="">Select sex</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
@@ -314,8 +230,8 @@ const OnboardingPopup = () => {
                 name="trainingGoal"
                 value={formData.trainingGoal}
                 onChange={handleChange}
-                placeholder="Select goal"
               >
+                <option value="">Select goal</option>
                 <option value="WeightGain">Weight Gain</option>
                 <option value="WeightLoss">Weight Loss</option>
                 <option value="Cardio">Cardio</option>
@@ -330,8 +246,8 @@ const OnboardingPopup = () => {
                 min={1}
                 max={20}
                 value={formData.workoutsPerWeek}
-                onChange={(value) =>
-                  setFormData((prev) => ({ ...prev, workoutsPerWeek: value }))
+                onChange={(v) =>
+                  setFormData({ ...formData, workoutsPerWeek: v })
                 }
               >
                 <SliderTrack>
@@ -342,19 +258,9 @@ const OnboardingPopup = () => {
             </FormControl>
           </VStack>
         </ModalBody>
+
         <ModalFooter>
-          <Button
-            colorScheme="blue"
-            isLoading={isLoading}
-            onClick={handleSubmit}
-            isDisabled={
-              !formData.age ||
-              !formData.weight ||
-              !formData.height ||
-              !formData.sex ||
-              !formData.trainingGoal
-            }
-          >
+          <Button colorScheme="blue" onClick={handleSubmit}>
             Complete Profile
           </Button>
         </ModalFooter>

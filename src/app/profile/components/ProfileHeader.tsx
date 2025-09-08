@@ -169,8 +169,9 @@ const ProfileHeader: React.FC = () => {
       <DeleteAccountModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-        onConfirm={handleDeleteAccount}
-        isLoading={false}
+        onSuccess={() => {
+          console.log("Account deleted successfully");
+        }}
       />
     </>
   );

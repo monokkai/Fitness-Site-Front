@@ -5,6 +5,7 @@ interface User {
     createdAt: string;
     goal?: string;
     avatarUrl?: string;
+    hasProfile?: boolean;
 }
 
 export default User;

@@ -1,22 +1,38 @@
 import { create } from "zustand";
 import IUser from "../interfaces/IUser";
-import { AUTH_ENDPOINTS } from "../config/api.config";
+import { AUTH_ENDPOINTS, TRAINING_ENDPOINTS } from "../config/api.config";
+import ProfileData from "../interfaces/IProfileData";
 
 interface UserStore {
     user: IUser | null;
+    profile: ProfileData | null;
+    hasProfile: boolean;
     setUser: (user: IUser) => void;
+    setProfile: (profile: ProfileData) => void;
     clearUser: () => void;
     logout: () => Promise<void>;
     fetchUser: () => Promise<void>;
+    fetchProfile: (userId: number) => Promise<void>;
 }
 
 export const useUserStore = create<UserStore>((set) => ({
     user: null,
+    profile: null,
+    hasProfile: false,
     setUser: (user) => set({ user }),
-    clearUser: () => set({ user: null }),
-    logout: async () => {
+    setProfile: (profile) => {
+        set({ profile, hasProfile: true });
+        localStorage.setItem("hasProfile", "true");
+    },
+    clearUser: () => {
+        set({ user: null, profile: null, hasProfile: false });
         localStorage.removeItem("token");
-        set({ user: null });
+        localStorage.removeItem("hasProfile");
+    },
+    logout: async () => {
+        set({ user: null, profile: null, hasProfile: false });
+        localStorage.removeItem("token");
+        localStorage.removeItem("hasProfile");
     },
     fetchUser: async () => {
         const token = localStorage.getItem("token");
@@ -25,33 +41,26 @@ export const useUserStore = create<UserStore>((set) => ({
             return;
         }
         try {
-            const response = await fetch(AUTH_ENDPOINTS.ME, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    Accept: "application/json",
-                },
+            const res = await fetch(AUTH_ENDPOINTS.ME, {
+                headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
             });
-            if (!response.ok) {
-                set({ user: null });
-                return;
-            }
-            const json = await response.json();
+            const json = await res.json();
             if (json.success && json.user) {
-                const apiUser = json.user;
-                set({
-                    user: {
-                        id: apiUser.id,
-                        username: apiUser.username,
-                        email: apiUser.email,
-                        goal: apiUser.goal,
-                        createdAt: apiUser.createdAt || apiUser.created_at || "",
-                    },
-                });
+                set({ user: json.user, hasProfile: localStorage.getItem("hasProfile") === "true" });
             } else {
-                set({ user: null });
+                set({ user: null, hasProfile: false });
             }
         } catch {
-            set({ user: null });
+            set({ user: null, hasProfile: false });
         }
+    },
+    fetchProfile: async (userId: number) => {
+        try {
+            const res = await fetch(`${TRAINING_ENDPOINTS.USER_PROFILES}/${userId}`);
+            if (!res.ok) return;
+            const profile: ProfileData = await res.json();
+            set({ profile, hasProfile: true });
+            localStorage.setItem("hasProfile", "true");
+        } catch { }
     },
 }));

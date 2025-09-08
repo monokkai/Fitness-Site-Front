@@ -24,6 +24,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { EditIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useState, useRef } from "react";
 import axios from "axios";
+import { API_URL } from "../shared/config/api.config";
 
 const MotionModalContent = motion(ModalContent);
 
@@ -31,6 +32,12 @@ interface User {
   id: number;
   username: string;
   email: string;
+  avatarUrl?: string;
+}
+
+interface UpdateProfileResponse {
+  message: string;
+  user?: User;
   avatarUrl?: string;
 }
 
@@ -122,15 +129,19 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
         ...(formData.password && { password: formData.password }),
       };
 
-      const response = await axios.put<Partial<User>>(
-        "/api/users",
+      const response = await axios.put<UpdateProfileResponse>(
+        `${API_URL}/api/users/profile`,
         updateData,
         {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
         }
       );
 
-      onUpdate(response.data);
+      onUpdate(response.data.user || response.data);
       onClose();
 
       toast({
