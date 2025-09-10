@@ -128,18 +128,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     async (email: string, password: string) => {
       setIsLoading(true);
       try {
-        const requestData = {
-          email: email,
-          password,
-        };
-        console.log("Login request data:", requestData);
-
         const response = await api.post<LoginResponse>(AUTH_ENDPOINTS.LOGIN, {
           email: email,
           password,
         });
-
-        console.log("Login response:", response.data);
 
         if (!response.data?.token) {
           throw new Error(response.data?.error || "No token received");
@@ -166,7 +158,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         router.push("/");
       } catch (error) {
-        console.error("Login error details:", error.response?.data);
         await clearAuthState();
         throw error;
       } finally {

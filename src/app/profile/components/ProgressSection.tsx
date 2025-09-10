@@ -21,6 +21,8 @@ const ProgressSection: React.FC = () => {
   const { user } = useAuth();
   const { data: profile, loading, error } = useUserProfile(user?.id);
 
+  console.log("Profile in ProgressSection:", profile);
+
   const progressItems = [
     {
       label: "Daily Goal",
