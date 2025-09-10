@@ -121,6 +121,7 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
             exit={{ opacity: 0, scale: 0.8, y: 50 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
             mx={4}
+            bg={"white"}
           >
             <ModalHeader textAlign="center" color="red.600">
               <Icon as={WarningIcon} mr={2} />
@@ -128,7 +129,7 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
             </ModalHeader>
 
             <ModalBody>
-              <VStack spacing={4} textAlign="center">
+              <VStack bg={"white"} spacing={4} textAlign="center">
                 <Text fontSize="lg" fontWeight="medium">
                   Are you sure you want to delete your account?
                 </Text>

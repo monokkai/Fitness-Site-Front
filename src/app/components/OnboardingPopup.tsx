@@ -152,11 +152,11 @@ const OnboardingPopup = ({ isOpen, onClose }: Props) => {
       size="xl"
     >
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent bg={"white"}>
         <ModalHeader>Complete Your Profile</ModalHeader>
         <ModalBody>
           {formData ? (
-            <VStack spacing={4}>
+            <VStack bg={"white"} spacing={4}>
               <FormControl>
                 <FormLabel>Profile Picture</FormLabel>
                 <HStack spacing={4}>

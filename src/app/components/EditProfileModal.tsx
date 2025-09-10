@@ -174,11 +174,12 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
             exit={{ opacity: 0, scale: 0.8, y: 50 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
             mx={4}
+            bg={"white"}
           >
             <ModalHeader textAlign="center">Edit Profile</ModalHeader>
 
             <ModalBody>
-              <VStack spacing={6}>
+              <VStack bg={"white"} spacing={6}>
                 <FormControl textAlign="center">
                   <FormLabel>Profile Picture</FormLabel>
                   <Box position="relative" display="inline-block">

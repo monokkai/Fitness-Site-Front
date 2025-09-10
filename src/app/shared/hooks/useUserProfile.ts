@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { API_URL, TRAINING_URL } from "../config/api.config";
+import { TRAINING_URL } from "../config/api.config";
 import ProfileData from "../interfaces/IProfileData";
 
 const useUserProfile = (userId: number | undefined) => {
