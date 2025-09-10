@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Button, useDisclosure, Text } from "@chakra-ui/react";
+import { Box, Button, useDisclosure } from "@chakra-ui/react";
 import Hero from "./components/layout/Hero";
 import DemoSection from "./components/DemoSection";
 import FAQSection from "./components/FAQSection";
@@ -48,26 +48,6 @@ export default function Home() {
       <Hero />
       <DemoSection />
       <FAQSection />
-
-      {user && (
-        <Box
-          position="fixed"
-          top="5rem"
-          right="1rem"
-          zIndex={9999}
-          bg="white"
-          p={3}
-          borderRadius="md"
-          boxShadow="md"
-        >
-          <Text fontSize="sm">User: {user.username}</Text>
-          <Text fontSize="sm">HasProfile: {hasProfile ? "Yes" : "No"}</Text>
-          <Text fontSize="sm">
-            ShowButton: {shouldShowButton ? "Yes" : "No"}
-          </Text>
-        </Box>
-      )}
-
       {shouldShowButton && (
         <Button
           position="fixed"
