@@ -10,7 +10,6 @@ import { useAuth } from "../shared/context/authContext";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "../components/LoadingSpinner";
-import OnboardingPopup from "../components/OnboardingPopup";
 
 const ProfilePage: React.FC = () => {
   const { user, isLoading } = useAuth();
@@ -37,7 +36,6 @@ const ProfilePage: React.FC = () => {
   return (
     <LayoutWrapper>
       <Box minH="100vh" bg="white" pt={20}>
-        <OnboardingPopup />
         <Container maxW="container.xl">
           <VStack spacing={8} align="stretch">
             <ProfileHeader />

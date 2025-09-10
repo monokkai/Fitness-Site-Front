@@ -2,7 +2,7 @@ interface ProfileData {
     id: number;
     userId: number;
     age: number;
-    weight: string;
+    weight: number;
     height: number;
     sex: string;
     trainingGoal: string;

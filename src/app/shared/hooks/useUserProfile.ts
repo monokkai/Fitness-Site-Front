@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { TRAINING_ENDPOINTS } from "../config/api.config";
+import { API_URL } from "../config/api.config";
 import ProfileData from "../interfaces/IProfileData";
 
 const useUserProfile = (userId: number | undefined) => {
@@ -17,7 +17,10 @@ const useUserProfile = (userId: number | undefined) => {
 
             try {
                 const { data } = await axios.get<ProfileData>(
-                    `${TRAINING_ENDPOINTS.USER_PROFILES}/${userId}`
+                    `${API_URL}/api/training/user-profiles/${userId}`,
+                    {
+                        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                    }
                 );
                 setData(data);
                 setError(null);
