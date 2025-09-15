@@ -1,59 +1,55 @@
 "use client";
 
 import {
-  Badge,
   Box,
-  Button,
+  SimpleGrid,
   Card,
   CardBody,
-  Flex,
-  Heading,
-  HStack,
-  SimpleGrid,
-  Text,
   VStack,
+  Text,
+  Button,
+  Badge,
 } from "@chakra-ui/react";
 import { motion, useReducedMotion } from "framer-motion";
-import { FeaturedWorkout } from "../interfaces/ITraining";
-import EmptyWorkoutCard from "./EmptyWorkoutCard";
+import { useWorkoutStore } from "../../shared/store/workoutStore";
+import useWorkouts from "../../shared/hooks/useWorkouts";
+import WorkoutPlayer from "./WorkoutPlayer";
 
 const MotionCard = motion(Card);
 
 const WorkoutsSection: React.FC = () => {
-  const featuredWorkouts: FeaturedWorkout[] = [];
+  useWorkouts();
   const shouldReduceMotion = useReducedMotion();
+  const { workouts, selectedWorkout, selectWorkout, loading } =
+    useWorkoutStore();
+
+  if (loading) return <Text>Loading workouts...</Text>;
 
   return (
     <Box mb={16}>
-      <Heading size="lg" mb={6}>
-        Featured Workouts
-      </Heading>
       <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8}>
-        {featuredWorkouts.length > 0 ? (
-          featuredWorkouts.map((workout, index) => (
+        {workouts.length > 0 ? (
+          workouts.map((workout) => (
             <MotionCard
               key={workout.id}
               initial={shouldReduceMotion ? {} : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-              cursor="pointer"
+              transition={{ duration: 0.3 }}
               bg="white"
               borderRadius="lg"
               boxShadow="base"
-              whileHover={shouldReduceMotion ? {} : { y: -2, boxShadow: "md" }}
             >
               <CardBody>
                 <VStack align="start" spacing={4}>
-                  <Flex justify="space-between" w="full">
-                    <Heading size="md">{workout.title}</Heading>
-                    <Badge colorScheme="green">{workout.xp} XP</Badge>
-                  </Flex>
+                  <Text fontSize="xl" fontWeight="bold">
+                    {workout.title}
+                  </Text>
                   <Text color="gray.600">{workout.description}</Text>
-                  <HStack spacing={4}>
-                    <Badge colorScheme="blue">{workout.duration}</Badge>
-                    <Badge colorScheme="purple">{workout.difficulty}</Badge>
-                  </HStack>
-                  <Button colorScheme="blue" size="sm">
+                  <Badge colorScheme="blue">{workout.duration} sec</Badge>
+                  <Button
+                    colorScheme="blue"
+                    onClick={() => selectWorkout(workout)}
+                  >
                     Start Workout
                   </Button>
                 </VStack>
@@ -61,12 +57,11 @@ const WorkoutsSection: React.FC = () => {
             </MotionCard>
           ))
         ) : (
-          <>
-            <EmptyWorkoutCard />
-            <EmptyWorkoutCard />
-          </>
+          <Text>No workouts available</Text>
         )}
       </SimpleGrid>
+
+      {selectedWorkout && <WorkoutPlayer />}
     </Box>
   );
 };

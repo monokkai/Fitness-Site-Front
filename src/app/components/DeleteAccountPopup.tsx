@@ -50,6 +50,7 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
   const toast = useToast();
 
   const handleDeleteAccount = async () => {
+    console.log("🚀 Sending delete account request...");
     if (!password) {
       toast({
         title: "Password required",
@@ -67,6 +68,7 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
       await axios({
         method: "delete",
         url: `${API_URL}/api/users/account`,
+        // url: "http://localhost:3004/api/users/account",
         data: { password },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

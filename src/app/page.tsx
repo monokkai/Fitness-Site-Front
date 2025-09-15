@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Button, useDisclosure } from "@chakra-ui/react";
+import { Box, useDisclosure } from "@chakra-ui/react";
 import Hero from "./components/layout/Hero";
 import DemoSection from "./components/DemoSection";
 import FAQSection from "./components/FAQSection";
@@ -14,22 +14,22 @@ export default function Home() {
   const user = useUserStore((state) => state.user);
   const hasProfile = useUserStore((state) => state.hasProfile);
   const [showPopup, setShowPopup] = useState(false);
+  const [isCheckingProfile, setIsCheckingProfile] = useState(true);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
-    console.log("User:", user);
-    console.log("Has profile:", hasProfile);
-    console.log("LocalStorage hasProfile:", localStorage.getItem("hasProfile"));
-  }, [user, hasProfile]);
-
-  useEffect(() => {
     setIsClient(true);
-    fetchUser();
+    const init = async () => {
+      setIsCheckingProfile(true);
+      await fetchUser();
+      setIsCheckingProfile(false);
+    };
+    init();
   }, [fetchUser]);
 
   useEffect(() => {
-    if (user && !hasProfile) {
+    if (user && !hasProfile && !isCheckingProfile) {
       console.log("New user detected, opening popup");
       const timer = setTimeout(() => {
         onOpen();
@@ -37,18 +37,20 @@ export default function Home() {
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [user, hasProfile, onOpen]);
+  }, [user, hasProfile, onOpen, isCheckingProfile]);
 
-  const shouldShowButton = user && !hasProfile && !showPopup;
+  // const shouldShowButton =
+  // user && !hasProfile && !showPopup && !isCheckingProfile;
 
-  if (!isClient) return null;
+  if (!isClient || isCheckingProfile) return null;
 
   return (
     <Box bg="white" position="relative" minH="100vh">
       <Hero />
       <DemoSection />
       <FAQSection />
-      {shouldShowButton && (
+
+      {/* {shouldShowButton && (
         <Button
           position="fixed"
           top="1rem"
@@ -61,7 +63,7 @@ export default function Home() {
         >
           Fill Your Profile
         </Button>
-      )}
+      )} */}
 
       {user && !hasProfile && (
         <OnboardingPopup isOpen={isOpen} onClose={onClose} />

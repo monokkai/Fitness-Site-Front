@@ -59,7 +59,10 @@ const TrainingSettings: React.FC = () => {
           },
           {
             label: "Rest Days",
-            value: `${7 - workoutsPerWeek} days`,
+            value:
+              workoutsPerWeek >= 7
+                ? "No rest days"
+                : `${7 - workoutsPerWeek} days`,
             color: "purple",
           },
         ]);
