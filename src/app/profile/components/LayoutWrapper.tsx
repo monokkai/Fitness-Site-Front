@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import TrainingNavbar from "../../trainings/components/TrainingNavbar";
+import TrainingNavbar from "../../trainings/components/main/TrainingNavbar";
 import Footer from "../../components/layout/Footer";
 import { Box } from "@chakra-ui/react";
 

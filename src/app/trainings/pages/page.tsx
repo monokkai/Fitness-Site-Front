@@ -2,14 +2,14 @@
 
 import { useEffect } from "react";
 import { Box, Container, Spinner } from "@chakra-ui/react";
-import LayoutWrapper from "./components/LayoutWrapper";
-import HeroSection from "./components/HeroSection";
-import { useAuth } from "../shared/context/authContext";
+import LayoutWrapper from "../components/LayoutWrapper";
+import HeroSection from "../components/main/HeroSection";
+import { useAuth } from "../../shared/context/authContext";
 import { useRouter } from "next/navigation";
-import StatsSection from "./components/StatsSection";
-import CategoriesSection from "./components/CategoriesSection";
-import WorkoutsSection from "./components/WorkoutsSection";
-import LearningPathSection from "./components/LearningPathSection";
+import StatsSection from "../components/main/StatsSection";
+import CategoriesSection from "../components/CategoriesSection";
+import WorkoutsSection from "../components/WorkoutsSection";
+import LearningPathSection from "../components/LearningPathSection";
 
 const TrainingsPage = () => {
   const { user, isLoading } = useAuth();

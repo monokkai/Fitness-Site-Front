@@ -4,9 +4,9 @@ import { Box, useBreakpointValue } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { LevelNode } from "./LevelNode";
 import { FaBook } from "react-icons/fa";
-import { PathNode } from "../interfaces/ITraining";
-import { containerVariants, itemVariants } from "../utils/animations";
-import { generatePath, generateSvgPath } from "../utils/utilities";
+import { PathNode } from "../../interfaces/ITraining";
+import { containerVariants, itemVariants } from "../../utils/animations";
+import { generatePath, generateSvgPath } from "../../utils/utilities";
 
 const nodes: PathNode[] = [
   {

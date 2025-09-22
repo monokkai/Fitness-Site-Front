@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Heading } from "@chakra-ui/react";
-import Roadmap from "./Roadmap";
+import Roadmap from "./roadmap/Roadmap";
 
 const LearningPathSection: React.FC = () => (
   <Box>
@@ -14,4 +14,4 @@ const LearningPathSection: React.FC = () => (
   </Box>
 );
 
-export default LearningPathSection; 
+export default LearningPathSection;

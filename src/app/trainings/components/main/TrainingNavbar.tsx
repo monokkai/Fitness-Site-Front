@@ -32,8 +32,8 @@ import {
 import { IoMdTrophy } from "react-icons/io";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useAuth } from "../../shared/context/authContext";
-import useUserProfile from "../../shared/hooks/useUserProfile";
+import { useAuth } from "../../../shared/context/authContext";
+import useUserProfile from "../../../shared/hooks/useUserProfile";
 import { useRouter } from "next/navigation";
 
 const MotionBox = motion(Box);
