@@ -10,7 +10,7 @@ import {
   Card,
   CardBody,
   useToast,
-  Text
+  Text,
 } from "@chakra-ui/react";
 import { useAuth } from "../../../shared/context/authContext";
 import { useLevelData } from "../../hooks/useLevelData";
@@ -22,7 +22,7 @@ import { VideoPlayer } from "../../components/level/VideoPlayer";
 import { WorkoutTimer } from "../../components/level/WorkoutTimer";
 import { WorkoutControls } from "../../components/level/WorkoutControls";
 import { WorkoutList } from "../../components/level/WorkoutList";
-import { LoadingSpinner } from "../../"
+import { LoadingSpinner } from "../../components/common/LoadingSpinner";
 import { ErrorAlert } from "../../components/common/ErrorAlert";
 
 export default function LevelPage() {
