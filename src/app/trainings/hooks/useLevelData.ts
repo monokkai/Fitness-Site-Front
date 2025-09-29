@@ -11,7 +11,7 @@ export const useLevelData = (levelId: number) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const token = localStorage.getItem("session_token");
+                const token = localStorage.getItem("token");
                 if (!token) throw new Error("No authentication token");
 
                 const data = await LevelService.fetchLevelData(levelId, token);

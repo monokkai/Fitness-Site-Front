@@ -1,56 +1,54 @@
 "use client";
 
-import { VStack, Button } from "@chakra-ui/react";
-import { FaPlay, FaPause, FaCheck } from "react-icons/fa";
+import { HStack, Button } from "@chakra-ui/react";
+import { FaPlay, FaPause, FaStop } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
+
+const MotionHStack = motion(HStack);
 
 interface WorkoutControlsProps {
-  isActive: boolean;
+  selectedWorkout: number | null;
+  isPlaying: boolean;
   onStart: () => void;
   onPause: () => void;
-  onComplete: () => void;
-  disabled?: boolean;
+  onStop: () => void;
 }
 
-export const WorkoutControls: React.FC<WorkoutControlsProps> = ({
-  isActive,
+export default function WorkoutControls({
+  selectedWorkout,
+  isPlaying,
   onStart,
   onPause,
-  onComplete,
-  disabled,
-}) => (
-  <VStack spacing={4}>
-    {!isActive ? (
-      <Button
-        leftIcon={<FaPlay />}
-        colorScheme="green"
-        size="lg"
-        w="full"
-        onClick={onStart}
-        isDisabled={disabled}
-      >
-        Start Workout
-      </Button>
-    ) : (
-      <Button
-        leftIcon={<FaPause />}
-        colorScheme="orange"
-        size="lg"
-        w="full"
-        onClick={onPause}
-      >
-        Pause
-      </Button>
-    )}
-
-    <Button
-      leftIcon={<FaCheck />}
-      colorScheme="blue"
-      variant="outline"
-      w="full"
-      onClick={onComplete}
-      isDisabled={disabled}
-    >
-      Complete Workout
-    </Button>
-  </VStack>
-);
+  onStop,
+}: WorkoutControlsProps) {
+  return (
+    <AnimatePresence>
+      {selectedWorkout && (
+        <MotionHStack
+          spacing={4}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3 }}
+        >
+          <Button
+            colorScheme={isPlaying ? "orange" : "green"}
+            size="lg"
+            onClick={isPlaying ? onPause : onStart}
+            leftIcon={isPlaying ? <FaPause /> : <FaPlay />}
+          >
+            {isPlaying ? "Pause" : "Start"}
+          </Button>
+          <Button
+            colorScheme="red"
+            size="lg"
+            leftIcon={<FaStop />}
+            onClick={onStop}
+          >
+            Stop
+          </Button>
+        </MotionHStack>
+      )}
+    </AnimatePresence>
+  );
+}

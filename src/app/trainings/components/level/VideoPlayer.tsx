@@ -1,46 +1,55 @@
 "use client";
 
-import {
-  Card,
-  CardBody,
-  Center,
-  VStack,
-  Icon,
-  Text,
-  Box,
-} from "@chakra-ui/react";
-import { motion } from "framer-motion";
-import { FaDumbbell } from "react-icons/fa";
+import { Box, VStack, Text } from "@chakra-ui/react";
 
-export const VideoPlayer: React.FC = () => (
-  <motion.div
-    initial={{ opacity: 0, x: -50 }}
-    animate={{ opacity: 1, x: 0 }}
-    transition={{ delay: 0.4 }}
-  >
-    <Card bg="white" shadow="lg" height="400px">
-      <CardBody>
-        <Center height="100%">
+interface VideoPlayerProps {
+  selectedWorkout: number | null;
+  isPlaying: boolean;
+  currentWorkoutIndex: number;
+  totalWorkouts: number;
+  workoutTitle?: string;
+}
+
+export default function VideoPlayer({
+  selectedWorkout,
+  isPlaying,
+  currentWorkoutIndex,
+  totalWorkouts,
+  workoutTitle,
+}: VideoPlayerProps) {
+  return (
+    <Box
+      w={{ base: "100%", lg: "700px" }}
+      h={{ base: "250px", lg: "400px" }}
+      maxW="700px"
+      bg="black"
+      borderRadius="xl"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      color="white"
+      fontSize="lg"
+      position="relative"
+    >
+      <VStack spacing={4}>
+        {selectedWorkout && isPlaying ? (
           <VStack spacing={4}>
-            <Box
-              w="200px"
-              h="200px"
-              borderRadius="20px"
-              bg="gray.100"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              border="4px dashed"
-              borderColor="gray.300"
-            >
-              <Icon as={FaDumbbell} w={16} h={16} color="gray.400" />
-            </Box>
-            <Text color="gray.500" textAlign="center">
-              Video demonstration will appear here
+            <Text fontSize="lg" color="gray.300">
+              {workoutTitle}
+            </Text>
+            <Text fontSize="sm" color="gray.400">
+              Exercise {currentWorkoutIndex + 1} of {totalWorkouts}
             </Text>
           </VStack>
-        </Center>
-      </CardBody>
-    </Card>
-  </motion.div>
-);
+        ) : (
+          <VStack spacing={4}>
+            <Text fontSize="xl">Ready to start training?</Text>
+            <Text fontSize="md" color="gray.400">
+              Select an exercise and press play
+            </Text>
+          </VStack>
+        )}
+      </VStack>
+    </Box>
+  );
+}

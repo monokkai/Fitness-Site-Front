@@ -5,7 +5,6 @@ import {
   Card,
   CardBody,
   Heading,
-  SimpleGrid,
   Text,
   VStack,
   Button,
@@ -16,6 +15,7 @@ import {
   Alert,
   AlertIcon,
   Icon,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
@@ -26,28 +26,20 @@ import { API_URL } from "@/app/shared/config/api.config";
 
 const MotionCard = motion.create(Card);
 
-interface Workout {
-  id: number;
-  title: string;
-  description: string;
-  duration: number;
-  difficulty: string;
-  category: string;
-}
-
 interface Level {
   id: number;
   title: string;
   description: string;
-  workouts: Workout[];
-  required_xp: number;
-  order: number;
+  workoutCount: number;
+  difficulty: string;
+  xp: number;
 }
 
 const CategoriesSection: React.FC = () => {
   const { user, isLoading: authLoading } = useAuth();
   const router = useRouter();
   const [levels, setLevels] = useState<Level[]>([]);
+  const [totalWorkouts, setTotalWorkouts] = useState(0);
   const [userXp, setUserXp] = useState(0);
   const [currentLevel, setCurrentLevel] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -62,12 +54,24 @@ const CategoriesSection: React.FC = () => {
     }
   }, [user, authLoading]);
 
+  // Refresh data when returning to page
+  useEffect(() => {
+    const handleFocus = () => {
+      if (user && !authLoading) {
+        fetchUserData();
+      }
+    };
+    
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, [user, authLoading]);
+
   const fetchUserData = async () => {
     try {
       setLoading(true);
       setError(null);
 
-      const token = localStorage.getItem("session_token");
+      const token = localStorage.getItem("token");
 
       if (!token) {
         throw new Error("Authentication token not found");
@@ -80,7 +84,7 @@ const CategoriesSection: React.FC = () => {
 
       const [workoutsResponse, userProfileResponse] = await Promise.all([
         fetch(`${API_URL}/workouts`, { headers }),
-        fetch(`${API_URL}/api/users/profile`, { headers }),
+        fetch(`${API_URL}/user-profiles/${user.id}`, { headers }),
       ]);
 
       if (!workoutsResponse.ok) {
@@ -97,8 +101,9 @@ const CategoriesSection: React.FC = () => {
       setUserXp(userProfileData.totalXP || 0);
       setCurrentLevel(userProfileData.currentLevel || 1);
 
-      const groupedLevels = groupWorkoutsIntoLevels(workoutsData);
-      setLevels(groupedLevels);
+      setTotalWorkouts(workoutsData.length);
+      const generatedLevels = generateLevels(workoutsData.length);
+      setLevels(generatedLevels);
     } catch (error) {
       setError(error instanceof Error ? error.message : "Failed to load data");
     } finally {
@@ -106,25 +111,24 @@ const CategoriesSection: React.FC = () => {
     }
   };
 
-  const groupWorkoutsIntoLevels = (workouts: Workout[]): Level[] => {
-    const levelsMap = new Map<number, Workout[]>();
+  const generateLevels = (totalWorkouts: number): Level[] => {
+    const workoutsPerLevel = 3;
+    const levelCount = Math.ceil(totalWorkouts / workoutsPerLevel);
 
-    workouts.forEach((workout) => {
-      const level = 1;
-      if (!levelsMap.has(level)) {
-        levelsMap.set(level, []);
-      }
-      levelsMap.get(level)!.push(workout);
+    return Array.from({ length: Math.max(levelCount, 5) }, (_, index) => {
+      const level = index + 1;
+      const difficulties = ["easy", "easy", "medium", "medium", "hard"];
+      const xpValues = [50, 75, 100, 125, 150];
+
+      return {
+        id: level,
+        title: `Level ${level}`,
+        description: `Complete ${workoutsPerLevel} exercises to unlock next level`,
+        workoutCount: workoutsPerLevel,
+        difficulty: difficulties[index] || "medium",
+        xp: xpValues[index] || 100,
+      };
     });
-
-    return Array.from(levelsMap.entries()).map(([level, levelWorkouts]) => ({
-      id: level,
-      title: `Level ${level}`,
-      description: "Complete all exercises to unlock next level",
-      workouts: levelWorkouts,
-      required_xp: 0,
-      order: level,
-    }));
   };
 
   const handleLevelClick = (levelId: number) => {
@@ -205,9 +209,9 @@ const CategoriesSection: React.FC = () => {
         </HStack>
       </VStack>
 
-      <VStack spacing={8} align="stretch">
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
         {levels.map((level) => {
-          const isUnlocked = true;
+          const isUnlocked = level.id <= currentLevel;
 
           return (
             <MotionCard
@@ -219,84 +223,77 @@ const CategoriesSection: React.FC = () => {
               borderRadius="2xl"
               boxShadow="xl"
               border="2px solid"
-              borderColor="green.200"
-              cursor="pointer"
-              onClick={() => handleLevelClick(level.id)}
-              _hover={{ transform: "translateY(-4px)", shadow: "2xl" }}
+              borderColor={isUnlocked ? "green.200" : "gray.200"}
+              cursor={isUnlocked ? "pointer" : "not-allowed"}
+              onClick={() => isUnlocked && handleLevelClick(level.id)}
+              _hover={
+                isUnlocked
+                  ? { transform: "translateY(-4px)", shadow: "2xl" }
+                  : {}
+              }
+              opacity={isUnlocked ? 1 : 0.6}
             >
               <CardBody p={6}>
-                <VStack align="start" spacing={6}>
-                  <HStack justify="space-between" w="full">
-                    <VStack align="start" spacing={2}>
-                      <Heading size="md" color="green.600">
-                        {level.title}
-                      </Heading>
-                      <Text color="gray.600">{level.description}</Text>
-                    </VStack>
-                    <Badge
-                      colorScheme="green"
-                      fontSize="md"
-                      px={3}
-                      py={1}
-                      borderRadius="full"
+                <VStack spacing={4} align="center">
+                  <Box
+                    w="80px"
+                    h="80px"
+                    borderRadius="full"
+                    bg={isUnlocked ? "blue.500" : "gray.400"}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    color="white"
+                    fontSize="2xl"
+                    fontWeight="bold"
+                  >
+                    {level.id}
+                  </Box>
+
+                  <VStack spacing={2} align="center">
+                    <Heading
+                      size="md"
+                      color={isUnlocked ? "blue.600" : "gray.500"}
                     >
-                      <Icon as={FaUnlock} mr={1} />
-                      Unlocked
+                      {level.title}
+                    </Heading>
+                    <Text color="gray.600" textAlign="center" fontSize="sm">
+                      {level.description}
+                    </Text>
+                  </VStack>
+
+                  <HStack spacing={2}>
+                    <Badge
+                      colorScheme={
+                        level.difficulty === "easy"
+                          ? "green"
+                          : level.difficulty === "medium"
+                            ? "orange"
+                            : "red"
+                      }
+                    >
+                      {level.difficulty}
                     </Badge>
+                    <Badge colorScheme="purple">{level.xp} XP</Badge>
+                    <Badge colorScheme="blue">{level.workoutCount} 💪</Badge>
                   </HStack>
 
-                  <SimpleGrid
-                    columns={{ base: 1, md: 2, lg: 3 }}
-                    spacing={4}
-                    w="full"
+                  <Badge
+                    colorScheme={isUnlocked ? "green" : "gray"}
+                    fontSize="sm"
+                    px={3}
+                    py={1}
+                    borderRadius="full"
                   >
-                    {level.workouts.map((workout) => (
-                      <Card
-                        key={workout.id}
-                        bg="gray.50"
-                        borderRadius="xl"
-                        border="1px solid"
-                        borderColor="gray.200"
-                      >
-                        <CardBody>
-                          <VStack spacing={3} align="start">
-                            <HStack>
-                              <Icon as={FaDumbbell} color="blue.500" />
-                              <Heading size="sm">{workout.title}</Heading>
-                            </HStack>
-                            <Text fontSize="sm" color="gray.600" noOfLines={2}>
-                              {workout.description}
-                            </Text>
-                            <HStack justify="space-between" w="full">
-                              <Badge
-                                colorScheme={
-                                  workout.difficulty === "easy"
-                                    ? "green"
-                                    : workout.difficulty === "medium"
-                                      ? "orange"
-                                      : "red"
-                                }
-                              >
-                                {workout.difficulty}
-                              </Badge>
-                              <Badge colorScheme="blue">
-                                {workout.duration}s
-                              </Badge>
-                            </HStack>
-                            <Text fontSize="xs" color="gray.500">
-                              {workout.category}
-                            </Text>
-                          </VStack>
-                        </CardBody>
-                      </Card>
-                    ))}
-                  </SimpleGrid>
+                    <Icon as={isUnlocked ? FaUnlock : FaDumbbell} mr={1} />
+                    {isUnlocked ? "Unlocked" : "Locked"}
+                  </Badge>
                 </VStack>
               </CardBody>
             </MotionCard>
           );
         })}
-      </VStack>
+      </SimpleGrid>
     </Box>
   );
 };

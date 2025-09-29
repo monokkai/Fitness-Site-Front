@@ -34,30 +34,30 @@ const StatsGrid: React.FC = () => {
 
   useEffect(() => {
     if (profile) {
-      const { currentStreak = 0, totalWorkouts = 0 } = profile;
+      const { currentStreak = 0, totalWorkouts = 0, totalXP = 0, currentLevel = 1 } = profile;
 
       setStats([
         {
-          label: "Current Streak",
-          value: currentStreak,
-          icon: FaFire,
-          color: "orange",
+          label: "Current Level",
+          value: currentLevel,
+          icon: FaTrophy,
+          color: "blue",
         },
         {
           label: "Total XP",
-          value: totalWorkouts * 10,
-          icon: FaTrophy,
+          value: totalXP,
+          icon: FaFire,
           color: "yellow",
         },
         {
           label: "Exercises Done",
           value: totalWorkouts,
           icon: FaDumbbell,
-          color: "blue",
+          color: "green",
         },
         {
-          label: "Achievements",
-          value: Math.floor(totalWorkouts / 5),
+          label: "Current Streak",
+          value: currentStreak,
           icon: FaMedal,
           color: "purple",
         },

@@ -8,7 +8,7 @@ import { useAuth } from "../shared/context/authContext";
 import { useRouter } from "next/navigation";
 import StatsSection from "./components/main/StatsSection";
 import CategoriesSection from "./components/CategoriesSection";
-import WorkoutsSection from "./components/WorkoutsSection";
+
 import LearningPathSection from "./components/LearningPathSection";
 
 const TrainingsPage = () => {
@@ -44,7 +44,6 @@ const TrainingsPage = () => {
           <HeroSection />
           <StatsSection />
           <CategoriesSection />
-          <WorkoutsSection />
           <LearningPathSection />
         </Container>
       </Box>

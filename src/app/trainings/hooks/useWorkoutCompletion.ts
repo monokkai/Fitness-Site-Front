@@ -1,31 +1,71 @@
-import { useState } from "react";
-import { WorkoutService } from "../services/workoutService";
+import { useState, useCallback } from "react";
+import { useAuth } from "../../shared/context/authContext";
+import { API_URL } from "@/app/shared/config/api.config";
 
-
-export const useWorkoutCompletion = (userId: number) => {
-    const [completedWorkouts, setCompletedWorkouts] = useState<number[]>([]);
-    const [totalXP, setTotalXP] = useState(0);
-    const [loading, setLoading] = useState(false);
-
-    const completeWorkout = async (workoutId: number, completionTime: number) => {
-        setLoading(true);
-        try {
-            const token = localStorage.getItem("session_token");
-            if (!token) throw new Error("No authentication token");
-
-            await WorkoutService.completeWorkout(userId, workoutId, completionTime, token);
-
-            setCompletedWorkouts(prev => [...prev, workoutId]);
-            setTotalXP(prev => prev + 10);
-
-            return true;
-        } catch (error) {
-            console.error("Workout completion error:", error);
-            return false;
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return { completedWorkouts, totalXP, loading, completeWorkout };
+interface UseWorkoutCompletionProps {
+  levelId: number;
+  levelData: any;
 }
+
+export const useWorkoutCompletion = ({ levelId, levelData }: UseWorkoutCompletionProps) => {
+  const [completedWorkouts, setCompletedWorkouts] = useState<number[]>([]);
+  const [currentWorkoutIndex, setCurrentWorkoutIndex] = useState(0);
+  const [showCompletion, setShowCompletion] = useState(false);
+  const [earnedXP, setEarnedXP] = useState(0);
+  const { user } = useAuth();
+
+  const completeWorkout = useCallback(async (totalTime: number) => {
+    if (!levelData || !user) return;
+
+    const currentWorkout = levelData.workouts[currentWorkoutIndex];
+    if (!currentWorkout) return;
+
+    const newCompletedWorkouts = [...completedWorkouts, currentWorkout.id];
+    setCompletedWorkouts(newCompletedWorkouts);
+
+    if (newCompletedWorkouts.length === levelData.workouts.length) {
+      const xpGained = levelData.required_xp || 100;
+      setEarnedXP(xpGained);
+      
+      try {
+        const token = localStorage.getItem("token");
+        await fetch(`${API_URL}/user-levels/complete`, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: user.id,
+            level: levelId,
+            completionTime: totalTime,
+            score: 100,
+          }),
+        });
+      } catch (error) {
+        console.error("Failed to update XP:", error);
+      }
+      
+      setShowCompletion(true);
+    } else {
+      setCurrentWorkoutIndex(currentWorkoutIndex + 1);
+    }
+  }, [levelData, user, currentWorkoutIndex, completedWorkouts, levelId]);
+
+  const resetProgress = useCallback(() => {
+    setCompletedWorkouts([]);
+    setCurrentWorkoutIndex(0);
+    setShowCompletion(false);
+    setEarnedXP(0);
+  }, []);
+
+  return {
+    completedWorkouts,
+    currentWorkoutIndex,
+    showCompletion,
+    earnedXP,
+    completeWorkout,
+    resetProgress,
+    setCurrentWorkoutIndex,
+  };
+};

@@ -1,9 +1,10 @@
 import { ILevel } from "../interfaces/ILevel";
 import { IWorkout } from "../interfaces/IWorkout";
+import { API_URL } from "@/app/shared/config/api.config";
 
 export class LevelService {
     static async fetchLevelData(levelId: number, token: string): Promise<ILevel> {
-        const workoutsResponse = await fetch(`${process.env.API_URL}/workouts`, {
+        const workoutsResponse = await fetch(`${API_URL}/workouts`, {
             headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -16,7 +17,7 @@ export class LevelService {
             id: levelId,
             title: `Level ${levelId}`,
             description: LevelService.getLevelDescription(levelId),
-            required_xp: (levelId - 1) * 100,
+            required_xp: levelId <= 2 ? 50 : levelId <= 4 ? 100 : 150,
             workouts: levelWorkouts,
         };
     }

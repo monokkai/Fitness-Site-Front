@@ -1,31 +1,65 @@
-import { useEffect, useState } from "react"
+import { useState, useEffect, useCallback } from "react";
 
+interface UseWorkoutTimerProps {
+  onComplete: () => void;
+  initialTime?: number;
+}
 
-export const useWorkoutTimer = (initialTime: number, onComplete: () => void) => {
-    const [timeLeft, setTimeLeft] = useState(initialTime);
-    const [isActive, setIsActive] = useState(false);
+export const useWorkoutTimer = ({ onComplete, initialTime = 60 }: UseWorkoutTimerProps) => {
+  const [timeLeft, setTimeLeft] = useState(initialTime);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [totalTime, setTotalTime] = useState(0);
 
-    useEffect(() => {
-        let interval: NodeJS.Timeout;
+  const start = useCallback(() => {
+    setIsPlaying(true);
+  }, []);
 
-        if (isActive && timeLeft > 0) {
-            interval = setInterval(() => {
-                setTimeLeft(prev => prev - 1);
-            }, 1000);
-        } else if (timeLeft === 0 && isActive) {
+  const pause = useCallback(() => {
+    setIsPlaying(false);
+  }, []);
+
+  const stop = useCallback(() => {
+    setIsPlaying(false);
+    setTimeLeft(initialTime);
+    setTotalTime(0);
+  }, [initialTime]);
+
+  const reset = useCallback(() => {
+    setTimeLeft(initialTime);
+    setIsPlaying(false);
+  }, [initialTime]);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    
+    if (isPlaying && timeLeft > 0) {
+      interval = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            setIsPlaying(false);
             onComplete();
-        }
-
-        return () => clearInterval(interval);
-    }, [isActive, timeLeft, onComplete]);
-
-    const start = () => setIsActive(true);
-    const pause = () => setIsActive(false);
-
-    const reset = (newTime?: number) => {
-        setIsActive(false);
-        setTimeLeft(newTime || initialTime);
+            return initialTime;
+          }
+          return prev - 1;
+        });
+        setTotalTime((prev) => prev + 1);
+      }, 1000);
     }
 
-    return { timeLeft, isActive, start, pause, reset }
-}
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [isPlaying, timeLeft, onComplete, initialTime]);
+
+  return {
+    timeLeft,
+    isPlaying,
+    totalTime,
+    start,
+    pause,
+    stop,
+    reset,
+  };
+};

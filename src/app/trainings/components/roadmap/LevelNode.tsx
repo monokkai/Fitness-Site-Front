@@ -3,6 +3,7 @@
 import { Box, Text, VStack, Badge, Tooltip, HStack } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { FaDumbbell, FaLock, FaCheck } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 interface LevelNodeProps {
   level: number;
@@ -27,6 +28,13 @@ export const LevelNode = ({
   exerciseCount = 5,
   difficulty = "medium",
 }: LevelNodeProps) => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    if (!isLocked) {
+      router.push(`/trainings/${level}`);
+    }
+  };
   const nodeContent = (
     <VStack spacing={3}>
       <motion.div
@@ -63,6 +71,7 @@ export const LevelNode = ({
         }
         whileTap={!isLocked ? { scale: 0.95 } : {}}
         transition={{ type: "spring", stiffness: 300 }}
+        onClick={handleClick}
       >
         {isLocked ? (
           <FaLock size={32} />
