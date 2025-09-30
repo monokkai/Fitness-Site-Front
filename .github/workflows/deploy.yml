@@ -26,7 +26,7 @@ jobs:
         run: |
           GIT_SHORT_SHA=$(git rev-parse --short HEAD)
           echo "GIT_SHORT_SHA=$GIT_SHORT_SHA" >> $GITHUB_ENV
-          docker build -t $IMAGE_NAME:$GIT_SHORT_SHA -t $IMAGE_NAME:latest ../frontend
+          docker build -t $IMAGE_NAME:$GIT_SHORT_SHA -t $IMAGE_NAME:latest .
 
       - name: 📤 Push image to DockerHub
         run: |
