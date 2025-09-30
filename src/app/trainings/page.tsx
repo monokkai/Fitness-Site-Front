@@ -9,8 +9,6 @@ import { useRouter } from "next/navigation";
 import StatsSection from "./components/main/StatsSection";
 import CategoriesSection from "./components/CategoriesSection";
 
-import LearningPathSection from "./components/LearningPathSection";
-
 const TrainingsPage = () => {
   const { user, isLoading } = useAuth();
   const router = useRouter();
@@ -44,7 +42,6 @@ const TrainingsPage = () => {
           <HeroSection />
           <StatsSection />
           <CategoriesSection />
-          <LearningPathSection />
         </Container>
       </Box>
     </LayoutWrapper>

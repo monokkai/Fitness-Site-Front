@@ -55,10 +55,10 @@ export default function WorkoutList({
               borderRadius="xl"
               border="2px solid"
               borderColor={isCompleted ? "green.300" : isCurrent ? "blue.300" : "gray.200"}
-              boxShadow="md"
+              style={{ boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)" }}
               cursor="pointer"
               onClick={() => !isPlaying && onWorkoutSelect(workout.id)}
-              whileHover={{ scale: 1.02, boxShadow: "lg" }}
+              whileHover={{ scale: 1.02, boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)" }}
               whileTap={{ scale: 0.98 }}
               animate={{
                 borderColor: isCompleted ? "#68D391" : isCurrent ? "#63B3ED" : "#E2E8F0",
