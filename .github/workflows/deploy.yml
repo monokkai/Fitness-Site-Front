@@ -23,12 +23,14 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: 🏗️ Build and tag image
+        working-directory: ./frontend
         run: |
           GIT_SHORT_SHA=$(git rev-parse --short HEAD)
           echo "GIT_SHORT_SHA=$GIT_SHORT_SHA" >> $GITHUB_ENV
           docker build -t $IMAGE_NAME:$GIT_SHORT_SHA -t $IMAGE_NAME:latest .
 
       - name: 📤 Push image to DockerHub
+        working-directory: ./frontend
         run: |
           docker push $IMAGE_NAME:$GIT_SHORT_SHA
           docker push $IMAGE_NAME:latest
