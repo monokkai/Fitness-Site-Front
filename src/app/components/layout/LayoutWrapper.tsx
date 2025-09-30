@@ -5,7 +5,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { Box } from "@chakra-ui/react";
 import OnboardingPopup from "../OnboardingPopup";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../shared/context/authContext";
 
 export default function LayoutWrapper({
@@ -15,6 +15,7 @@ export default function LayoutWrapper({
 }) {
   const pathname = usePathname();
   const { user, isLoading } = useAuth();
+  const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
   const hideNavbarPaths = ["/auth", "/signup", "/trainings", "/profile"];
   const shouldHideNavbar = hideNavbarPaths.some((path) =>
     pathname?.startsWith(path)
@@ -24,6 +25,7 @@ export default function LayoutWrapper({
     if (!isLoading && user) {
       const isQualified = localStorage.getItem("isQualified");
       if (!isQualified || isQualified === "false") {
+        setIsOnboardingOpen(true);
       }
     }
   }, [user, isLoading, pathname]);
@@ -32,7 +34,10 @@ export default function LayoutWrapper({
     <Box>
       {!shouldHideNavbar && <Navbar />}
       <Box as="main" className="bg-white text-white">
-        <OnboardingPopup />
+        <OnboardingPopup 
+          isOpen={isOnboardingOpen} 
+          onClose={() => setIsOnboardingOpen(false)} 
+        />
         {children}
       </Box>
       {!shouldHideNavbar && <Footer />}
