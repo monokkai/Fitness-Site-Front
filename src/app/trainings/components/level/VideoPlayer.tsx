@@ -1,55 +1,42 @@
 "use client";
 
-import { Box, VStack, Text } from "@chakra-ui/react";
+import { Box, Text, VStack } from "@chakra-ui/react";
 
 interface VideoPlayerProps {
   selectedWorkout: number | null;
   isPlaying: boolean;
-  currentWorkoutIndex: number;
-  totalWorkouts: number;
-  workoutTitle?: string;
+  timeLeft: number;
+  currentWorkoutTitle?: string;
 }
 
-export default function VideoPlayer({
-  selectedWorkout,
-  isPlaying,
-  currentWorkoutIndex,
-  totalWorkouts,
-  workoutTitle,
-}: VideoPlayerProps) {
+export default function VideoPlayer({ selectedWorkout, isPlaying, timeLeft, currentWorkoutTitle }: VideoPlayerProps) {
   return (
-    <Box
-      w={{ base: "100%", lg: "700px" }}
-      h={{ base: "250px", lg: "400px" }}
-      maxW="700px"
-      bg="black"
-      borderRadius="xl"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      color="white"
-      fontSize="lg"
-      position="relative"
-    >
-      <VStack spacing={4}>
-        {selectedWorkout && isPlaying ? (
-          <VStack spacing={4}>
-            <Text fontSize="lg" color="gray.300">
-              {workoutTitle}
-            </Text>
-            <Text fontSize="sm" color="gray.400">
-              Exercise {currentWorkoutIndex + 1} of {totalWorkouts}
-            </Text>
-          </VStack>
-        ) : (
-          <VStack spacing={4}>
-            <Text fontSize="xl">Ready to start training?</Text>
-            <Text fontSize="md" color="gray.400">
-              Select an exercise and press play
-            </Text>
-          </VStack>
-        )}
-      </VStack>
-    </Box>
+    <VStack spacing={4}>
+      <Box
+        w={{ base: "100%", lg: "700px" }}
+        h={{ base: "250px", lg: "400px" }}
+        maxW="700px"
+        bg="black"
+        borderRadius="xl"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        color="white"
+        fontSize="lg"
+      >
+        <Text>Video Player</Text>
+      </Box>
+      
+      {selectedWorkout && isPlaying && (
+        <Box textAlign="center">
+          <Text fontSize="3xl" fontWeight="bold" color="blue.600">
+            {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
+          </Text>
+          <Text fontSize="lg" color="gray.600">
+            {currentWorkoutTitle}
+          </Text>
+        </Box>
+      )}
+    </VStack>
   );
 }

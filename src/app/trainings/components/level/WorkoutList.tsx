@@ -14,31 +14,24 @@ import {
 } from "@chakra-ui/react";
 import { FaDumbbell } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { IWorkout } from "../../interfaces/IWorkout";
 
-const MotionCard = motion(Card);
-
-interface Workout {
-  id: number;
-  title: string;
-  description: string;
-  difficulty: string;
-  duration: number;
-}
+const MotionCard = motion.create(Card);
 
 interface WorkoutListProps {
-  workouts: Workout[];
+  workouts: IWorkout[];
   selectedWorkout: number | null;
   completedWorkouts: number[];
   isPlaying: boolean;
   onWorkoutSelect: (workoutId: number) => void;
 }
 
-export default function WorkoutList({
-  workouts,
-  selectedWorkout,
-  completedWorkouts,
-  isPlaying,
-  onWorkoutSelect,
+export default function WorkoutList({ 
+  workouts, 
+  selectedWorkout, 
+  completedWorkouts, 
+  isPlaying, 
+  onWorkoutSelect 
 }: WorkoutListProps) {
   return (
     <VStack spacing={4} align="stretch">
@@ -54,7 +47,7 @@ export default function WorkoutList({
         workouts.map((workout) => {
           const isCompleted = completedWorkouts.includes(workout.id);
           const isCurrent = selectedWorkout === workout.id;
-
+          
           return (
             <MotionCard
               key={workout.id}
@@ -64,7 +57,7 @@ export default function WorkoutList({
               borderColor={isCompleted ? "green.300" : isCurrent ? "blue.300" : "gray.200"}
               boxShadow="md"
               cursor="pointer"
-              onClick={() => onWorkoutSelect(workout.id)}
+              onClick={() => !isPlaying && onWorkoutSelect(workout.id)}
               whileHover={{ scale: 1.02, boxShadow: "lg" }}
               whileTap={{ scale: 0.98 }}
               animate={{
