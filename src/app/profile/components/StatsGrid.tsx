@@ -29,8 +29,20 @@ const MotionCard = motion(Card);
 
 const StatsGrid: React.FC = () => {
   const { user } = useAuth();
-  const { data: profile, loading, error } = useUserProfile(user?.id);
+  const { data: profile, loading, error, refetch } = useUserProfile(user?.id);
   const [stats, setStats] = useState<StatsData[]>([]);
+
+  // Refresh data when component becomes visible
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden && user?.id) {
+        refetch();
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [user?.id, refetch]);
 
   useEffect(() => {
     if (profile) {

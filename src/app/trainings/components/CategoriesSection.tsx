@@ -22,7 +22,7 @@ import { useState, useEffect } from "react";
 import { FaUnlock, FaDumbbell, FaRedo, FaSignInAlt } from "react-icons/fa";
 import { useAuth } from "../../shared/context/authContext";
 import { useRouter } from "next/navigation";
-import { API_URL } from "@/app/shared/config/api.config";
+import { API_URL, TRAINING_URL } from "@/app/shared/config/api.config";
 
 const MotionCard = motion.create(Card);
 
@@ -56,15 +56,25 @@ const CategoriesSection: React.FC = () => {
 
   // Refresh data when returning to page
   useEffect(() => {
-    const handleFocus = () => {
-      if (user && !authLoading) {
+    const handleVisibilityChange = () => {
+      if (!document.hidden && user && !authLoading) {
         fetchUserData();
       }
     };
     
-    window.addEventListener('focus', handleFocus);
-    return () => window.removeEventListener('focus', handleFocus);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, [user, authLoading]);
+
+  // Also refresh when component mounts after navigation
+  useEffect(() => {
+    if (user && !authLoading) {
+      const timer = setTimeout(() => {
+        fetchUserData();
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   const fetchUserData = async () => {
     try {
@@ -83,8 +93,8 @@ const CategoriesSection: React.FC = () => {
       };
 
       const [workoutsResponse, userProfileResponse] = await Promise.all([
-        fetch(`${API_URL}/workouts`, { headers }),
-        fetch(`${API_URL}/user-profiles/${user.id}`, { headers }),
+        fetch(`${TRAINING_URL}/workouts`, { headers }),
+        fetch(`${TRAINING_URL}/user-profiles/${user.id}`, { headers }),
       ]);
 
       if (!workoutsResponse.ok) {

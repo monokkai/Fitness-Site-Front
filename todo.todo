@@ -27,16 +27,16 @@
 ✔ Make special "bruteforce" for: rushing /auth/login page and MYSQL database. @done(25-08-13 21:26)
 ✔ Delete cookie-service and collect cookie on the API-Gateway-Service side @done(25-08-25 20:51)
 ☐ Make independent service for rewards for users.
-☐ Make independent service for users-service for editting User data.
+✔ Make independent service for users-service for editting User data. @done(25-09-29 19:38)
 But now it doest show cookies(token) in browser!
-☐ Ability do delete your account!(On backend and frontend)
+✔ Ability do delete your account!(On backend and frontend) @done(25-09-29 19:38)
 x Add cash manager(Redis or inMemory)
   For training service and etc...(otherwise i'll do only for training service, dont know now!).
 x Add logging for services
 ☐ Work with transactions(Databases)
 ✔ Add documentations with README.md files and Swagger(Or others for DX and documenting server logic!) @done(25-09-10 19:45)
   For proxing the request, securing and etc...
-☐ Add new service notification-service(GoLang)
+x Add new service notification-service(GoLang)
   It will be my latest service! After all services.
 x Add Two-Factor auth
 ☐ Split big docker-compose.yaml file to micro files in other folders to make a search a bit better

@@ -8,35 +8,36 @@ const useUserProfile = (userId: number | undefined) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    const fetchData = async () => {
+        if (!userId) {
+            setLoading(false);
+            return;
+        }
+
+        try {
+            setLoading(true);
+            const { data } = await axios.get<ProfileData>(
+                `${TRAINING_URL}/user-profiles/${userId}`,
+                {
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                }
+            );
+            setData(data);
+            setError(null);
+        } catch (err) {
+            console.error("Error fetching profile:", err);
+            setError("Failed to load profile data");
+            setData(null);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            if (!userId) {
-                setLoading(false);
-                return;
-            }
-
-            try {
-                const { data } = await axios.get<ProfileData>(
-                    `${TRAINING_URL}/user-profiles/${userId}`,
-                    {
-                        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-                    }
-                );
-                setData(data);
-                setError(null);
-            } catch (err) {
-                console.error("Error fetching profile:", err);
-                setError("Failed to load profile data");
-                setData(null);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchData();
     }, [userId]);
 
-    return { data, loading, error };
+    return { data, loading, error, refetch: fetchData };
 };
 
 export default useUserProfile;

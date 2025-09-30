@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { useAuth } from "../../shared/context/authContext";
-import { API_URL } from "@/app/shared/config/api.config";
+import { TRAINING_URL } from "@/app/shared/config/api.config";
 
 interface UseWorkoutCompletionProps {
   levelId: number;
@@ -29,21 +29,37 @@ export const useWorkoutCompletion = ({ levelId, levelData }: UseWorkoutCompletio
       
       try {
         const token = localStorage.getItem("token");
-        await fetch(`${API_URL}/user-levels/complete`, {
+        const requestData = {
+          userId: user.id,
+          level: levelId,
+          completionTime: totalTime,
+          score: 100,
+        };
+        
+        console.log("Sending XP update request:", requestData);
+        console.log("API URL:", `${TRAINING_URL}/user-levels/complete`);
+        
+        const response = await fetch(`${TRAINING_URL}/user-levels/complete`, {
           method: "POST",
           headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            userId: user.id,
-            level: levelId,
-            completionTime: totalTime,
-            score: 100,
-          }),
+          body: JSON.stringify(requestData),
         });
+        
+        const responseText = await response.text();
+        console.log("Response status:", response.status);
+        console.log("Response text:", responseText);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}, response: ${responseText}`);
+        }
+        
+        console.log("XP updated successfully");
       } catch (error) {
         console.error("Failed to update XP:", error);
+        alert(`Failed to update XP: ${error}`);
       }
       
       setShowCompletion(true);
