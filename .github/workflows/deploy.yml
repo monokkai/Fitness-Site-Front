@@ -1,4 +1,4 @@
-name: Build & Push Docker image to DockerHub frontend
+name: Build & Push Docker image to DockerHub Frontend
 
 on:
   push:
