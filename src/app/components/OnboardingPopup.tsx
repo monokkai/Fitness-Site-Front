@@ -101,8 +101,11 @@ const OnboardingPopup = ({ isOpen, onClose }: Props) => {
       if (avatarFile) {
         const form = new FormData();
         form.append("avatar", avatarFile);
-        await axios.post(`${API_URL}/api/users/avatar/upload`, form, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        await axios.post(`${API_URL}/api/users/avatar`, form, {
+          headers: { 
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            'Content-Type': 'multipart/form-data'
+          },
         });
       }
 
