@@ -15,51 +15,44 @@ import { FaFire, FaStar, FaTrophy, FaDumbbell } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../../shared/context/authContext";
 import { API_URL } from "@/app/shared/config/api.config";
+import useUserProfile from "../../../shared/hooks/useUserProfile";
 
 const MotionCard = motion.create(Card);
 
 const StatsSection: React.FC = () => {
   const shouldReduceMotion = useReducedMotion();
   const { user } = useAuth();
-  const [stats, setStats] = useState({
-    totalXP: 0,
-    currentLevel: 1,
-    totalWorkouts: 0,
-    currentStreak: 0
-  });
-  const [loading, setLoading] = useState(true);
-
+  const { data: profile, loading, refetch } = useUserProfile(user?.id);
+  
+  const stats = {
+    totalXP: profile?.totalXP || 0,
+    currentLevel: profile?.currentLevel || 1,
+    totalWorkouts: profile?.totalWorkouts || 0,
+    currentStreak: profile?.currentStreak || 0
+  };
+  
+  // Refresh stats when page becomes visible
   useEffect(() => {
-    const fetchStats = async () => {
-      if (!user) return;
-      
-      try {
-        const token = localStorage.getItem("token");
-        const response = await fetch(`${API_URL}/api/users/profile`, {
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
-        });
-        
-        if (response.ok) {
-          const data = await response.json();
-          setStats({
-            totalXP: data.totalXP || 0,
-            currentLevel: data.currentLevel || 1,
-            totalWorkouts: data.totalWorkouts || 0,
-            currentStreak: data.currentStreak || 0
-          });
-        }
-      } catch (error) {
-        console.error("Failed to fetch stats:", error);
-      } finally {
-        setLoading(false);
+    const handleVisibilityChange = () => {
+      if (!document.hidden && user?.id) {
+        refetch();
       }
     };
     
-    fetchStats();
-  }, [user]);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [user?.id, refetch]);
+  
+  // Refresh stats every 5 seconds when on trainings page
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (user?.id) {
+        refetch();
+      }
+    }, 5000);
+    
+    return () => clearInterval(interval);
+  }, [user?.id, refetch]);
 
   const cards = [
     {

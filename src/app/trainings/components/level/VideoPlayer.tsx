@@ -20,12 +20,12 @@ export default function VideoPlayer({
 }: VideoPlayerProps) {
   const videoUrl = selectedWorkoutId ? getVideoUrl(level, selectedWorkoutId) : null;
   console.log('Video URL:', videoUrl, 'Level:', level, 'WorkoutId:', selectedWorkoutId);
-  
+
   return (
     <VStack spacing={4}>
       <Box
         w={{ base: "100%", lg: "700px" }}
-        h={{ base: "250px", lg: "400px" }}
+        h={{ base: "220px", lg: "390px" }}
         maxW="700px"
         bg="black"
         borderRadius="xl"

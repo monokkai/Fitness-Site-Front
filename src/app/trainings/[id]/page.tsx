@@ -39,7 +39,8 @@ export default function TrainingLevelPage() {
     earnedXP,
     startWorkout,
     pauseWorkout,
-    stopWorkout
+    stopWorkout,
+    completeLevel
   } = useWorkoutTimer({
     levelData,
     onComplete: () => {}
@@ -153,6 +154,7 @@ export default function TrainingLevelPage() {
                 onStart={handleStart}
                 onPause={pauseWorkout}
                 onStop={handleStop}
+                onCompleteLevel={completeLevel}
               />
             </VStack>
           </Box>

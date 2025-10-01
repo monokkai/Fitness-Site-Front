@@ -12,9 +12,10 @@ interface WorkoutControlsProps {
   onStart: () => void;
   onPause: () => void;
   onStop: () => void;
+  onCompleteLevel?: () => void;
 }
 
-export default function WorkoutControls({ selectedWorkout, isPlaying, onStart, onPause, onStop }: WorkoutControlsProps) {
+export default function WorkoutControls({ selectedWorkout, isPlaying, onStart, onPause, onStop, onCompleteLevel }: WorkoutControlsProps) {
   return (
     <AnimatePresence>
       {selectedWorkout && (
@@ -41,6 +42,15 @@ export default function WorkoutControls({ selectedWorkout, isPlaying, onStart, o
             >
               Stop
             </Button>
+            {onCompleteLevel && (
+              <Button
+                colorScheme="purple"
+                size="lg"
+                onClick={onCompleteLevel}
+              >
+                Complete Level (Test)
+              </Button>
+            )}
           </HStack>
         </MotionBox>
       )}

@@ -35,18 +35,6 @@ export const useWorkoutTimer = ({ levelData, onComplete }: UseWorkoutTimerProps)
           score: 100
         })
       });
-      
-      await fetch(`${API_URL}/api/users/profile`, {
-        method: "PATCH",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          totalWorkouts: 1,
-          totalXP: 50
-        })
-      });
     } catch (error) {
       console.error("Failed to save workout completion:", error);
     }
@@ -57,7 +45,7 @@ export const useWorkoutTimer = ({ levelData, onComplete }: UseWorkoutTimerProps)
     
     try {
       const token = localStorage.getItem("token");
-      await fetch(`${API_URL}/api/users/profile`, {
+      await fetch(`${API_URL}/user-profiles/${user.id}`, {
         method: "PATCH",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -121,6 +109,72 @@ export const useWorkoutTimer = ({ levelData, onComplete }: UseWorkoutTimerProps)
     setCompletedWorkouts([]);
   };
 
+  const completeLevel = useCallback(async () => {
+    if (!levelData?.workouts || !user) return;
+    
+    try {
+      const token = localStorage.getItem("token");
+      
+      // Complete all workouts
+      for (const workout of levelData.workouts) {
+        await fetch(`${API_URL}/user-workouts`, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            userId: user.id,
+            workoutId: workout.id,
+            completionTime: 60,
+            actualRepeats: 1,
+            score: 100
+          })
+        });
+      }
+      
+      // Update user level progress
+      await fetch(`${API_URL}/user-level`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          levelId: levelData.id,
+          isCompleted: true,
+          completionDate: new Date().toISOString()
+        })
+      });
+      
+      const earnedXP = levelData.workouts.length * 50;
+      
+      // Update user profile with new XP and stats
+      await fetch(`${API_URL}/user-profiles/${user.id}`, {
+        method: "PATCH",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          totalXP: earnedXP,
+          totalWorkouts: levelData.workouts.length,
+          currentLevel: levelData.id + 1
+        })
+      });
+      
+      setCompletedWorkouts(levelData.workouts.map((w: any) => w.id));
+      setEarnedXP(earnedXP);
+      setIsPlaying(false);
+      setShowCompletion(true);
+      onComplete();
+      
+    } catch (error) {
+      console.error("Failed to complete level:", error);
+    }
+  }, [levelData, user, onComplete]);
+
   return {
     currentWorkoutIndex,
     isPlaying,
@@ -130,6 +184,7 @@ export const useWorkoutTimer = ({ levelData, onComplete }: UseWorkoutTimerProps)
     earnedXP,
     startWorkout,
     pauseWorkout,
-    stopWorkout
+    stopWorkout,
+    completeLevel
   };
 };

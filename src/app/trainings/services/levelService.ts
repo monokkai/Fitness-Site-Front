@@ -68,8 +68,11 @@ export class LevelService {
     }
 
     private static getWorkoutsForLevel(level: number, workouts: IWorkout[]): IWorkout[] {
-        const startIndex = (level - 1) * 3;
-        return workouts.slice(startIndex, startIndex + 3);
+        if (workouts.length === 0) return [];
+        
+        // For now, return all available workouts for each level
+        // Later you can implement level-specific workout filtering
+        return workouts;
     }
 
     private static getLevelDescription(level: number): string {
