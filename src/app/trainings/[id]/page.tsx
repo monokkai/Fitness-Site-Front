@@ -140,10 +140,11 @@ export default function TrainingLevelPage() {
           <Box flex={1} w="full">
             <VStack spacing={4}>
               <VideoPlayer
-                selectedWorkout={selectedWorkout}
+                selectedWorkoutId={selectedWorkout}
                 isPlaying={isPlaying}
                 timeLeft={timeLeft}
                 currentWorkoutTitle={levelData.workouts.find(w => w.id === selectedWorkout)?.title}
+                level={levelId}
               />
               
               <WorkoutControls
